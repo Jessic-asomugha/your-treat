@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Messages - Admin - Sweet Delights Bakery</title>
+  <link rel="stylesheet" href="admin.css" />
+  <style>
+    /* WhatsApp-style messaging layout */
+    .messaging-container {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      height: calc(100vh - 180px);
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* LEFT PANEL - Conversations List */
+    .conversations-panel {
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      background: #f9fafb;
+    }
+
+    .conversations-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    .conversations-header h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--text-dark);
+    }
+
+    .conversations-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .conversation-item {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: background 0.2s;
+      background: white;
+    }
+
+    .conversation-item:hover {
+      background: #f3f4f6;
+    }
+
+    .conversation-item.active {
+      background: var(--cream);
+      border-left: 3px solid var(--primary-color);
+    }
+
+    .conversation-sender {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .conversation-preview {
+      font-size: 0.875rem;
+      color: var(--text-medium);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conversation-time {
+      font-size: 0.75rem;
+      color: var(--text-medium);
+    }
+
+    .conversation-badge {
+      background: var(--primary-color);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* RIGHT PANEL - Chat Thread */
+    .chat-panel {
+      display: flex;
+      flex-direction: column;
+      background: #fef7ec;
+    }
+
+    .chat-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.125rem;
+      color: var(--text-dark);
+    }
+
+    .chat-header p {
+      margin: 0.25rem 0 0 0;
+      font-size: 0.875rem;
+      color: var(--text-medium);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .message-bubble {
+      max-width: 65%;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .message-bubble.customer {
+      align-self: flex-start;
+      background: white;
+      border: 1px solid #e5e7eb;
+    }
+
+    .message-bubble.admin {
+      align-self: flex-end;
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .message-text {
+      margin-bottom: 0.25rem;
+      word-wrap: break-word;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .chat-input-container {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    .chat-input-form {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 24px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      resize: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .send-button {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .send-button:hover {
+      background: #7a3e1a;
+    }
+
+    .empty-chat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-medium);
+    }
+
+    .empty-chat-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .messaging-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .conversations-panel {
+        display: none;
+      }
+      
+      .conversations-panel.mobile-show {
+        display: flex;
+      }
+      
+      .chat-panel.mobile-show {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Header -->
+  <header class="admin-header">
+    <div class="admin-header-content">
+      <div class="admin-logo">
+        Sweet Delights
+        <span class="admin-badge">Admin Panel</span>
+      </div>
+      <div class="admin-user">
+        <span class="admin-user-name">👤 Admin User</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Navigation -->
+  <nav class="admin-nav">
+    <div class="admin-nav-content">
+      <a href="admin-index.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="cake-orders.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+        </svg>
+        Cake Orders
+      </a>
+      <a href="customer-messages.html" class="admin-nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Customer Messages
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="admin-container">
+    <div class="messaging-container">
+      
+      <!-- LEFT: Conversations List -->
+      <div class="conversations-panel">
+        <div class="conversations-header">
+          <h3>Messages</h3>
+        </div>
+        <div class="conversations-list" id="conversationsList">
+          <!-- Conversations loaded here by JS -->
+        </div>
+      </div>
+
+      <!-- RIGHT: Chat Thread -->
+      <div class="chat-panel" id="chatPanel">
+        <div id="emptyChatState" class="empty-chat">
+          <div class="empty-chat-icon">💬</div>
+          <h3>Select a conversation</h3>
+          <p>Choose a customer from the list to view their messages</p>
+        </div>
+
+        <!-- This appears when a conversation is selected -->
+        <div id="activeChatState" style="display: none; flex-direction: column; height: 100%;">
+          <div class="chat-header">
+            <h3 id="chatCustomerName"></h3>
+            <p id="chatMessageCount"></p>
+          </div>
+
+          <div class="chat-messages" id="chatMessages">
+            <!-- Messages loaded here -->
+          </div>
+
+          <div class="chat-input-container">
+            <form class="chat-input-form" id="replyForm" onsubmit="sendReply(event)">
+              <textarea 
+                class="chat-input" 
+                id="replyInput" 
+                placeholder="Type your message..."
+                rows="1"
+                required
+              ></textarea>
+              <button type="submit" class="send-button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script src="../js/simple-data-manager.js"></script>
+<script>
+// WhatsApp-style messaging JavaScript
+let allMessages = [];
+let conversations = [];
+let selectedConversation = null;
+
+// Load messages on page load
+document.addEventListener('DOMContentLoaded', async function() {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  loadMessages();
+  
+  // Real-time updates
+  window.dataManager.onMessagesChange(() => {
+    loadMessages();
+  });
+});
+
+async function loadMessages() {
+  try {
+    allMessages = await window.dataManager.getMessages();
+    conversations = groupMessagesBySender(allMessages);
+    renderConversationsList();
+    
+    // If a conversation is selected, refresh it
+    if (selectedConversation) {
+      selectConversation(selectedConversation);
+    }
+  } catch (error) {
+    console.error('Error loading messages:', error);
+  }
+}
+
+function groupMessagesBySender(messages) {
+  const convMap = {};
+
+  messages.forEach(msg => {
+    if (msg.isAdmin) return; // Skip admin messages in grouping
+
+    if (!convMap[msg.sender]) {
+      convMap[msg.sender] = {
+        sender: msg.sender,
+        messages: [],
+        lastMessage: msg,
+        unreadCount: 0
+      };
+    }
+
+    convMap[msg.sender].messages.push(msg);
+
+    if (msg.timestamp > convMap[msg.sender].lastMessage.timestamp) {
+      convMap[msg.sender].lastMessage = msg;
+    }
+  });
+
+  // Add admin replies to their respective conversations
+  messages.forEach(msg => {
+    if (msg.isAdmin && msg.replyTo) {
+      if (convMap[msg.replyTo]) {
+        convMap[msg.replyTo].messages.push(msg);
+      }
+    }
+  });
+
+  // Sort messages within each conversation
+  Object.values(convMap).forEach(conv => {
+    conv.messages.sort((a, b) => a.timestamp - b.timestamp);
+  });
+
+  return Object.values(convMap).sort((a, b) =>
+    b.lastMessage.timestamp - a.lastMessage.timestamp
+  );
+}
+
+function renderConversationsList() {
+  const container = document.getElementById('conversationsList');
+  
+  if (conversations.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 2rem; text-align: center; color: var(--text-medium);">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">💬</div>
+        <p>No messages yet</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = conversations.map(conv => `
+    <div class="conversation-item ${selectedConversation === conv.sender ? 'active' : ''}" 
+         onclick="selectConversation('${conv.sender}')">
+      <div class="conversation-sender">
+        <span>👤 ${conv.sender}</span>
+        <span class="conversation-time">${formatTime(conv.lastMessage.timestamp)}</span>
+      </div>
+      <div class="conversation-preview">
+        ${conv.lastMessage.text.substring(0, 50)}${conv.lastMessage.text.length > 50 ? '...' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectConversation(sender) {
+  selectedConversation = sender;
+  const conv = conversations.find(c => c.sender === sender);
+  
+  if (!conv) return;
+
+  // Update UI
+  document.getElementById('emptyChatState').style.display = 'none';
+  document.getElementById('activeChatState').style.display = 'flex';
+  
+  // Update header
+  document.getElementById('chatCustomerName').textContent = sender;
+  document.getElementById('chatMessageCount').textContent = 
+    `${conv.messages.length} message${conv.messages.length > 1 ? 's' : ''}`;
+
+  // Render messages
+  renderChatMessages(conv.messages);
+
+  // Update conversations list active state
+  renderConversationsList();
+
+  // Scroll to bottom
+  setTimeout(() => {
+    const chatContainer = document.getElementById('chatMessages');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, 100);
+}
+
+function renderChatMessages(messages) {
+  const container = document.getElementById('chatMessages');
+  
+  container.innerHTML = messages.map(msg => `
+    <div class="message-bubble ${msg.isAdmin ? 'admin' : 'customer'}">
+      <div class="message-text">${msg.text}</div>
+      <div class="message-time">${formatFullTime(msg.timestamp)}</div>
+    </div>
+  `).join('');
+}
+
+async function sendReply(event) {
+  event.preventDefault();
+  
+  const input = document.getElementById('replyInput');
+  const text = input.value.trim();
+  
+  if (!text || !selectedConversation) return;
+
+  try {
+    await window.dataManager.sendMessage({
+      sender: 'Sweet Delights Admin',
+      text: text,
+      isAdmin: true,
+      replyTo: selectedConversation
+    });
+
+    input.value = '';
+    
+    // Reload to show new message
+    setTimeout(() => loadMessages(), 300);
+    
+  } catch (error) {
+    console.error('Error sending message:', error);
+    alert('Error sending message. Please try again.');
+  }
+}
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays}d ago`;
+  
+  return date.toLocaleDateString();
+}
+
+function formatFullTime(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+// Auth check
+const currentUser = window.dataManager.getCurrentUser();
+if (!currentUser || !currentUser.isAdmin) {
+  window.location.href = '../auth/admin-login.html';
+}
+
+// Auto-resize textarea
+document.getElementById('replyInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+</script>
+
+</body>
+</html>

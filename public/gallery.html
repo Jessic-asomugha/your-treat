@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery - Sweet Delights Bakery</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">Sweet Delights</div>
+<nav class="nav">
+  <a href="index.html">Home</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="order.html">Order</a>
+  <a href="my-orders.html">My Orders</a>
+  <a href="chat.html">Chat</a>
+  <span id="authNav">
+    <a href="auth/login.html">Login</a>
+  </span>
+</nav>
+  </header>
+
+  <!-- Gallery Section -->
+  <section class="featured">
+    <h2>Our Cakes</h2>
+
+    <div class="cake-grid">
+      <div class="cake-card"
+           data-name="Chocolate Delight"
+           data-sizes="6, 8, 10 inches"
+           data-layers="3 layers"
+           data-description="Rich chocolate sponge with creamy chocolate frosting. A crowd favorite for chocolate lovers!"
+           data-image="images/chocolate cake.jpg">
+        <img src="images/chocolate cake.jpg" alt="Chocolate Cake">
+        <h3>Chocolate Delight</h3>
+        <p>Rich chocolate sponge with creamy frosting</p>
+      </div>
+
+      <div class="cake-card"
+           data-name="Vanilla Dream"
+           data-sizes="6, 8 inches"
+           data-layers="2 layers"
+           data-description="Classic vanilla cake with smooth buttercream frosting. Perfect for any celebration!"
+           data-image="images/vanilla cake.jpg">
+        <img src="images/vanilla cake.jpg" alt="Vanilla Cake">
+        <h3>Vanilla Dream</h3>
+        <p>Classic vanilla cake with buttercream</p>
+      </div>
+
+      <div class="cake-card"
+           data-name="Red Velvet Romance"
+           data-sizes="8, 10 inches"
+           data-layers="3 layers"
+           data-description="Soft red velvet cake with rich cream cheese frosting. An elegant choice for special occasions!"
+           data-image="images/red velvet cake.jpg">
+        <img src="images/red velvet cake.jpg" alt="Red Velvet Cake">
+        <h3>Red Velvet Romance</h3>
+        <p>Soft red velvet with cream cheese frosting</p>
+      </div>
+
+      <div class="cake-card"
+           data-name="Strawberry Passion"
+           data-sizes="6, 8, 10 inches"
+           data-layers="2-3 layers"
+           data-description="Fresh strawberries layered with light cream. A refreshing and fruity delight!"
+           data-image="images/strawberry cake.jpg">
+        <img src="images/strawberry cake.jpg" alt="Strawberry Cake">
+        <h3>Strawberry Passion</h3>
+        <p>Fresh strawberries with light cream</p>
+      </div>
+
+      <div class="cake-card"
+           data-name="Loaf Delight"
+           data-sizes="Standard loaf size"
+           data-layers="Single layer"
+           data-description="Perfectly baked loaf cake with a moist, tender crumb. Great for sharing!"
+           data-image="images/bread cake.jpg">
+        <img src="images/bread cake.jpg" alt="Loaf Cake">
+        <h3>Loaf Delight</h3>
+        <p>Perfect for sharing and gifting</p>
+      </div>
+
+      <div class="cake-card"
+           data-name="Caramel Heaven"
+           data-sizes="6, 8, 10 inches"
+           data-layers="3-4 layers"
+           data-description="Decadent caramel layers with smooth caramel drizzle. Pure indulgence!"
+           data-image="images/chocolate cake.jpg">
+        <img src="images/chocolate cake.jpg" alt="Caramel Cake">
+        <h3>Caramel Heaven</h3>
+        <p>Decadent caramel layers</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal" id="cakeModal">
+    <div class="modal-content">
+      <button class="close">&times;</button>
+      <img id="modalImage" alt="">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDescription"></p>
+      <p><strong>Available Sizes:</strong> <span id="modalSizes"></span></p>
+      <p><strong>Layers:</strong> <span id="modalLayers"></span></p>
+      <a href="order.html" class="btn primary" style="margin-top: 1.5rem;">Order This Cake</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<footer class="footer">
+  <p>© 2026 Sweet Delights Bakery</p>
+  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+    <a href="../auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
+  </p>
+</footer>
+
+<script src="../js/main.js"></script>
+<script src="../js/simple-data-manager.js"></script>
+
+
+  <script>
+// Update navigation based on auth state
+window.onAuthStateChanged = (user, isAdmin) => {
+  const authNav = document.getElementById('authNav');
+  if (!authNav) return;
+
+  if (user) {
+    const displayName = user.displayName || user.email.split('@')[0];
+    authNav.innerHTML = `
+      <span style="color: var(--primary-color); font-weight: 600;">
+        👤 ${displayName}
+      </span>
+      <a href="#" onclick="event.preventDefault(); window.authManager.logout().then(() => location.reload());">
+        Logout
+      </a>
+    `;
+  } else {
+    authNav.innerHTML = `
+      <a href="auth/login.html">Login</a>
+      <a href="auth/register.html">Sign Up</a>
+    `;
+  }
+};
+</script>
+
+</body>
+</html>

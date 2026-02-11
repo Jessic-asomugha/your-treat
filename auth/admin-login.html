@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Sweet Delights Bakery</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="auth-logo">Sweet Delights</div>
+      <h1 class="auth-title">Admin Login</h1>
+      <p class="auth-subtitle">Enter your credentials to continue</p>
+    </div>
+
+    <div id="alertMessage" class="alert"></div>
+
+    <form id="loginForm" class="auth-form">
+      
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          class="form-input" 
+          placeholder="admin@sweetdelights.com" 
+          required 
+          value="admin@sweetdelights.com"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          class="form-input" 
+          placeholder="Enter password" 
+          required
+          value="admin123"
+        />
+      </div>
+
+      <button type="submit" id="loginBtn" class="btn btn-primary">
+        Login
+      </button>
+
+      <div style="margin-top: 1.5rem; padding: 1rem; background: var(--cream); border-radius: 10px; font-size: 0.85rem;">
+        <strong>Default Credentials:</strong><br>
+        Email: admin@sweetdelights.com<br>
+        Password: admin123
+      </div>
+
+    </form>
+
+    <div class="back-to-site">
+      <a href="../public/index.html">← Back to website</a>
+    </div>
+  </div>
+  <script src="../js/admin.js"></script>
+  <script src="../js/simple-data-manager.js"></script>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const alertMessage = document.getElementById('alertMessage');
+
+    // Check if already logged in
+    const currentUser = window.dataManager.getCurrentUser();
+    if (currentUser && currentUser.isAdmin) {
+      window.location.href = '../admin/admin-index.html';
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      const result = window.dataManager.login(email, password);
+
+      if (result.success && result.isAdmin) {
+        showAlert('Login successful! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = '../admin/admin-index.html';
+        }, 1000);
+      } else {
+        showAlert('Invalid email or password', 'error');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
+
+    function showAlert(message, type) {
+      alertMessage.textContent = message;
+      alertMessage.className = `alert alert-${type} show`;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cake Orders - Admin - Sweet Delights Bakery</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- Admin Header -->
+  <header class="admin-header">
+    <div class="admin-header-content">
+      <div class="admin-logo">
+        Sweet Delights
+        <span class="admin-badge">Admin Panel</span>
+      </div>
+      <div class="admin-user">
+        <span class="admin-user-name">👤 Admin User</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Navigation -->
+  <nav class="admin-nav">
+    <div class="admin-nav-content">
+      <a href="admin-index.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="cake-orders.html" class="admin-nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+        </svg>
+        Cake Orders
+      </a>
+      <a href="customer-messages.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Customer Messages
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="admin-container">
+    
+    <!-- Page Title -->
+    <div style="margin-bottom: 2rem;">
+      <h1>Cake Orders</h1>
+      <p style="color: var(--text-medium); font-size: 1.05rem;">Manage and track all customer orders</p>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="search-filter-bar">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="🔍 Search by Order ID, Customer Name, or Phone..."
+        onkeyup="filterOrders()"
+      />
+      <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+        <option value="all">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Baking">Baking</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="content-card">
+      <div class="content-card-header">
+        <h2 class="content-card-title">All Orders (<span id="ordersCount">0</span>)</h2>
+        <button class="btn btn-primary" onclick="exportOrders()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export
+        </button>
+      </div>
+
+      <div id="ordersContainer">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Cake</th>
+              <th>Size/Layers</th>
+              <th>Delivery Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable">
+            <!-- Orders will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content" style="max-width: 800px;">
+      <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+      
+      <div class="modal-header">
+        <h2 class="modal-title">Order Details</h2>
+      </div>
+
+      <div id="orderDetailsContent">
+        <!-- Order details will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+<script src="../js/simple-data-manager.js"></script>
+<script src="../js/admin.js"></script>
+
+<script>
+  const currentUser = window.dataManager.getCurrentUser();
+  if (!currentUser || !currentUser.isAdmin) {
+    window.location.href = '../admin-login.html';
+  }
+</script>
+
+</body>
+</html>
