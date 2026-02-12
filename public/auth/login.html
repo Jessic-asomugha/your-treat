@@ -85,7 +85,7 @@
 
     <!-- Back to Site -->
     <div class="back-to-site">
-      <a href="../public/index.html">
+      <a href="../index.html">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="19" y1="12" x2="5" y2="12"/>
           <polyline points="12 19 5 12 12 5"/>
@@ -95,7 +95,7 @@
     </div>
   </div>
 
-<script src="js/simple-data-manager.js"></script>
+<script src="../js/simple-data-manager.js"></script>
 
   <script>
     const loginForm = document.getElementById('loginForm');
@@ -105,7 +105,7 @@
 
     // Get redirect URL from query params
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || '../public/index.html';
+    const redirectUrl = urlParams.get('redirect') || '../index.html';
 
     // Handle email/password login
     loginForm.addEventListener('submit', async (e) => {
