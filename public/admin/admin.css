@@ -117,11 +117,6 @@ h3 {
   gap: 1rem;
 }
 
-.admin-user-name {
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
 .logout-btn {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -159,27 +154,45 @@ h3 {
 .admin-nav-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  text-decoration: none;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
   color: var(--text-dark);
+  text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
   transition: var(--transition);
-  white-space: nowrap;
-  border: 2px solid transparent;
+  border-bottom: 3px solid transparent;
 }
 
 .admin-nav-link:hover {
-  background: var(--cream);
   color: var(--primary-color);
+  background: var(--cream);
 }
 
 .admin-nav-link.active {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background: var(--cream);
+}
+
+/* Logout button in navigation */
+.admin-nav .logout-btn {
+  background: var(--error);
+  border: 1px solid var(--error);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+  margin-top: 0.5rem;
+}
+
+.admin-nav .logout-btn:hover {
+  background: #cc0000;
+  border-color: #cc0000;
+  transform: scale(1.02);
 }
 
 .admin-nav-link svg {
@@ -294,6 +307,35 @@ h3 {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1.5rem;
+}
+
+/* Responsive Table Container */
+.data-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: white;
+  margin-top: 1.5rem;
+}
+
+/* Custom scrollbar for webkit browsers */
+.data-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.data-table-container::-webkit-scrollbar-track {
+  background: var(--cream);
+  border-radius: 4px;
+}
+
+.data-table-container::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.data-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
 
 .data-table thead {
@@ -806,6 +848,24 @@ h3 {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  /* Tablet responsive tables */
+  .data-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .data-table {
+    min-width: 800px;
+    font-size: 0.9rem;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 1rem 0.75rem;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-header-content {
     flex-direction: column;
@@ -891,3 +951,298 @@ h3 {
 .flex-center { display: flex; align-items: center; justify-content: center; }
 .gap-1 { gap: 1rem; }
 .gap-2 { gap: 2rem; }
+
+
+/* ========================================
+   ADMIN MOBILE RESPONSIVE FIXES
+   Add these at the END of your admin.css file
+   ======================================== */
+
+/* Admin Menu Toggle Button */
+.admin-menu-toggle {
+  display: none;
+  background: white;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 1rem;
+  transition: all 0.3s ease;
+}
+
+.admin-menu-toggle:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Admin Mobile Styles */
+@media (max-width: 768px) {
+  
+  /* ===== MENU TOGGLE ===== */
+  .admin-menu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* ===== ADMIN NAV ===== */
+  .admin-nav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    width: 280px;
+    background: white;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    padding-top: 2rem;
+  }
+  
+  .admin-nav.active {
+    left: 0;
+  }
+  
+  .admin-nav-content {
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  .admin-nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--cream);
+  }
+  
+  .admin-nav-link svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+/* ===== HEADER ===== */
+  .admin-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .admin-user {
+    order: 2;
+  }
+  
+  .admin-logo {
+    order: 1;
+  }
+  
+  .admin-menu-toggle {
+    order: 3;
+    margin: 0;
+  }
+  
+  .logout-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  /* ===== CONTAINER ===== */
+  .admin-container {
+    padding: 0.75rem;
+    margin-top: 4rem; /* Space for fixed elements */
+  }
+  
+  /* ===== DASHBOARD GRID ===== */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    margin-bottom: 0;
+  }
+  
+  .stat-card-value {
+    font-size: 2rem;
+  }
+  
+  /* ===== TABLES - CRITICAL FIX ===== */
+  .data-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1.5rem -0.75rem;
+    padding: 0 0.75rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .data-table {
+    min-width: 650px;
+    font-size: 0.85rem;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 0.75rem 0.5rem;
+    white-space: nowrap;
+  }
+  
+  /* Make Order IDs smaller and breakable */
+  .data-table td:first-child,
+  .data-table th:first-child {
+    font-size: 0.7rem;
+    min-width: 70px;
+    max-width: 100px;
+    white-space: normal;
+    word-break: break-all;
+    padding: 0.75rem 0.25rem;
+  }
+  
+  /* Customer name column */
+  .data-table td:nth-child(2),
+  .data-table th:nth-child(2) {
+    min-width: 100px;
+    max-width: 120px;
+    white-space: normal;
+    word-break: break-word;
+  }
+  
+  /* Status column - make it compact */
+  .data-table td:nth-child(5),
+  .data-table th:nth-child(5) {
+    min-width: 80px;
+    text-align: center;
+  }
+  
+  /* Actions column */
+  .data-table td:nth-child(6),
+  .data-table th:nth-child(6) {
+    min-width: 100px;
+    text-align: center;
+  }
+  
+  /* For cake orders table - hide size/layers on very small screens */
+  .data-table th:nth-child(4),
+  .data-table td:nth-child(4) {
+    min-width: 80px;
+  }
+  
+  /* Hide less critical columns on very small screens */
+  @media (max-width: 480px) {
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+      display: none; /* Hide Cake column */
+    }
+    
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+      display: none; /* Hide Size/Layers column */
+    }
+  }
+  
+  /* Action buttons */
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .action-buttons button,
+  .action-buttons .btn {
+    width: 100%;
+    font-size: 0.7rem;
+    padding: 0.375rem 0.5rem;
+    white-space: nowrap;
+  }
+  
+  /* ===== CONTENT CARDS ===== */
+  .content-card {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .content-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .content-card-title {
+    font-size: 1.1rem;
+  }
+  
+  /* ===== QUICK ACTIONS ===== */
+  .content-card > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  /* ===== FORMS ===== */
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 0.9rem;
+  }
+  
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .btn-small {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  /* ===== STATUS BADGES ===== */
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* ===== MODALS ===== */
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+    margin: 0.75rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+  }
+  
+  .modal-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 0.75rem;
+  }
+  
+  .stat-card-value {
+    font-size: 1.75rem;
+  }
+  
+  .content-card {
+    padding: 0.875rem;
+  }
+  
+  .data-table {
+    font-size: 0.75rem;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 0.5rem 0.375rem;
+  }
+}

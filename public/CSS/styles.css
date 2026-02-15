@@ -818,3 +818,223 @@ section {
 .mb-1 { margin-bottom: 1rem; }
 .mb-2 { margin-bottom: 2rem; }
 .mb-3 { margin-bottom: 3rem; }
+
+
+/* ========================================
+   MOBILE RESPONSIVE FIXES
+   Add these at the END of your styles.css file
+   ======================================== */
+
+/* Hamburger Menu Toggle Button */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+  position: absolute;
+  right: 1rem;
+  bottom: 0.6rem;
+}
+
+/* Menu Overlay */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  opacity: 40%;
+  transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+  display: flex;
+  flex-direction: column;
+  opacity: 40%;
+
+}
+.menu-overlay.active.header{
+  background-color: transparent;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  
+  /* ===== HAMBURGER MENU ===== */
+  .menu-toggle {
+    display: block;
+  }
+  
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 280px;
+    background: white;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem 2rem 2rem;
+    gap: 0.5rem;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  }
+  
+  .nav.active {
+    left: 0;
+  }
+  
+  .nav a {
+    padding: 0.5rem 0;
+    border-bottom: 3px solid var(--cream);
+    font-size: 1rem;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+  
+  .nav a:hover {
+    padding-left: 0.5rem;
+    color: var(--primary-color);
+  }
+  
+  /* ===== HEADER ===== */
+  .header {
+    padding: 1rem 5%;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+    margin-right : 70%;
+    
+  }
+  
+  /* ===== HERO SECTION ===== */
+  .hero {
+    padding: 3rem 5%;
+    min-height: 50vh;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .hero-buttons .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* ===== SECTIONS ===== */
+  .featured,
+  .why-us,
+  .recent-deliveries {
+    padding: 3rem 5%;
+  }
+  
+  /* ===== CAKE GRID ===== */
+  .cake-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  /* ===== ORDER CONFIRMATION ===== */
+  #orderConfirmation {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  #orderId, 
+  #paymentReference {
+    font-size: 0.85rem;
+    word-break: break-all;
+    max-width: 100%;
+    line-height: 1.5;
+  }
+  
+  /* ===== ORDER CARDS (my-orders.html) ===== */
+  .order-card {
+    padding: 1.5rem;
+  }
+  
+  .tabs {
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  /* ===== FORMS ===== */
+  .order-form,
+  .tracking-form {
+    padding: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 1rem;
+    padding: 0.875rem;
+  }
+ 
+  /* ===== FOOTER ===== */
+  .footer {
+    padding: 2rem 5%;
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+  .header {
+    padding: 0.875rem 4%;
+  }
+  
+  .logo {
+    font-size: 1.2rem;
+  }
+  
+  .hero {
+    padding: 2rem 4%;
+  }
+  
+  .featured,
+  .why-us {
+    padding: 2rem 4%;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}

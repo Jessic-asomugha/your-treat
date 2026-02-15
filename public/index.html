@@ -9,9 +9,10 @@
 <body>
 
   <!-- Header -->
-  <header class="header">
-    <div class="logo">Sweet Delights</div>
-<nav class="nav">
+<header class="header">
+  <div class="logo">Sweet Delights</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <nav class="nav">
   <a href="index.html">Home</a>
   <a href="gallery.html">Gallery</a>
   <a href="order.html">Order</a>
@@ -21,7 +22,11 @@
     <a href="auth/login.html">Login</a>
   </span>
 </nav>
+
   </header>
+
+  
+<div class="menu-overlay" onclick="toggleMenu()"></div>
 
   <!-- Demo Notice -->
   <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-bottom: 3px solid #F59E0B; padding: 1.25rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
@@ -114,6 +119,37 @@
 
 <script src="js/simple-data-manager.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+// Hamburger Menu Toggle
+function toggleMenu() {
+  const nav = document.querySelector('.nav');
+  const overlay = document.querySelector('.menu-overlay');
+  const toggle = document.querySelector('.menu-toggle');
+  
+  nav.classList.toggle('active');
+  overlay.classList.toggle('active');
+  
+  if (nav.classList.contains('active')) {
+    toggle.textContent = '✕'; 
+    document.getElementsByTagName('header')[0].style.backgroundColor = 'var(--primary)';
+  } else {
+    toggle.textContent = '☰';
+    
+  }
+}
+
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    const nav = document.querySelector('.nav');
+    const overlay = document.querySelector('.menu-overlay');
+    const toggle = document.querySelector('.menu-toggle');
+    nav.classList.remove('active');
+    overlay.classList.remove('active');
+    toggle.textContent = '☰';
+  });
+});
+</script>
 
   <script>
 // Update navigation based on auth state

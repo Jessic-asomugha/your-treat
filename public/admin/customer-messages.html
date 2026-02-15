@@ -229,6 +229,96 @@
         display: flex;
       }
     }
+
+    /* CUSTOMER MESSAGES MOBILE FIX */
+    /* Mobile Back Button */
+    .mobile-back-button {
+      display: none;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--primary-color);
+      z-index: 10;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .messaging-container {
+        grid-template-columns: 1fr;
+        height: calc(100vh - 100px);
+      }
+      
+      /* Show only conversations by default */
+      .conversations-panel {
+        display: flex;
+      }
+      
+      .chat-panel {
+        display: none;
+      }
+      
+      /* When chat is active, hide conversations and show chat */
+      .conversations-panel.mobile-hidden {
+        display: none;
+      }
+      
+      .chat-panel.mobile-active {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+        background: white;
+      }
+      
+      /* Show back button on mobile */
+      .mobile-back-button {
+        display: block;
+      }
+      
+      /* Increase conversation touch targets */
+      .conversation-item {
+        min-height: 80px;
+        padding: 1.25rem 1.5rem;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(139, 69, 19, 0.1);
+        touch-action: manipulation;
+      }
+      
+      .conversation-item:active {
+        background: var(--cream);
+      }
+      
+      /* Make chat header accommodate back button */
+      .chat-header {
+        padding-left: 4rem;
+      }
+      
+      /* Adjust message bubbles */
+      .message-bubble {
+        max-width: 80%;
+        font-size: 0.9rem;
+      }
+      
+      /* Input area */
+      .chat-input {
+        font-size: 1rem;
+      }
+      
+      .send-button {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -240,10 +330,7 @@
         Sweet Delights
         <span class="admin-badge">Admin Panel</span>
       </div>
-      <div class="admin-user">
-        <span class="admin-user-name">👤 Admin User</span>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-      </div>
+      <button class="admin-menu-toggle" onclick="toggleAdminMenu()">☰ Menu</button>
     </div>
   </header>
 
@@ -272,6 +359,7 @@
         </svg>
         Customer Messages
       </a>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </nav>
 
@@ -300,6 +388,7 @@
         <!-- This appears when a conversation is selected -->
         <div id="activeChatState" style="display: none; flex-direction: column; height: 100%;">
           <div class="chat-header">
+            <button class="mobile-back-button" onclick="goBackToConversations()">←</button>
             <h3 id="chatCustomerName"></h3>
             <p id="chatMessageCount"></p>
           </div>
@@ -434,6 +523,13 @@ function renderConversationsList() {
 }
 
 function selectConversation(sender) {
+
+  // Mobile-specific: Toggle views
+  if (window.innerWidth <= 768) {
+    document.querySelector('.conversations-panel').classList.add('mobile-hidden');
+    document.getElementById('chatPanel').classList.add('mobile-active');
+  }
+
   selectedConversation = sender;
   const conv = conversations.find(c => c.sender === sender);
   
@@ -531,6 +627,54 @@ document.getElementById('replyInput').addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 100) + 'px';
 });
+</script>
+
+<script>
+function toggleAdminMenu() {
+  const nav = document.querySelector('.admin-nav');
+  const toggle = document.querySelector('.admin-menu-toggle');
+  nav.classList.toggle('active');
+  
+  if (nav.classList.contains('active')) {
+    toggle.innerHTML = '✕ Close';
+  } else {
+    toggle.innerHTML = '☰ Menu';
+  }
+}
+
+document.querySelectorAll('.admin-nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      const nav = document.querySelector('.admin-nav');
+      const toggle = document.querySelector('.admin-menu-toggle');
+      nav.classList.remove('active');
+      toggle.innerHTML = '☰ Menu';
+    }
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (window.innerWidth <= 768) {
+    const nav = document.querySelector('.admin-nav');
+    const toggle = document.querySelector('.admin-menu-toggle');
+    
+    if (nav.classList.contains('active') && 
+        !nav.contains(e.target) && 
+        !toggle.contains(e.target)) {
+      nav.classList.remove('active');
+      toggle.innerHTML = '☰ Menu';
+    }
+  }
+});
+
+// Add back button functionality
+function goBackToConversations() {
+  if (window.innerWidth <= 768) {
+    document.querySelector('.conversations-panel').classList.remove('mobile-hidden');
+    document.getElementById('chatPanel').classList.remove('mobile-active');
+  }
+}
+
 </script>
 
 </body>

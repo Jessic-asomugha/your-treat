@@ -9,9 +9,10 @@
 <body>
 
   <!-- Header -->
-  <header class="header">
-    <div class="logo">Sweet Delights</div>
-<nav class="nav">
+<header class="header">
+  <div class="logo">Sweet Delights</div>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <nav class="nav">
   <a href="index.html">Home</a>
   <a href="gallery.html">Gallery</a>
   <a href="order.html">Order</a>
@@ -22,6 +23,9 @@
   </span>
 </nav>
   </header>
+
+
+<div class="menu-overlay" onclick="toggleMenu()"></div>
 
   <!-- Order Form -->
   <section class="featured">
@@ -125,6 +129,35 @@
 
   <script src="js/main.js"></script>
 <script src="js/simple-data-manager.js"></script>
+
+<script>
+// Hamburger Menu Toggle
+function toggleMenu() {
+  const nav = document.querySelector('.nav');
+  const overlay = document.querySelector('.menu-overlay');
+  const toggle = document.querySelector('.menu-toggle');
+  
+  nav.classList.toggle('active');
+  overlay.classList.toggle('active');
+  
+  if (nav.classList.contains('active')) {
+    toggle.textContent = '✕';
+  } else {
+    toggle.textContent = '☰';
+  }
+}
+
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    const nav = document.querySelector('.nav');
+    const overlay = document.querySelector('.menu-overlay');
+    const toggle = document.querySelector('.menu-toggle');
+    nav.classList.remove('active');
+    overlay.classList.remove('active');
+    toggle.textContent = '☰';
+  });
+});
+</script>
 
   <script>
 // Update navigation based on auth state
