@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  fullName  String
+  phone     String?
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+
+  cakeName        String
+  size            String
+  layers          String
+  quantity        Int           @default(1)
+  flavor          String?
+  deliveryOption  String        @default("pickup")
+  deliveryDate    String
+  deliveryAddress String?
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  specialRequests String?
+
+  status          OrderStatus   @default(PENDING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderName  String
+  senderEmail String?
+  text        String
+  isAdmin     Boolean  @default(false)
+  replyTo     String?
+  createdAt   DateTime @default(now())
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  BAKING
+  DELIVERED
+  CANCELLED
+}
