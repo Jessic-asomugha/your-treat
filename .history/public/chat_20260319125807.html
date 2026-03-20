@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with Us – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C3317;
+      --brown-mid:  #7A4728;
+      --gold:       #C4924A;
+      --gold-light: #E8C078;
+      --cream:      #FAF6F0;
+      --cream-dark: #F2E8D9;
+      --ink:        #1C1410;
+      --ink-mid:    #4A3728;
+      --stone:      #9E8A78;
+      --border:     rgba(92,51,23,0.12);
+    }
+
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.02em;
+    }
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .nav { display: flex; gap: 2rem; align-items: center; }
+    .nav a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--brown); }
+    .nav-cta {
+      background: var(--brown) !important;
+      color: #fff !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+    }
+
+    /* ── CHAT LAYOUT ── */
+    .chat-page {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      height: calc(100vh - 65px); /* viewport minus header */
+      overflow: hidden;
+    }
+
+    /* ── LEFT: INFO PANEL ── */
+    .info-panel {
+      background: var(--brown);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-panel::before {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.08);
+    }
+
+    .info-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .info-tagline {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .info-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 2rem 0;
+    }
+
+    .info-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .info-heading em { font-style: italic; color: var(--gold-light); }
+
+    .info-desc {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .info-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .info-item-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .info-item-text {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .info-bottom {
+      position: relative;
+      z-index: 1;
+    }
+
+    .info-hours {
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+
+    .info-hours-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      padding: 0.2rem 0;
+    }
+
+    .online-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #4ADE80;
+      margin-right: 0.4rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ── RIGHT: CHAT PANEL ── */
+    .chat-panel {
+      display: flex;
+      flex-direction: column;
+      background: var(--cream-dark);
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Chat top bar */
+    .chat-topbar {
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .chat-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .chat-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .chat-topbar-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .chat-topbar-status {
+      font-size: 0.72rem;
+      color: var(--stone);
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .chat-identity {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .identity-label {
+      font-size: 0.7rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    .identity-name {
+      font-size: 0.78rem;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    .change-name-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.3rem 0.65rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .change-name-btn:hover { border-color: var(--brown); color: var(--brown); }
+
+    /* Messages area */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(92,51,23,0.15); border-radius: 2px; }
+
+    /* Date divider */
+    .date-divider {
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .date-divider span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+      background: var(--cream-dark);
+      padding: 0.25rem 0.75rem;
+    }
+
+    /* Bubbles */
+    .bubble-wrap {
+      display: flex;
+      flex-direction: column;
+      max-width: 68%;
+    }
+
+    .bubble-wrap.customer { align-self: flex-end; align-items: flex-end; }
+    .bubble-wrap.admin    { align-self: flex-start; align-items: flex-start; }
+
+    .bubble-sender {
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--stone);
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+    }
+
+    .bubble {
+      padding: 0.85rem 1.1rem;
+      border-radius: 2px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .bubble.customer {
+      background: var(--brown);
+      color: #fff;
+      border-bottom-right-radius: 0;
+    }
+
+    .bubble.admin {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 0;
+    }
+
+    .bubble-time {
+      font-size: 0.62rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Welcome state */
+    .chat-welcome {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      gap: 0.75rem;
+    }
+
+    .welcome-icon {
+      width: 52px; height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--brown);
+      font-weight: 400;
+    }
+
+    .welcome-sub {
+      font-size: 0.8rem;
+      color: var(--stone);
+      font-weight: 300;
+      max-width: 280px;
+      line-height: 1.7;
+    }
+
+    .quick-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .quick-btn {
+      padding: 0.45rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--ink-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-btn:hover { border-color: var(--gold); color: var(--brown); background: var(--cream); }
+
+    /* Input area */
+    .chat-input-area {
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ink);
+      background: #fff;
+      resize: none;
+      min-height: 42px;
+      max-height: 120px;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+      overflow-y: auto;
+    }
+
+    .chat-input:focus { outline: none; border-color: var(--gold); }
+    .chat-input::placeholder { color: rgba(158,138,120,0.5); }
+
+    .send-btn {
+      width: 42px; height: 42px;
+      background: var(--brown);
+      border: none;
+      border-radius: 2px;
+      color: #fff;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .send-btn:hover { background: var(--brown-mid); transform: translateY(-1px); }
+    .send-btn:active { transform: translateY(0); }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .input-hint {
+      font-size: 0.65rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-top: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── NAME MODAL ── */
+    .name-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,20,16,0.75);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .name-modal-backdrop.show { display: flex; }
+
+    .name-modal {
+      background: var(--cream);
+      border-radius: 2px;
+      padding: 2.5rem;
+      max-width: 400px;
+      width: 100%;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .name-modal-eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .name-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 0.4rem;
+    }
+
+    .name-modal-sub {
+      font-size: 0.8rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .name-modal-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: #fff;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .name-modal-input:focus { outline: none; border-color: var(--gold); }
+
+    .name-modal-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .name-modal-btn:hover { background: var(--brown-mid); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: rgba(255,255,255,0.3); }
+    .footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.2); font-weight: 300; }
+    .footer-admin { font-size: 0.68rem; color: rgba(255,255,255,0.18); text-decoration: none; }
+    .footer-admin:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .chat-page { grid-template-columns: 1fr; }
+      .info-panel { display: none; }
+      .chat-panel { height: calc(100vh - 65px); }
+      .nav a:not(.nav-cta):not(.active) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo-wrap">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="order.html">Order</a>
+      <a href="my-orders.html">My Orders</a>
+      <a href="chat.html" class="active">Chat</a>
+      <span id="authNav"><a href="auth/login.html">Login</a></span>
+    </nav>
+  </header>
+
+  <!-- CHAT PAGE -->
+  <div class="chat-page">
+
+    <!-- LEFT: INFO PANEL -->
+    <div class="info-panel">
+      <div>
+        <div class="info-logo">Sweet Delights</div>
+        <div class="info-tagline">Artisan Bakery · Lagos</div>
+        <div class="info-divider"></div>
+        <div class="info-heading">Chat with our <em>team</em></div>
+        <p class="info-desc">Have a question about an order, a custom cake request, or just want to say hi? We're here to help.</p>
+        <div class="info-items">
+          <div class="info-item">
+            <div class="info-item-dot"></div>
+            <p class="info-item-text">Ask about cake flavours, sizes, and pricing</p>
+          </div>
+          <div class="info-item">
+            <div class="info-item-dot"></div>
+            <p class="info-item-text">Get help with an existing order</p>
+          </div>
+          <div class="info-item">
+            <div class="info-item-dot"></div>
+            <p class="info-item-text">Request a custom design or corporate order</p>
+          </div>
+          <div class="info-item">
+            <div class="info-item-dot"></div>
+            <p class="info-item-text">Discuss delivery options and scheduling</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-bottom">
+        <div class="info-hours">
+          <div class="info-hours-label">Business hours</div>
+          <div class="info-hours-row">
+            <span>Monday – Friday</span>
+            <span>8am – 6pm</span>
+          </div>
+          <div class="info-hours-row">
+            <span>Saturday</span>
+            <span>9am – 4pm</span>
+          </div>
+          <div class="info-hours-row">
+            <span>Sunday</span>
+            <span>Closed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CHAT PANEL -->
+    <div class="chat-panel">
+
+      <!-- Top bar -->
+      <div class="chat-topbar">
+        <div class="chat-topbar-left">
+          <div class="chat-avatar">SD</div>
+          <div>
+            <div class="chat-topbar-name">Sweet Delights Support</div>
+            <div class="chat-topbar-status">
+              <span class="online-dot"></span>
+              Usually replies within the hour
+            </div>
+          </div>
+        </div>
+        <div class="chat-identity" id="identityWrap" style="display:none;">
+          <span class="identity-label">Chatting as</span>
+          <span class="identity-name" id="identityName"></span>
+          <button class="change-name-btn" onclick="promptName()">Change</button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Welcome state shown until first message -->
+        <div class="chat-welcome" id="welcomeState">
+          <div class="welcome-icon">💬</div>
+          <div class="welcome-title">How can we help?</div>
+          <p class="welcome-sub">Send us a message and our team will get back to you as soon as possible.</p>
+          <div class="quick-btns">
+            <button class="quick-btn" onclick="sendQuick('I\'d like to place a custom cake order')">Custom order</button>
+            <button class="quick-btn" onclick="sendQuick('Can I get pricing information?')">Pricing</button>
+            <button class="quick-btn" onclick="sendQuick('I need help with an existing order')">Track order</button>
+            <button class="quick-btn" onclick="sendQuick('What are your delivery options?')">Delivery</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input-area">
+        <div class="chat-input-row">
+          <textarea
+            class="chat-input"
+            id="chatInput"
+            placeholder="Type your message…"
+            rows="1"
+            oninput="autoResize(this)"
+            onkeydown="handleKey(event)"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+        <p class="input-hint">Press Enter to send · Shift+Enter for new line</p>
+      </div>
+
+    </div><!-- /chat-panel -->
+
+  </div><!-- /chat-page -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-logo">Sweet Delights</span>
+    <span class="footer-copy">© 2025 Sweet Delights Bakery</span>
+    <a href="auth/admin-login.html" class="footer-admin">Admin</a>
+  </footer>
+
+  <!-- NAME MODAL -->
+  <div class="name-modal-backdrop" id="nameModalBackdrop">
+    <div class="name-modal">
+      <p class="name-modal-eyebrow">Before we begin</p>
+      <h2 class="name-modal-title">What's your name?</h2>
+      <p class="name-modal-sub">So our team knows who they're talking to.</p>
+      <input
+        class="name-modal-input"
+        id="nameInput"
+        type="text"
+        placeholder="e.g. Amaka Obi"
+        maxlength="40"
+        autocomplete="name"
+        onkeydown="if(event.key==='Enter') confirmName()"
+      />
+      <button class="name-modal-btn" onclick="confirmName()">Start Chatting</button>
+    </div>
+  </div>
+
+  <script>
+    let guestName = null;
+    let messages  = []; // ── BACKEND PLACEHOLDER: replace with API-fetched messages
+
+    // ── INIT ──
+    document.addEventListener('DOMContentLoaded', () => {
+      const stored = localStorage.getItem('chat_guest_name');
+      if (stored) {
+        guestName = stored;
+        setIdentity(guestName);
+        loadMessages();
+      } else {
+        promptName();
+      }
+
+      // Enable/disable send button based on input
+      document.getElementById('chatInput').addEventListener('input', () => {
+        const val = document.getElementById('chatInput').value.trim();
+        document.getElementById('sendBtn').disabled = !val || !guestName;
+      });
+    });
+
+    // ── NAME FLOW ──
+    function promptName() {
+      document.getElementById('nameModalBackdrop').classList.add('show');
+      setTimeout(() => document.getElementById('nameInput').focus(), 100);
+    }
+
+    function confirmName() {
+      const val = document.getElementById('nameInput').value.trim();
+      if (!val) return;
+      guestName = val;
+      localStorage.setItem('chat_guest_name', val);
+      document.getElementById('nameModalBackdrop').classList.remove('show');
+      setIdentity(val);
+      loadMessages();
+    }
+
+    function setIdentity(name) {
+      document.getElementById('identityName').textContent = name;
+      document.getElementById('identityWrap').style.display = 'flex';
+    }
+
+    // ── MESSAGES ──
+    // ── BACKEND PLACEHOLDER ──
+    // Replace loadMessages() with:
+    // const res = await fetch('/api/chat/messages?user=' + encodeURIComponent(guestName));
+    // messages = await res.json();
+    // renderMessages();
+    // Then poll or use a WebSocket for real-time updates.
+
+    function loadMessages() {
+      if (window.dataManager) {
+        try {
+          const all = window.dataManager.getMessages() || [];
+          // Filter to messages relevant to this guest
+          messages = all.filter(m =>
+            m.sender === guestName || (m.isAdmin && m.replyTo === guestName)
+          );
+          renderMessages();
+
+          // Poll for new messages every 5 seconds (replace with WS when backend is live)
+          clearInterval(window._chatPoll);
+          window._chatPoll = setInterval(loadMessages, 5000);
+        } catch(e) {
+          console.error('Error loading messages:', e);
+        }
+      }
+    }
+
+    function renderMessages() {
+      const container = document.getElementById('chatMessages');
+      const welcomeState = document.getElementById('welcomeState');
+
+      if (messages.length === 0) {
+        if (!welcomeState) {
+          container.innerHTML = `<div class="chat-welcome" id="welcomeState">
+            <div class="welcome-icon">💬</div>
+            <div class="welcome-title">How can we help?</div>
+            <p class="welcome-sub">Send us a message and our team will get back to you as soon as possible.</p>
+            <div class="quick-btns">
+              <button class="quick-btn" onclick="sendQuick('I\\'d like to place a custom cake order')">Custom order</button>
+              <button class="quick-btn" onclick="sendQuick('Can I get pricing information?')">Pricing</button>
+              <button class="quick-btn" onclick="sendQuick('I need help with an existing order')">Track order</button>
+              <button class="quick-btn" onclick="sendQuick('What are your delivery options?')">Delivery</button>
+            </div>
+          </div>`;
+        }
+        return;
+      }
+
+      // Remove welcome state once messages exist
+      if (welcomeState) welcomeState.remove();
+
+      container.innerHTML = messages.map(m => bubbleHTML(m)).join('');
+      scrollToBottom();
+    }
+
+    function bubbleHTML(m) {
+      const isMe = !m.isAdmin;
+      const time = new Date(m.timestamp).toLocaleTimeString('en-NG', { hour:'2-digit', minute:'2-digit' });
+      const sender = m.isAdmin ? 'Sweet Delights' : m.sender;
+      return `
+        <div class="bubble-wrap ${isMe ? 'customer' : 'admin'}">
+          <div class="bubble-sender">${sender}</div>
+          <div class="bubble ${isMe ? 'customer' : 'admin'}">${escapeHTML(m.text)}</div>
+          <div class="bubble-time">${time}</div>
+        </div>`;
+    }
+
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/\n/g, '<br>');
+    }
+
+    // ── SEND ──
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text  = input.value.trim();
+      if (!text || !guestName) return;
+
+      // ── BACKEND PLACEHOLDER ──
+      // Replace with:
+      // await fetch('/api/chat/send', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ sender: guestName, text })
+      // });
+      // loadMessages();
+
+      if (window.dataManager) {
+        window.dataManager.sendMessage({
+          sender:  guestName,
+          text:    text,
+          isAdmin: false
+        });
+      }
+
+      // Optimistic UI — show message immediately
+      const optimistic = {
+        sender:    guestName,
+        text:      text,
+        isAdmin:   false,
+        timestamp: Date.now()
+      };
+      messages.push(optimistic);
+
+      const welcomeState = document.getElementById('welcomeState');
+      if (welcomeState) welcomeState.remove();
+
+      const container = document.getElementById('chatMessages');
+      container.insertAdjacentHTML('beforeend', bubbleHTML(optimistic));
+      scrollToBottom();
+
+      input.value = '';
+      input.style.height = '';
+      document.getElementById('sendBtn').disabled = true;
+    }
+
+    function sendQuick(text) {
+      document.getElementById('chatInput').value = text;
+      sendMessage();
+    }
+
+    // ── UI HELPERS ──
+    function autoResize(el) {
+      el.style.height = '';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function scrollToBottom() {
+      const c = document.getElementById('chatMessages');
+      c.scrollTop = c.scrollHeight;
+    }
+
+    // ── AUTH NAV ──
+    window.onAuthStateChanged = (user) => {
+      const authNav = document.getElementById('authNav');
+      if (!authNav) return;
+      if (user) {
+        const name = user.displayName || user.email.split('@')[0];
+        // If logged in, use their real name
+        if (!guestName) {
+          guestName = name;
+          localStorage.setItem('chat_guest_name', name);
+          setIdentity(name);
+        }
+        authNav.innerHTML = `
+          <span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+          <a href="#" onclick="event.preventDefault();window.authManager&&window.authManager.logout().then(()=>location.reload());">Logout</a>`;
+      } else {
+        authNav.innerHTML = `<a href="auth/login.html">Login</a><a href="auth/register.html">Sign Up</a>`;
+      }
+    };
+  </script>
+
+  <!-- Remove when backend is live -->
+  <script src="js/simple-data-manager.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

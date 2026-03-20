@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order a Cake – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:       #5C3317;
+      --brown-mid:   #7A4728;
+      --gold:        #C4924A;
+      --gold-light:  #E8C078;
+      --cream:       #FAF6F0;
+      --cream-dark:  #F2E8D9;
+      --ink:         #1C1410;
+      --ink-mid:     #4A3728;
+      --stone:       #9E8A78;
+      --border:      rgba(92,51,23,0.12);
+      --success:     #3A7D44;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .nav { display: flex; gap: 2rem; align-items: center; }
+    .nav a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--brown); }
+    .nav-cta {
+      background: var(--brown) !important;
+      color: #fff !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+    }
+    .nav-cta:hover { background: var(--brown-mid) !important; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--brown);
+      padding: 3.5rem 5%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.1);
+    }
+    .page-hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .page-hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .page-hero-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      text-align: right;
+      max-width: 220px;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── LAYOUT ── */
+    .order-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 5%;
+      align-items: start;
+      gap: 3rem;
+    }
+
+    /* ── FORM ── */
+    .form-wrap { display: flex; flex-direction: column; gap: 2rem; }
+
+    .form-section {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .form-section-header {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .form-section-num {
+      width: 28px; height: 28px;
+      background: var(--brown);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .form-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--brown);
+    }
+    .form-section-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    .field { display: flex; flex-direction: column; gap: 0.45rem; }
+    .field label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(92,51,23,0.2);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: #fff;
+    }
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239E8A78' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+    .field textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+    .field-hint { font-size: 0.72rem; color: var(--stone); font-weight: 300; margin-top: 0.2rem; }
+
+    /* Cake picker cards */
+    .cake-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .cake-option {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .cake-option:hover { border-color: var(--gold); background: #fff; }
+    .cake-option.selected {
+      border-color: var(--brown);
+      background: #fff;
+    }
+    .cake-option.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 0.5rem; right: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--brown);
+      font-weight: 500;
+    }
+    .cake-option-thumb {
+      height: 80px;
+      border-radius: 1px;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #7A4728 0%, #5C3317 100%);
+    }
+    .cake-option-thumb.choc { background: linear-gradient(135deg, #3D1F0A 0%, #6B3A1F 100%); }
+    .cake-option-thumb.van  { background: linear-gradient(135deg, #C4924A 0%, #E8C078 100%); }
+    .cake-option-thumb.red  { background: linear-gradient(135deg, #7A1F1F 0%, #B03030 100%); }
+    .cake-option-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--brown);
+    }
+    .cake-option-desc { font-size: 0.72rem; color: var(--stone); font-weight: 300; margin-top: 0.2rem; }
+
+    /* Delivery toggle */
+    .delivery-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .delivery-btn {
+      padding: 0.85rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+      background: var(--cream);
+      border: none;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .delivery-btn:first-child { border-right: 1px solid var(--border); }
+    .delivery-btn.active {
+      background: var(--brown);
+      color: #fff;
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .summary-card {
+      background: var(--brown);
+      border-radius: 2px;
+      padding: 2rem;
+      position: sticky;
+      top: 6rem;
+    }
+    .summary-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      gap: 1rem;
+    }
+    .summary-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .summary-value {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 300;
+      text-align: right;
+    }
+    .summary-value.placeholder { color: rgba(255,255,255,0.25); font-style: italic; }
+
+    .summary-total {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    .summary-total-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+    .summary-total-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+    .summary-note {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .submit-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .summary-guarantee {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .guarantee-icon {
+      width: 16px; height: 16px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .guarantee-text {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── CONFIRMATION ── */
+    .confirmation-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,20,16,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .confirmation-overlay.show { display: flex; }
+    .confirmation-card {
+      background: var(--cream);
+      border-radius: 2px;
+      padding: 3rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .confirm-icon {
+      width: 60px; height: 60px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.4rem;
+    }
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+    .confirm-sub { font-size: 0.85rem; color: var(--stone); font-weight: 300; margin-bottom: 2rem; }
+    .confirm-id-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .confirm-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      color: var(--brown);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      background: var(--cream-dark);
+      padding: 0.75rem 2rem;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+    .confirm-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-dark {
+      background: var(--brown);
+      color: #fff;
+      padding: 0.75rem 1.75rem;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-dark:hover { background: var(--brown-mid); }
+    .btn-outline {
+      background: transparent;
+      color: var(--brown);
+      padding: 0.75rem 1.75rem;
+      border: 1px solid var(--brown);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover { background: var(--brown); color: #fff; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 5rem;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 300; }
+    .footer-admin { font-size: 0.7rem; color: rgba(255,255,255,0.2); text-decoration: none; letter-spacing: 0.05em; }
+    .footer-admin:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .order-layout { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .cake-options { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .cake-options { grid-template-columns: 1fr; }
+      .nav { gap: 1rem; }
+      .nav a:not(.nav-cta):not(.active) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo-wrap" style="text-decoration:none;">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="order.html" class="active">Order</a>
+      <a href="my-orders.html">My Orders</a>
+      <a href="chat.html">Chat</a>
+      <span id="authNav">
+        <a href="auth/login.html">Login</a>
+      </span>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <p class="page-hero-eyebrow">Custom order</p>
+      <h1>Place your <em>order</em></h1>
+    </div>
+    <p class="page-hero-note">Please order at least 48 hours in advance. We'll confirm via WhatsApp or email.</p>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="order-layout">
+
+    <!-- LEFT: FORM -->
+    <div class="form-wrap">
+
+      <!-- SECTION 1: Choose Cake -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-num">1</div>
+          <div class="form-section-title">Choose your cake</div>
+        </div>
+        <div class="form-section-body">
+          <div class="cake-options">
+            <div class="cake-option selected" data-cake="Chocolate Delight" data-price="12000" onclick="selectCake(this)">
+              <div class="cake-option-thumb choc"></div>
+              <div class="cake-option-name">Chocolate Delight</div>
+              <div class="cake-option-desc">Rich ganache & dark sponge</div>
+            </div>
+            <div class="cake-option" data-cake="Vanilla Dream" data-price="9500" onclick="selectCake(this)">
+              <div class="cake-option-thumb van"></div>
+              <div class="cake-option-name">Vanilla Dream</div>
+              <div class="cake-option-desc">Classic buttercream finish</div>
+            </div>
+            <div class="cake-option" data-cake="Red Velvet" data-price="11000" onclick="selectCake(this)">
+              <div class="cake-option-thumb red"></div>
+              <div class="cake-option-name">Red Velvet</div>
+              <div class="cake-option-desc">Cream cheese frosting</div>
+            </div>
+          </div>
+          <!-- Hidden input for form submission -->
+          <input type="hidden" id="selectedCake" name="cake" value="Chocolate Delight" />
+          <input type="hidden" id="selectedPrice" value="12000" />
+
+          <div class="form-row">
+            <div class="field">
+              <label for="size">Size</label>
+              <select id="size" name="size" required onchange="updateSummary()">
+                <option value="6 inch">6 inch — Small</option>
+                <option value="8 inch" selected>8 inch — Medium</option>
+                <option value="10 inch">10 inch — Large</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="layers">Layers</label>
+              <select id="layers" name="layers" required onchange="updateSummary()">
+                <option value="2">2 layers</option>
+                <option value="3" selected>3 layers</option>
+                <option value="4">4 layers</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" style="max-width: 160px;">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="quantity" min="1" max="20" value="1" required oninput="updateSummary()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Delivery -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-num">2</div>
+          <div class="form-section-title">Delivery details</div>
+        </div>
+        <div class="form-section-body">
+
+          <div class="field">
+            <label>Fulfilment method</label>
+            <div class="delivery-toggle">
+              <button type="button" class="delivery-btn active" id="btnPickup" onclick="setDelivery('pickup')">Pickup</button>
+              <button type="button" class="delivery-btn" id="btnDelivery" onclick="setDelivery('delivery')">Delivery</button>
+            </div>
+            <input type="hidden" id="deliveryOption" name="deliveryOption" value="pickup" />
+          </div>
+
+          <div class="field">
+            <label for="deliveryDate">Date</label>
+            <input type="date" id="deliveryDate" name="deliveryDate" required onchange="updateSummary()" />
+            <p class="field-hint">Minimum 48 hours from today</p>
+          </div>
+
+          <div class="field" id="addressField" style="display:none;">
+            <label for="deliveryAddress">Delivery address</label>
+            <textarea id="deliveryAddress" name="deliveryAddress" placeholder="Full address including area / landmark"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SECTION 3: Your Details -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-num">3</div>
+          <div class="form-section-title">Your details</div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-row">
+            <div class="field">
+              <label for="customerName">Full name</label>
+              <input type="text" id="customerName" name="customerName" placeholder="e.g. Amaka Obi" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input type="tel" id="phone" name="phone" placeholder="e.g. 08012345678" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Email address <span style="font-weight:300;color:var(--stone)">(optional)</span></label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" />
+          </div>
+          <div class="field">
+            <label for="notes">Special instructions <span style="font-weight:300;color:var(--stone)">(optional)</span></label>
+            <textarea id="notes" name="notes" placeholder="Inscription on cake, allergy info, colour preference…"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-wrap -->
+
+    <!-- RIGHT: SUMMARY -->
+    <div>
+      <div class="summary-card">
+        <div class="summary-title">Order Summary</div>
+
+        <div class="summary-row">
+          <span class="summary-label">Cake</span>
+          <span class="summary-value" id="sum-cake">Chocolate Delight</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Size</span>
+          <span class="summary-value" id="sum-size">8 inch</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Layers</span>
+          <span class="summary-value" id="sum-layers">3 layers</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Quantity</span>
+          <span class="summary-value" id="sum-qty">× 1</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Fulfilment</span>
+          <span class="summary-value" id="sum-delivery">Pickup</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Date</span>
+          <span class="summary-value placeholder" id="sum-date">Not selected</span>
+        </div>
+
+        <div class="summary-total">
+          <div class="summary-total-label">Estimated Total</div>
+          <div class="summary-total-price" id="sum-price">₦12,000</div>
+          <div class="summary-note">Final price confirmed on order review</div>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitOrder()">
+          Place Order
+        </button>
+
+        <div class="summary-guarantee">
+          <div class="guarantee-icon">✓</div>
+          <p class="guarantee-text">We'll send a WhatsApp confirmation within 1 hour of your order.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /order-layout -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-logo">Sweet Delights</span>
+    <span class="footer-copy">© 2025 Sweet Delights Bakery</span>
+    <a href="auth/admin-login.html" class="footer-admin">Admin</a>
+  </footer>
+
+  <!-- CONFIRMATION OVERLAY -->
+  <div class="confirmation-overlay" id="confirmationOverlay">
+    <div class="confirmation-card">
+      <div class="confirm-icon">🎂</div>
+      <div class="confirm-title">Order Placed!</div>
+      <p class="confirm-sub">Thank you. We'll confirm your order shortly via WhatsApp or email.</p>
+      <div class="confirm-id-label">Your Order ID</div>
+      <div class="confirm-id" id="confirmId">—</div>
+      <p style="font-size:0.78rem;color:var(--stone);margin-bottom:2rem;font-weight:300;">Save this ID to track or manage your order</p>
+      <div class="confirm-actions">
+        <a href="my-orders.html" class="btn-dark">Track My Order</a>
+        <button class="btn-outline" onclick="closeConfirmation()">Back to Site</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/simple-data-manager.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+
+    // Pricing map
+    const PRICES = {
+      'Chocolate Delight': 12000,
+      'Vanilla Dream':     9500,
+      'Red Velvet':        11000
+    };
+
+    // Cake selection
+    function selectCake(el) {
+      document.querySelectorAll('.cake-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('selectedCake').value = el.dataset.cake;
+      document.getElementById('selectedPrice').value = el.dataset.price;
+      updateSummary();
+    }
+
+    // Delivery toggle
+    function setDelivery(type) {
+      document.getElementById('deliveryOption').value = type;
+      document.getElementById('btnPickup').classList.toggle('active', type === 'pickup');
+      document.getElementById('btnDelivery').classList.toggle('active', type === 'delivery');
+      document.getElementById('addressField').style.display = type === 'delivery' ? 'flex' : 'none';
+      updateSummary();
+    }
+
+    // Update sidebar summary
+    function updateSummary() {
+      const cake  = document.getElementById('selectedCake').value;
+      const size  = document.getElementById('size').value;
+      const layers = document.getElementById('layers').value;
+      const qty   = parseInt(document.getElementById('quantity').value) || 1;
+      const date  = document.getElementById('deliveryDate').value;
+      const deliv = document.getElementById('deliveryOption').value;
+      const price = PRICES[cake] || 0;
+
+      document.getElementById('sum-cake').textContent    = cake;
+      document.getElementById('sum-size').textContent    = size;
+      document.getElementById('sum-layers').textContent  = layers + ' layers';
+      document.getElementById('sum-qty').textContent     = '× ' + qty;
+      document.getElementById('sum-delivery').textContent = deliv === 'pickup' ? 'Pickup' : 'Delivery';
+
+      const dateEl = document.getElementById('sum-date');
+      if (date) {
+        dateEl.textContent = new Date(date + 'T00:00:00').toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
+        dateEl.classList.remove('placeholder');
+      } else {
+        dateEl.textContent = 'Not selected';
+        dateEl.classList.add('placeholder');
+      }
+
+      const total = price * qty;
+      document.getElementById('sum-price').textContent = '₦' + total.toLocaleString('en-NG');
+    }
+
+    // Set minimum date (48 hrs from now)
+    (function setMinDate() {
+      const d = new Date();
+      d.setDate(d.getDate() + 2);
+      const iso = d.toISOString().split('T')[0];
+      document.getElementById('deliveryDate').min = iso;
+    })();
+
+    // Submit
+    function submitOrder() {
+      const name  = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const date  = document.getElementById('deliveryDate').value;
+
+      if (!name || !phone || !date) {
+        alert('Please fill in your name, phone number, and delivery date.');
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Placing order…';
+
+      try {
+        const orderData = {
+          cakeId:          document.getElementById('selectedCake').value,
+          cakeName:        document.getElementById('selectedCake').value,
+          size:            document.getElementById('size').value,
+          layers:          document.getElementById('layers').value,
+          quantity:        parseInt(document.getElementById('quantity').value) || 1,
+          deliveryDate:    date,
+          deliveryOption:  document.getElementById('deliveryOption').value,
+          customerName:    name,
+          customerPhone:   phone,
+          customerEmail:   document.getElementById('email').value.trim(),
+          deliveryAddress: document.getElementById('deliveryAddress').value.trim(),
+          specialRequests: document.getElementById('notes').value.trim(),
+        };
+
+        const order = window.dataManager.createOrder(orderData);
+
+        document.getElementById('confirmId').textContent = order.id;
+        document.getElementById('confirmationOverlay').classList.add('show');
+
+      } catch (err) {
+        console.error(err);
+        alert('Something went wrong. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Place Order';
+      }
+    }
+
+    function closeConfirmation() {
+      document.getElementById('confirmationOverlay').classList.remove('show');
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').textContent = 'Place Order';
+    }
+
+    // Auth nav
+    window.onAuthStateChanged = (user) => {
+      const authNav = document.getElementById('authNav');
+      if (!authNav) return;
+      if (user) {
+        const name = user.displayName || user.email.split('@')[0];
+        authNav.innerHTML = `
+          <span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+          <a href="#" style="font-size:0.78rem;" onclick="event.preventDefault();window.authManager.logout().then(()=>location.reload());">Logout</a>`;
+      } else {
+        authNav.innerHTML = `
+          <a href="auth/login.html">Login</a>
+          <a href="auth/register.html">Sign Up</a>`;
+      }
+    };
+
+    // Init summary on load
+    updateSummary();
+  </script>
+</body>
+</html>

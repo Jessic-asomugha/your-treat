@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Admin Dashboard - Sweet Delights Bakery</title>
+
+  <link rel="stylesheet" href="admin.css" />
+
+</head>
+
+<body>
+
+
+
+  <!-- Admin Header -->
+
+  <header class="admin-header">
+
+    <div class="admin-header-content">
+
+      <div class="admin-logo">
+
+        Sweet Delights
+
+        <span class="admin-badge">Admin Panel</span>
+
+      </div>
+
+      <div class="admin-user">
+
+        <span class="admin-user-name">👤 Admin User</span>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- Admin Navigation -->
+
+  <nav class="admin-nav">
+
+    <div class="admin-nav-content">
+
+      <a href="index.html" class="admin-nav-link active">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+          <rect x="3" y="3" width="7" height="7"/>
+
+          <rect x="14" y="3" width="7" height="7"/>
+
+          <rect x="14" y="14" width="7" height="7"/>
+
+          <rect x="3" y="14" width="7" height="7"/>
+
+        </svg>
+
+        Dashboard
+
+      </a>
+
+      <a href="cake-orders.html" class="admin-nav-link">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+
+          <line x1="3" y1="6" x2="21" y2="6"/>
+
+        </svg>
+
+        Cake Orders
+
+      </a>
+
+      <a href="customer-messages.html" class="admin-nav-link">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+
+        </svg>
+
+        Customer Messages
+
+      </a>
+
+    </div>
+
+  </nav>
+
+
+
+  <button class="admin-menu-toggle" onclick="toggleAdminMenu()">☰ Menu</button>
+
+
+
+  <!-- Main Container -->
+
+  <div class="admin-container">
+
+    
+
+    <!-- Page Title -->
+
+    <div style="margin-bottom: 2rem;">
+
+      <h1>Dashboard Overview</h1>
+
+      <p style="color: var(--text-medium); font-size: 1.05rem;">Welcome back! Here's what's happening with your bakery today.</p>
+
+    </div>
+
+
+
+    <!-- Statistics Cards -->
+
+    <div class="dashboard-grid">
+
+      
+
+      <!-- Total Orders -->
+
+      <div class="stat-card">
+
+        <div class="stat-card-header">
+
+          <div>
+
+            <div class="stat-card-title">Total Orders</div>
+
+          </div>
+
+          <div class="stat-card-icon">
+
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2">
+
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+
+              <line x1="3" y1="6" x2="21" y2="6"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div class="stat-card-value" id="totalOrders">0</div>
+
+        <div class="stat-card-change positive">↑ 12% from last week</div>
+
+      </div>
+
+
+
+      <!-- Pending Orders -->
+
+      <div class="stat-card" style="border-left-color: #FFA726;">
+
+        <div class="stat-card-header">
+
+          <div>
+
+            <div class="stat-card-title">Pending Orders</div>
+
+          </div>
+
+          <div class="stat-card-icon">
+
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2">
+
+              <circle cx="12" cy="12" r="10"/>
+
+              <polyline points="12 6 12 12 16 14"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div class="stat-card-value" id="pendingOrders" style="color: #FFA726;">0</div>
+
+        <div class="stat-card-change">Needs attention</div>
+
+      </div>
+
+
+
+      <!-- Completed Today -->
+
+      <div class="stat-card" style="border-left-color: #4CAF50;">
+
+        <div class="stat-card-header">
+
+          <div>
+
+            <div class="stat-card-title">Completed Today</div>
+
+          </div>
+
+          <div class="stat-card-icon">
+
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+
+              <polyline points="20 6 9 17 4 12"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div class="stat-card-value" id="completedToday" style="color: #4CAF50;">0</div>
+
+        <div class="stat-card-change positive">Great job!</div>
+
+      </div>
+
+
+
+      <!-- Unread Messages -->
+
+      <div class="stat-card" style="border-left-color: #2196F3;">
+
+        <div class="stat-card-header">
+
+          <div>
+
+            <div class="stat-card-title">Unread Messages</div>
+
+          </div>
+
+          <div class="stat-card-icon">
+
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
+
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div class="stat-card-value" id="unreadMessages" style="color: #2196F3;">0</div>
+
+        <div class="stat-card-change">Respond quickly</div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+    <!-- Recent Orders -->
+
+    <div class="content-card">
+
+      <div class="content-card-header">
+
+        <h2 class="content-card-title">Recent Orders</h2>
+
+        <a href="cake-orders.html" class="btn btn-secondary btn-small">View All Orders</a>
+
+      </div>
+
+
+
+      <div id="recentOrdersContainer">
+
+        <table class="data-table">
+
+          <thead>
+
+            <tr>
+
+              <th>Order ID</th>
+
+              <th>Customer</th>
+
+              <th>Cake</th>
+
+              <th>Date</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="recentOrdersTable">
+
+            <!-- Orders will be loaded here -->
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- Quick Actions -->
+
+    <div class="content-card">
+
+      <div class="content-card-header">
+
+        <h2 class="content-card-title">Quick Actions</h2>
+
+      </div>
+
+
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+
+        
+
+        <div style="background: var(--cream); padding: 2rem; border-radius: var(--radius-lg); text-align: center;">
+
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+
+          <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">New Order</h3>
+
+          <p style="color: var(--text-medium); margin-bottom: 1.5rem; font-size: 0.95rem;">Manually add a new cake order</p>
+
+          <button class="btn btn-primary" onclick="alert('This would open a new order form - Demo feature')">Create Order</button>
+
+        </div>
+
+
+
+        <div style="background: var(--cream); padding: 2rem; border-radius: var(--radius-lg); text-align: center;">
+
+          <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
+
+          <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">Messages</h3>
+
+          <p style="color: var(--text-medium); margin-bottom: 1.5rem; font-size: 0.95rem;">Respond to customer inquiries</p>
+
+          <a href="customer-messages.html" class="btn btn-primary">View Messages</a>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+
+
+<script src="../js/simple-data-manager.js"></script>
+
+<script src="../js/admin.js"></script>
+
+
+
+  <!-- Add auth check at the very end -->
+
+ <script>
+
+  const currentUser = window.dataManager.getCurrentUser();
+
+  if (!currentUser || !currentUser.isAdmin) {
+
+    window.location.href = '../admin-login.html';
+
+  }
+
+</script>
+
+
+
+<!-- hamburger menu-->
+
+<script>
+
+function toggleAdminMenu() {
+
+  const nav = document.querySelector('.admin-nav');
+
+  const toggle = document.querySelector('.admin-menu-toggle');
+
+  nav.classList.toggle('active');
+
+  
+
+  if (nav.classList.contains('active')) {
+
+    toggle.innerHTML = '✕ Close';
+
+  } else {
+
+    toggle.innerHTML = '☰ Menu';
+
+  }
+
+}
+
+
+
+document.querySelectorAll('.admin-nav-link').forEach(link => {
+
+  link.addEventListener('click', () => {
+
+    if (window.innerWidth <= 768) {
+
+      const nav = document.querySelector('.admin-nav');
+
+      const toggle = document.querySelector('.admin-menu-toggle');
+
+      nav.classList.remove('active');
+
+      toggle.innerHTML = '☰ Menu';
+
+    }
+
+  });
+
+});
+
+
+
+document.addEventListener('click', (e) => {
+
+  if (window.innerWidth <= 768) {
+
+    const nav = document.querySelector('.admin-nav');
+
+    const toggle = document.querySelector('.admin-menu-toggle');
+
+    
+
+    if (nav.classList.contains('active') && 
+
+        !nav.contains(e.target) && 
+
+        !toggle.contains(e.target)) {
+
+      nav.classList.remove('active');
+
+      toggle.innerHTML = '☰ Menu';
+
+    }
+
+  }
+
+});
+
+</script>
+
+
+
+
+
+</body>
+
+</html>

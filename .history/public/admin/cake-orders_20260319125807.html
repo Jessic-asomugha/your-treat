@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders – Sweet Delights Admin</title>
+  <link rel="stylesheet" href="admin-shared.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="admin-header">
+    <div class="admin-logo">
+      Sweet Delights
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-user">
+      <span class="admin-user-name" id="adminUserName">Admin</span>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="admin-nav">
+    <a href="admin-index.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Dashboard
+    </a>
+    <a href="cake-orders.html" class="admin-nav-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+      </svg>
+      Orders
+    </a>
+    <a href="customer-messages.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="admin-container">
+
+    <div class="page-title">
+      <h1>Cake Orders</h1>
+      <p>Manage and update all customer orders</p>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search by order ID, customer name or phone…"
+        oninput="filterOrders()"
+      />
+      <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+        <option value="all">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Baking">Baking</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="exportCSV()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Export CSV
+      </button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="content-card">
+      <div class="content-card-header">
+        <span class="content-card-title">All Orders &nbsp;<span id="ordersCount" style="font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--stone);font-weight:400;"></span></span>
+      </div>
+      <div class="content-card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Cake</th>
+              <th>Size / Layers</th>
+              <th>Delivery Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="panel-backdrop" id="panelBackdrop">
+    <div class="side-panel">
+      <div class="side-panel-header">
+        <button class="side-panel-close" onclick="closePanel()">✕</button>
+        <div class="side-panel-eyebrow" id="panelOrderId"></div>
+        <div class="side-panel-title" id="panelCakeName"></div>
+        <div class="side-panel-sub" id="panelPlaced"></div>
+      </div>
+
+      <div class="side-panel-body">
+
+        <div class="panel-section">
+          <div class="panel-section-title">Update status</div>
+          <select class="filter-select" id="panelStatusSelect" onchange="updateStatus()" style="width:100%;">
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Baking">Baking</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
+        <div class="panel-section">
+          <div class="panel-section-title">Cake details</div>
+          <div id="panelCakeDetails"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="panel-section-title">Delivery</div>
+          <div id="panelDelivery"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="panel-section-title">Customer</div>
+          <div id="panelCustomer"></div>
+        </div>
+
+        <div id="panelNotes" class="panel-section" style="display:none;">
+          <div class="panel-section-title">Special requests</div>
+          <p id="panelNotesText" style="font-size:0.85rem;color:var(--ink-mid);font-weight:300;line-height:1.7;background:#fff;padding:1rem;border:1px solid var(--border);border-left:3px solid var(--gold);"></p>
+        </div>
+
+      </div>
+
+      <div class="panel-actions">
+        <a id="panelCallBtn" href="#" class="btn btn-primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.13 12 19.79 19.79 0 0 1 1.06 3.4 2 2 0 0 1 3 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          Call Customer
+        </a>
+        <button class="btn btn-ghost" onclick="closePanel()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/simple-data-manager.js"></script>
+  <script>
+
+    // ── AUTH ──
+    (function() {
+      const user = window.dataManager && window.dataManager.getCurrentUser();
+      if (!user || !user.isAdmin) window.location.href = '../auth/admin-login.html';
+      else document.getElementById('adminUserName').textContent = user.email || 'Admin';
+    })();
+
+    let allOrders = [];
+    let currentOrderId = null;
+
+    // ── LOAD ──
+    // BACKEND PLACEHOLDER:
+    // const res = await fetch('/api/admin/orders', { headers:{ Authorization:'Bearer '+token } });
+    // allOrders = await res.json(); renderOrders(allOrders);
+    function load() {
+      allOrders = window.dataManager.getOrders() || [];
+      renderOrders(allOrders);
+    }
+
+    function renderOrders(orders) {
+      const tbody = document.getElementById('ordersTable');
+      const count = document.getElementById('ordersCount');
+      count.textContent = orders.length + ' order' + (orders.length !== 1 ? 's' : '');
+
+      if (orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">
+          <div class="empty-icon">📦</div>
+          <div class="empty-title">No orders found</div>
+          <div class="empty-text">Try changing the filter or search term</div>
+        </div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => {
+        const date = o.deliveryDate
+          ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' })
+          : '—';
+        const sc = 'sp-' + (o.status || '').toLowerCase();
+        return `
+          <tr style="cursor:pointer;" onclick="openPanel('${o.id}')">
+            <td style="font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:600;color:var(--brown);">${o.id}</td>
+            <td>
+              <div style="font-weight:500;font-size:0.85rem;">${o.customerName || '—'}</div>
+              <div style="font-size:0.72rem;color:var(--stone);">${o.customerPhone || ''}</div>
+            </td>
+            <td style="font-size:0.85rem;">${o.cakeName || '—'}</td>
+            <td style="font-size:0.82rem;color:var(--ink-mid);">${o.size || '—'} / ${o.layers ? o.layers + ' layers' : '—'}</td>
+            <td style="font-size:0.85rem;">${date}</td>
+            <td>
+              <select class="status-select ${sc}" onclick="event.stopPropagation()"
+                onchange="quickStatus('${o.id}', this)">
+                ${['Pending','Confirmed','Baking','Delivered','Cancelled'].map(s =>
+                  `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s}</option>`
+                ).join('')}
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openPanel('${o.id}')">Details</button>
+            </td>
+          </tr>`;
+      }).join('');
+
+      // Style status selects
+      styleStatusSelects();
+    }
+
+    function styleStatusSelects() {
+      const styles = {
+        pending:   { color: 'var(--s-pending)',   bg: 'rgba(180,83,9,0.08)',    border: 'rgba(180,83,9,0.3)' },
+        confirmed: { color: 'var(--s-confirmed)', bg: 'rgba(29,111,66,0.08)',   border: 'rgba(29,111,66,0.3)' },
+        baking:    { color: 'var(--s-baking)',    bg: 'rgba(30,64,175,0.08)',   border: 'rgba(30,64,175,0.3)' },
+        delivered: { color: 'var(--s-delivered)', bg: 'rgba(39,103,73,0.08)',   border: 'rgba(39,103,73,0.3)' },
+        cancelled: { color: 'var(--s-cancelled)', bg: 'rgba(155,44,44,0.08)',   border: 'rgba(155,44,44,0.3)' },
+      };
+      document.querySelectorAll('.status-select').forEach(sel => {
+        const key = sel.value.toLowerCase();
+        const s = styles[key] || {};
+        sel.style.color = s.color || '';
+        sel.style.background = s.bg || '';
+        sel.style.borderColor = s.border || '';
+      });
+    }
+
+    // ── FILTER ──
+    function filterOrders() {
+      const q      = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      const filtered = allOrders.filter(o => {
+        const matchQ = !q ||
+          o.id.toLowerCase().includes(q) ||
+          (o.customerName || '').toLowerCase().includes(q) ||
+          (o.customerPhone || '').includes(q) ||
+          (o.cakeName || '').toLowerCase().includes(q);
+        const matchS = status === 'all' || o.status === status;
+        return matchQ && matchS;
+      });
+      renderOrders(filtered);
+    }
+
+    // ── QUICK STATUS (inline select) ──
+    function quickStatus(orderId, sel) {
+      const newStatus = sel.value;
+      // BACKEND PLACEHOLDER: await fetch('/api/admin/orders/'+orderId+'/status', { method:'PATCH', body: JSON.stringify({status:newStatus}) });
+      window.dataManager.updateOrderStatus(orderId, newStatus);
+      const order = allOrders.find(o => o.id === orderId);
+      if (order) order.status = newStatus;
+      styleStatusSelects();
+      // If panel open for this order, sync its select
+      if (currentOrderId === orderId) {
+        document.getElementById('panelStatusSelect').value = newStatus;
+      }
+    }
+
+    // ── PANEL ──
+    function openPanel(orderId) {
+      const o = allOrders.find(x => x.id === orderId);
+      if (!o) return;
+      currentOrderId = orderId;
+
+      document.getElementById('panelOrderId').textContent   = 'Order ' + o.id;
+      document.getElementById('panelCakeName').textContent  = o.cakeName || 'Order Details';
+      document.getElementById('panelPlaced').textContent    = o.createdAt
+        ? 'Placed ' + new Date(o.createdAt).toLocaleString('en-NG', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' })
+        : '';
+
+      document.getElementById('panelStatusSelect').value = o.status || 'Pending';
+
+      const row = (label, val) => val ? `
+        <div class="panel-row">
+          <span class="panel-row-label">${label}</span>
+          <span class="panel-row-value">${val}</span>
+        </div>` : '';
+
+      document.getElementById('panelCakeDetails').innerHTML =
+        row('Cake', o.cakeName) +
+        row('Size', o.size) +
+        row('Layers', o.layers ? o.layers + ' layers' : null) +
+        row('Quantity', o.quantity ? o.quantity + ' cake(s)' : '1');
+
+      const date = o.deliveryDate
+        ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', { weekday:'long', day:'numeric', month:'long', year:'numeric' })
+        : null;
+
+      document.getElementById('panelDelivery').innerHTML =
+        row('Method', o.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup') +
+        row('Date', date) +
+        row('Address', o.deliveryAddress);
+
+      document.getElementById('panelCustomer').innerHTML =
+        row('Name', o.customerName) +
+        row('Phone', o.customerPhone) +
+        row('Email', o.customerEmail);
+
+      if (o.specialRequests) {
+        document.getElementById('panelNotes').style.display = 'block';
+        document.getElementById('panelNotesText').textContent = o.specialRequests;
+      } else {
+        document.getElementById('panelNotes').style.display = 'none';
+      }
+
+      document.getElementById('panelCallBtn').href = 'tel:' + (o.customerPhone || '');
+
+      document.getElementById('panelBackdrop').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateStatus() {
+      if (!currentOrderId) return;
+      const newStatus = document.getElementById('panelStatusSelect').value;
+      // BACKEND PLACEHOLDER: await fetch('/api/admin/orders/'+currentOrderId+'/status', { method:'PATCH', body:JSON.stringify({status:newStatus}) });
+      window.dataManager.updateOrderStatus(currentOrderId, newStatus);
+      const order = allOrders.find(o => o.id === currentOrderId);
+      if (order) order.status = newStatus;
+      renderOrders(allOrders); // re-render to reflect inline select change
+    }
+
+    function closePanel() {
+      document.getElementById('panelBackdrop').classList.remove('show');
+      document.body.style.overflow = '';
+      currentOrderId = null;
+    }
+
+    document.getElementById('panelBackdrop').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closePanel();
+    });
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+    // ── EXPORT ──
+    function exportCSV() {
+      const orders = window.dataManager.getOrders();
+      if (!orders.length) { alert('No orders to export.'); return; }
+      let csv = 'Order ID,Customer,Phone,Email,Cake,Size,Layers,Qty,Delivery Date,Method,Status,Notes\n';
+      orders.forEach(o => {
+        csv += [o.id, o.customerName, o.customerPhone, o.customerEmail||'', o.cakeName||'',
+                o.size||'', o.layers||'', o.quantity||1, o.deliveryDate||'',
+                o.deliveryOption||'', o.status, '"'+(o.specialRequests||'')+'"'].join(',') + '\n';
+      });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv' }));
+      a.download = 'orders_' + new Date().toISOString().split('T')[0] + '.csv';
+      a.click();
+    }
+
+    function handleLogout() {
+      if (window.dataManager.logout) window.dataManager.logout();
+      window.location.href = '../auth/admin-login.html';
+    }
+
+    // Check for ?id= in URL (deep link from dashboard)
+    const urlId = new URLSearchParams(window.location.search).get('id');
+
+    load();
+    if (urlId) setTimeout(() => openPanel(urlId), 300);
+
+    window.dataManager.onOrdersChange(() => load());
+  </script>
+</body>
+</html>

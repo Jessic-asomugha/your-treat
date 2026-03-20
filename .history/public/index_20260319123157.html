@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Sweet Delights Bakery - Handcrafted Cakes</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+</head>
+
+<body>
+
+
+
+  <!-- Header -->
+
+  <header class="header">
+
+    <div class="logo">Sweet Delights</div>
+
+<nav class="nav">
+
+  <a href="index.html">Home</a>
+
+  <a href="gallery.html">Gallery</a>
+
+  <a href="order.html">Order</a>
+
+  <a href="my-orders.html">My Orders</a>
+
+  <a href="chat.html">Chat</a>
+
+  <span id="authNav">
+
+    <a href="../auth/login.html">Login</a>
+
+  </span>
+
+</nav>
+
+  </header>
+
+
+
+  <!-- Demo Notice -->
+
+  <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-bottom: 3px solid #F59E0B; padding: 1.25rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+    <p style="margin: 0; font-weight: bold; color: #78350F; font-size: 1.1rem;">
+
+      📌 Portfolio Demo Project
+
+    </p>
+
+    <p style="margin: 0.5rem 0 0 0; color: #92400E; font-size: 0.95rem;">
+
+      This is a demonstration website. All data is stored locally in your browser. No real orders or payments are processed.
+
+    </p>
+
+  </div>
+
+
+
+  <!-- Hero Section -->
+
+  <section class="hero">
+
+    <h1>Freshly Baked Cakes for Every Occasion</h1>
+
+    <p>Delicious, custom-made cakes baked with love and the finest ingredients</p>
+
+    <div class="hero-buttons">
+
+      <a href="order.html" class="btn primary">Order a Cake</a>
+
+      <a href="gallery.html" class="btn secondary">View Gallery</a>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Featured Cakes -->
+
+  <section class="featured">
+
+    <h2>Featured Cakes</h2>
+
+    <div class="cake-grid">
+
+      <div class="cake-card">
+
+        <img src="images/chocolate cake.jpg" alt="Chocolate Cake">
+
+        <h3>Chocolate Delight</h3>
+
+        <p>Rich chocolate sponge with creamy frosting</p>
+
+      </div>
+
+      <div class="cake-card">
+
+        <img src="images/vanilla-cake.jpg" alt="Vanilla Cake">
+
+        <h3>Vanilla Dream</h3>
+
+        <p>Classic vanilla cake with buttercream</p>
+
+      </div>
+
+      <div class="cake-card">
+
+        <img src="images/red velvet cake.jpg" alt="Red Velvet Cake">
+
+        <h3>Red Velvet</h3>
+
+        <p>Soft red velvet with cream cheese frosting</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Why Choose Us -->
+
+  <section class="why-us">
+
+    <h2>Why Choose Us</h2>
+
+    <div class="reasons">
+
+      <div>🎂 Fresh Ingredients</div>
+
+      <div>⏰ On-Time Delivery</div>
+
+      <div>❤️ Made with Love</div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Recently Delivered -->
+
+  <section class="recently-delievered">
+
+    <h2>These Cakes Just Went Out the Door</h2>
+
+    <div class="cake-grid">
+
+      <div class="cake-card">
+
+        <img src="images/bread cake.jpg" alt="Loaf Cake">
+
+        <h3>Loaf Delight</h3>
+
+        <p>Perfectly baked and freshly delivered</p>
+
+      </div>
+
+      <div class="cake-card">
+
+        <img src="images/vanilla-cake.jpg" alt="Vanilla Cake">
+
+        <h3>Vanilla Dream</h3>
+
+        <p>A customer favorite, just delivered</p>
+
+      </div>
+
+      <div class="cake-card">
+
+        <img src="images/strawberry cake.jpg" alt="Strawberry Cake">
+
+        <h3>Strawberry Passion</h3>
+
+        <p>Fresh strawberries and cream</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Call to Action -->
+
+  <section class="cta">
+
+    <h2>Ready to Order?</h2>
+
+    <p>Chat with us or place your order in minutes.</p>
+
+    <a href="chat.html" class="btn">Chat Now</a>
+
+  </section>
+
+
+
+  <!-- Footer -->
+
+<footer class="footer">
+
+  <p>© 2026 Sweet Delights Bakery</p>
+
+  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+
+    <a href="../auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
+
+  </p>
+
+</footer>
+
+
+
+<script src="js/simple-data-manager.js"></script>
+
+<script src="../js/main.js"></script>
+
+
+
+  <script>
+
+// Update navigation based on auth state
+
+window.onAuthStateChanged = (user, isAdmin) => {
+
+  const authNav = document.getElementById('authNav');
+
+  if (!authNav) return;
+
+
+
+  if (user) {
+
+    const displayName = user.displayName || user.email.split('@')[0];
+
+    authNav.innerHTML = `
+
+      <span style="color: var(--primary-color); font-weight: 600;">
+
+        👤 ${displayName}
+
+      </span>
+
+      <a href="#" onclick="event.preventDefault(); window.authManager.logout().then(() => location.reload());">
+
+        Logout
+
+      </a>
+
+    `;
+
+  } else {
+
+    authNav.innerHTML = `
+
+      <a href="auth/login.html">Login</a>
+
+      <a href="auth/register.html">Sign Up</a>
+
+    `;
+
+  }
+
+};
+
+</script>
+
+
+
+</body>
+
+</html>

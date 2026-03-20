@@ -3,119 +3,202 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Customer Messages - Admin - Sweet Delights Bakery</title>
+  <title>Messages – Sweet Delights Admin</title>
   <link rel="stylesheet" href="admin.css" />
   <style>
-    /* WhatsApp-style messaging layout */
-    .messaging-container {
+    /* ── MESSAGING LAYOUT ── */
+    .messaging-wrap {
       display: grid;
-      grid-template-columns: 350px 1fr;
-      height: calc(100vh - 180px);
-      background: white;
-      border-radius: 12px;
+      grid-template-columns: 300px 1fr;
+      height: calc(100vh - 110px); /* minus header + nav */
+      background: var(--cream);
+      border: 1px solid var(--border);
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    /* LEFT PANEL - Conversations List */
-    .conversations-panel {
-      border-right: 1px solid #e5e7eb;
+    /* LEFT: CONVERSATION LIST */
+    .conv-panel {
+      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      background: #f9fafb;
+      overflow: hidden;
+      background: var(--cream-dark);
     }
 
-    .conversations-header {
-      padding: 1.25rem;
-      border-bottom: 1px solid #e5e7eb;
-      background: white;
+    .conv-panel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+      flex-shrink: 0;
     }
 
-    .conversations-header h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      color: var(--text-dark);
+    .conv-panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--brown);
     }
 
-    .conversations-list {
+    .conv-search {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: var(--ink);
+      background: #fff;
+      margin-top: 0.65rem;
+      transition: border-color 0.2s;
+    }
+    .conv-search:focus { outline: none; border-color: var(--gold); }
+
+    .conv-list {
       flex: 1;
       overflow-y: auto;
     }
 
-    .conversation-item {
+    .conv-item {
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border);
       cursor: pointer;
-      transition: background 0.2s;
-      background: white;
-    }
-
-    .conversation-item:hover {
-      background: #f3f4f6;
-    }
-
-    .conversation-item.active {
+      transition: background 0.15s;
       background: var(--cream);
-      border-left: 3px solid var(--primary-color);
+      border-left: 3px solid transparent;
+    }
+    .conv-item:hover { background: var(--cream-dark); }
+    .conv-item.active {
+      background: #fff;
+      border-left-color: var(--brown);
     }
 
-    .conversation-sender {
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 0.25rem;
+    .conv-item-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      margin-bottom: 0.3rem;
     }
 
-    .conversation-preview {
-      font-size: 0.875rem;
-      color: var(--text-medium);
+    .conv-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .conv-time {
+      font-size: 0.65rem;
+      color: var(--stone);
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    .conv-preview {
+      font-size: 0.75rem;
+      color: var(--stone);
+      font-weight: 300;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .conversation-time {
-      font-size: 0.75rem;
-      color: var(--text-medium);
+    .conv-unread {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-right: 0.4rem;
+      flex-shrink: 0;
     }
 
-    .conversation-badge {
-      background: var(--primary-color);
-      color: white;
-      font-size: 0.75rem;
-      padding: 0.125rem 0.5rem;
-      border-radius: 12px;
-      font-weight: 600;
+    .conv-empty {
+      padding: 3rem 1.5rem;
+      text-align: center;
     }
+    .conv-empty p { font-size: 0.8rem; color: var(--stone); font-weight: 300; }
 
-    /* RIGHT PANEL - Chat Thread */
-    .chat-panel {
+    /* RIGHT: CHAT THREAD */
+    .thread-panel {
       display: flex;
       flex-direction: column;
-      background: #fef7ec;
+      background: var(--cream-dark);
+      height: 100%;
+      overflow: hidden;
     }
 
-    .chat-header {
-      padding: 1.25rem;
-      border-bottom: 1px solid #e5e7eb;
-      background: white;
+    .thread-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 0.5rem;
     }
 
-    .chat-header h3 {
-      margin: 0;
-      font-size: 1.125rem;
-      color: var(--text-dark);
+    .thread-empty-icon {
+      width: 48px; height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
     }
 
-    .chat-header p {
-      margin: 0.25rem 0 0 0;
-      font-size: 0.875rem;
-      color: var(--text-medium);
+    .thread-empty-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--brown);
     }
 
-    .chat-messages {
+    .thread-empty-sub {
+      font-size: 0.78rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    /* Thread header */
+    .thread-header {
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .thread-customer {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .thread-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--brown);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .thread-customer-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .thread-customer-count {
+      font-size: 0.72rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    /* Messages */
+    .thread-messages {
       flex: 1;
       overflow-y: auto;
       padding: 1.5rem;
@@ -124,557 +207,386 @@
       gap: 0.75rem;
     }
 
-    .message-bubble {
-      max-width: 65%;
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      position: relative;
-    }
+    .thread-messages::-webkit-scrollbar { width: 4px; }
+    .thread-messages::-webkit-scrollbar-thumb { background: rgba(92,51,23,0.15); border-radius: 2px; }
 
-    .message-bubble.customer {
-      align-self: flex-start;
-      background: white;
-      border: 1px solid #e5e7eb;
-    }
-
-    .message-bubble.admin {
-      align-self: flex-end;
-      background: var(--primary-color);
-      color: white;
-    }
-
-    .message-text {
-      margin-bottom: 0.25rem;
-      word-wrap: break-word;
-    }
-
-    .message-time {
-      font-size: 0.75rem;
-      opacity: 0.7;
-    }
-
-    .chat-input-container {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid #e5e7eb;
-      background: white;
-    }
-
-    .chat-input-form {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .chat-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 24px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      outline: none;
-      resize: none;
-    }
-
-    .chat-input:focus {
-      border-color: var(--primary-color);
-    }
-
-    .send-button {
-      padding: 0.75rem 1.5rem;
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 24px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .send-button:hover {
-      background: #7a3e1a;
-    }
-
-    .empty-chat {
+    .msg-wrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: var(--text-medium);
+      max-width: 65%;
+    }
+    .msg-wrap.customer { align-self: flex-start; align-items: flex-start; }
+    .msg-wrap.admin    { align-self: flex-end;   align-items: flex-end; }
+
+    .msg-sender {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--stone);
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
     }
 
-    .empty-chat-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
+    .msg-bubble {
+      padding: 0.8rem 1rem;
+      border-radius: 2px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      word-break: break-word;
     }
 
-    @media (max-width: 768px) {
-      .messaging-container {
-        grid-template-columns: 1fr;
-      }
-      
-      .conversations-panel {
-        display: none;
-      }
-      
-      .conversations-panel.mobile-show {
-        display: flex;
-      }
-      
-      .chat-panel.mobile-show {
-        display: flex;
-      }
+    .msg-bubble.customer {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      border-bottom-left-radius: 0;
     }
 
-    /* CUSTOMER MESSAGES MOBILE FIX */
-    /* Mobile Back Button */
-    .mobile-back-button {
-      display: none;
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
+    .msg-bubble.admin {
+      background: var(--brown);
+      color: #fff;
+      border-bottom-right-radius: 0;
+    }
+
+    .msg-time {
+      font-size: 0.62rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-top: 0.25rem;
+    }
+
+    /* Reply input */
+    .thread-input-area {
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .thread-input-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .thread-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--ink);
+      background: #fff;
+      resize: none;
+      min-height: 40px;
+      max-height: 100px;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+    .thread-input:focus { outline: none; border-color: var(--gold); }
+
+    .reply-btn {
+      width: 40px; height: 40px;
+      background: var(--brown);
       border: none;
-      font-size: 1.5rem;
+      border-radius: 2px;
+      color: #fff;
       cursor: pointer;
-      padding: 0.5rem;
-      color: var(--primary-color);
-      z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
     }
+    .reply-btn:hover { background: var(--brown-mid); }
+    .reply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Mobile Responsive */
     @media (max-width: 768px) {
-      .messaging-container {
-        grid-template-columns: 1fr;
-        height: calc(100vh - 100px);
-      }
-      
-      /* Show only conversations by default */
-      .conversations-panel {
-        display: flex;
-      }
-      
-      .chat-panel {
-        display: none;
-      }
-      
-      /* When chat is active, hide conversations and show chat */
-      .conversations-panel.mobile-hidden {
-        display: none;
-      }
-      
-      .chat-panel.mobile-active {
-        display: flex;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 1000;
-        background: white;
-      }
-      
-      /* Show back button on mobile */
-      .mobile-back-button {
-        display: block;
-      }
-      
-      /* Increase conversation touch targets */
-      .conversation-item {
-        min-height: 80px;
-        padding: 1.25rem 1.5rem;
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(139, 69, 19, 0.1);
-        touch-action: manipulation;
-      }
-      
-      .conversation-item:active {
-        background: var(--cream);
-      }
-      
-      /* Make chat header accommodate back button */
-      .chat-header {
-        padding-left: 4rem;
-      }
-      
-      /* Adjust message bubbles */
-      .message-bubble {
-        max-width: 80%;
-        font-size: 0.9rem;
-      }
-      
-      /* Input area */
-      .chat-input {
-        font-size: 1rem;
-      }
-      
-      .send-button {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9rem;
-      }
+      .messaging-wrap { grid-template-columns: 1fr; height: auto; }
+      .conv-panel { height: 280px; }
     }
-
   </style>
 </head>
 <body>
 
-  <!-- Admin Header -->
+  <!-- HEADER -->
   <header class="admin-header">
-    <div class="admin-header-content">
-      <div class="admin-logo">
-        Sweet Delights
-        <span class="admin-badge">Admin Panel</span>
-      </div>
-      <button class="admin-menu-toggle" onclick="toggleAdminMenu()">☰ Menu</button>
+    <div class="admin-logo">
+      Sweet Delights
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-user">
+      <span class="admin-user-name" id="adminUserName">Admin</span>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
     </div>
   </header>
 
-  <!-- Admin Navigation -->
+  <!-- NAV -->
   <nav class="admin-nav">
-    <div class="admin-nav-content">
-      <a href="admin-index.html" class="admin-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"/>
-          <rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        Dashboard
-      </a>
-      <a href="cake-orders.html" class="admin-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-        </svg>
-        Cake Orders
-      </a>
-      <a href="customer-messages.html" class="admin-nav-link active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        Customer Messages
-      </a>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
+    <a href="admin-index.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Dashboard
+    </a>
+    <a href="cake-orders.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+      </svg>
+      Orders
+    </a>
+    <a href="customer-messages.html" class="admin-nav-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
   </nav>
 
-  <!-- Main Container -->
-  <div class="admin-container">
-    <div class="messaging-container">
-      
-      <!-- LEFT: Conversations List -->
-      <div class="conversations-panel">
-        <div class="conversations-header">
-          <h3>Messages</h3>
-        </div>
-        <div class="conversations-list" id="conversationsList">
-          <!-- Conversations loaded here by JS -->
-        </div>
+  <!-- MESSAGING LAYOUT — flush, no admin-container padding -->
+  <div style="padding: 0 5%; background: var(--bg);">
+    <div style="max-width:1300px; margin:0 auto; padding: 1.5rem 0;">
+
+      <div class="page-title" style="margin-bottom:1rem;">
+        <h1>Customer Messages</h1>
+        <p>Read and reply to customer conversations</p>
       </div>
 
-      <!-- RIGHT: Chat Thread -->
-      <div class="chat-panel" id="chatPanel">
-        <div id="emptyChatState" class="empty-chat">
-          <div class="empty-chat-icon">💬</div>
-          <h3>Select a conversation</h3>
-          <p>Choose a customer from the list to view their messages</p>
-        </div>
+      <div class="messaging-wrap">
 
-        <!-- This appears when a conversation is selected -->
-        <div id="activeChatState" style="display: none; flex-direction: column; height: 100%;">
-          <div class="chat-header">
-            <button class="mobile-back-button" onclick="goBackToConversations()">←</button>
-            <h3 id="chatCustomerName"></h3>
-            <p id="chatMessageCount"></p>
+        <!-- LEFT: CONVERSATIONS -->
+        <div class="conv-panel">
+          <div class="conv-panel-header">
+            <div class="conv-panel-title">Conversations</div>
+            <input class="conv-search" id="convSearch" placeholder="Search customers…" oninput="filterConvs()" />
           </div>
-
-          <div class="chat-messages" id="chatMessages">
-            <!-- Messages loaded here -->
-          </div>
-
-          <div class="chat-input-container">
-            <form class="chat-input-form" id="replyForm" onsubmit="sendReply(event)">
-              <textarea 
-                class="chat-input" 
-                id="replyInput" 
-                placeholder="Type your message..."
-                rows="1"
-                required
-              ></textarea>
-              <button type="submit" class="send-button">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                Send
-              </button>
-            </form>
+          <div class="conv-list" id="convList">
+            <div class="conv-empty"><p>Loading…</p></div>
           </div>
         </div>
+
+        <!-- RIGHT: THREAD -->
+        <div class="thread-panel" id="threadPanel">
+          <div class="thread-empty" id="threadEmpty">
+            <div class="thread-empty-icon">💬</div>
+            <div class="thread-empty-title">No conversation selected</div>
+            <p class="thread-empty-sub">Choose a customer from the list to view their messages</p>
+          </div>
+
+          <div id="threadActive" style="display:none; flex-direction:column; height:100%; overflow:hidden;">
+            <div class="thread-header">
+              <div class="thread-customer">
+                <div class="thread-avatar" id="threadAvatar"></div>
+                <div>
+                  <div class="thread-customer-name" id="threadName"></div>
+                  <div class="thread-customer-count" id="threadCount"></div>
+                </div>
+              </div>
+            </div>
+            <div class="thread-messages" id="threadMessages"></div>
+            <div class="thread-input-area">
+              <div class="thread-input-row">
+                <textarea
+                  class="thread-input"
+                  id="replyInput"
+                  placeholder="Type your reply…"
+                  rows="1"
+                  oninput="autoResize(this)"
+                  onkeydown="handleKey(event)"
+                ></textarea>
+                <button class="reply-btn" onclick="sendReply()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"/>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-
     </div>
   </div>
 
-<script src="../js/simple-data-manager.js"></script>
-<script>
-// WhatsApp-style messaging JavaScript
-let allMessages = [];
-let conversations = [];
-let selectedConversation = null;
+<script type="module">
+  import {
+    apiGetAllMessages, apiReply,
+    getUser, isLoggedIn, isAdmin, apiLogout
+  } from '../js/api.js'
 
-// Load messages on page load
-document.addEventListener('DOMContentLoaded', async function() {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  loadMessages();
-  
-  // Real-time updates
-  window.dataManager.onMessagesChange(() => {
-    loadMessages();
-  });
-});
-
-async function loadMessages() {
-  try {
-    allMessages = await window.dataManager.getMessages();
-    conversations = groupMessagesBySender(allMessages);
-    renderConversationsList();
-    
-    // If a conversation is selected, refresh it
-    if (selectedConversation) {
-      selectConversation(selectedConversation);
-    }
-  } catch (error) {
-    console.error('Error loading messages:', error);
+  // Auth check
+  if (!isLoggedIn() || !isAdmin()) {
+    window.location.href = '../auth/admin-login.html'
   }
-}
 
-function groupMessagesBySender(messages) {
-  const convMap = {};
+  const user = getUser()
+  document.getElementById('adminUserName').textContent = user?.fullName || user?.email || 'Admin'
 
-  messages.forEach(msg => {
-    if (msg.isAdmin) return; // Skip admin messages in grouping
+  let conversations  = []
+  let selectedSender = null
+  let pollTimer      = null
 
-    if (!convMap[msg.sender]) {
-      convMap[msg.sender] = {
-        sender: msg.sender,
-        messages: [],
-        lastMessage: msg,
-        unreadCount: 0
-      };
+  // Load all messages and group into conversations
+  async function load() {
+    try {
+      const msgs = await apiGetAllMessages()
+      buildConversations(msgs)
+    } catch (err) {
+      console.error('Load messages error:', err)
     }
+  }
 
-    convMap[msg.sender].messages.push(msg);
+  function buildConversations(msgs) {
+    const map = {}
 
-    if (msg.timestamp > convMap[msg.sender].lastMessage.timestamp) {
-      convMap[msg.sender].lastMessage = msg;
-    }
-  });
-
-  // Add admin replies to their respective conversations
-  messages.forEach(msg => {
-    if (msg.isAdmin && msg.replyTo) {
-      if (convMap[msg.replyTo]) {
-        convMap[msg.replyTo].messages.push(msg);
+    msgs.forEach(m => {
+      const key = m.isAdmin ? m.replyTo : m.senderName
+      if (!key) return
+      if (!map[key]) {
+        map[key] = { sender: key, messages: [], lastTs: 0 }
       }
+      map[key].messages.push(m)
+      const ts = new Date(m.createdAt).getTime()
+      if (ts > map[key].lastTs) map[key].lastTs = ts
+    })
+
+    conversations = Object.values(map)
+      .sort((a, b) => b.lastTs - a.lastTs)
+
+    conversations.forEach(c => {
+      c.messages.sort((a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      )
+    })
+
+    renderConvList()
+    if (selectedSender) selectConv(selectedSender)
+  }
+
+  // Render conversation list
+  function renderConvList(filter = '') {
+    const list = document.getElementById('convList')
+    const filtered = filter
+      ? conversations.filter(c => c.sender.toLowerCase().includes(filter))
+      : conversations
+
+    if (!filtered.length) {
+      list.innerHTML = `<div class="conv-empty"><p>${filter ? 'No results' : 'No messages yet'}</p></div>`
+      return
     }
-  });
 
-  // Sort messages within each conversation
-  Object.values(convMap).forEach(conv => {
-    conv.messages.sort((a, b) => a.timestamp - b.timestamp);
-  });
-
-  return Object.values(convMap).sort((a, b) =>
-    b.lastMessage.timestamp - a.lastMessage.timestamp
-  );
-}
-
-function renderConversationsList() {
-  const container = document.getElementById('conversationsList');
-  
-  if (conversations.length === 0) {
-    container.innerHTML = `
-      <div style="padding: 2rem; text-align: center; color: var(--text-medium);">
-        <div style="font-size: 2.5rem; margin-bottom: 1rem;">💬</div>
-        <p>No messages yet</p>
-      </div>
-    `;
-    return;
+    list.innerHTML = filtered.map(c => {
+      const last    = c.messages[c.messages.length - 1]
+      const preview = last ? last.text.substring(0, 42) + (last.text.length > 42 ? '…' : '') : ''
+      const time    = last ? formatTime(new Date(last.createdAt).getTime()) : ''
+      return `
+        <div class="conv-item ${selectedSender === c.sender ? 'active' : ''}"
+             onclick="selectConv('${c.sender}')">
+          <div class="conv-item-top">
+            <div class="conv-name">${c.sender}</div>
+            <div class="conv-time">${time}</div>
+          </div>
+          <div class="conv-preview">${preview}</div>
+        </div>`
+    }).join('')
   }
 
-  container.innerHTML = conversations.map(conv => `
-    <div class="conversation-item ${selectedConversation === conv.sender ? 'active' : ''}" 
-         onclick="selectConversation('${conv.sender}')">
-      <div class="conversation-sender">
-        <span>👤 ${conv.sender}</span>
-        <span class="conversation-time">${formatTime(conv.lastMessage.timestamp)}</span>
-      </div>
-      <div class="conversation-preview">
-        ${conv.lastMessage.text.substring(0, 50)}${conv.lastMessage.text.length > 50 ? '...' : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function selectConversation(sender) {
-
-  // Mobile-specific: Toggle views
-  if (window.innerWidth <= 768) {
-    document.querySelector('.conversations-panel').classList.add('mobile-hidden');
-    document.getElementById('chatPanel').classList.add('mobile-active');
+  window.filterConvs = function() {
+    renderConvList(document.getElementById('convSearch').value.toLowerCase())
   }
 
-  selectedConversation = sender;
-  const conv = conversations.find(c => c.sender === sender);
-  
-  if (!conv) return;
+  // Select a conversation
+  window.selectConv = function(sender) {
+    selectedSender = sender
+    const conv = conversations.find(c => c.sender === sender)
+    if (!conv) return
 
-  // Update UI
-  document.getElementById('emptyChatState').style.display = 'none';
-  document.getElementById('activeChatState').style.display = 'flex';
-  
-  // Update header
-  document.getElementById('chatCustomerName').textContent = sender;
-  document.getElementById('chatMessageCount').textContent = 
-    `${conv.messages.length} message${conv.messages.length > 1 ? 's' : ''}`;
+    document.getElementById('threadEmpty').style.display = 'none'
+    const active = document.getElementById('threadActive')
+    active.style.display = 'flex'
 
-  // Render messages
-  renderChatMessages(conv.messages);
+    const initials = sender.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase()
+    document.getElementById('threadAvatar').textContent      = initials
+    document.getElementById('threadName').textContent        = sender
+    document.getElementById('threadCount').textContent       =
+      conv.messages.length + ' message' + (conv.messages.length !== 1 ? 's' : '')
 
-  // Update conversations list active state
-  renderConversationsList();
+    const container = document.getElementById('threadMessages')
+    container.innerHTML = conv.messages.map(m => {
+      const isAdmin = m.isAdmin
+      const time    = new Date(m.createdAt).toLocaleTimeString('en-NG', {
+        hour: '2-digit', minute: '2-digit'
+      })
+      const label = isAdmin ? 'Sweet Delights' : m.senderName
+      return `
+        <div class="msg-wrap ${isAdmin ? 'admin' : 'customer'}">
+          <div class="msg-sender">${label}</div>
+          <div class="msg-bubble ${isAdmin ? 'admin' : 'customer'}">${escapeHTML(m.text)}</div>
+          <div class="msg-time">${time}</div>
+        </div>`
+    }).join('')
 
-  // Scroll to bottom
-  setTimeout(() => {
-    const chatContainer = document.getElementById('chatMessages');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 100);
-}
-
-function renderChatMessages(messages) {
-  const container = document.getElementById('chatMessages');
-  
-  container.innerHTML = messages.map(msg => `
-    <div class="message-bubble ${msg.isAdmin ? 'admin' : 'customer'}">
-      <div class="message-text">${msg.text}</div>
-      <div class="message-time">${formatFullTime(msg.timestamp)}</div>
-    </div>
-  `).join('');
-}
-
-async function sendReply(event) {
-  event.preventDefault();
-  
-  const input = document.getElementById('replyInput');
-  const text = input.value.trim();
-  
-  if (!text || !selectedConversation) return;
-
-  try {
-    await window.dataManager.sendMessage({
-      sender: 'Sweet Delights Admin',
-      text: text,
-      isAdmin: true,
-      replyTo: selectedConversation
-    });
-
-    input.value = '';
-    
-    // Reload to show new message
-    setTimeout(() => loadMessages(), 300);
-    
-  } catch (error) {
-    console.error('Error sending message:', error);
-    alert('Error sending message. Please try again.');
+    container.scrollTop = container.scrollHeight
+    renderConvList(document.getElementById('convSearch').value.toLowerCase())
   }
-}
 
-function formatTime(timestamp) {
-  const date = new Date(timestamp);
-  const now = new Date();
-  const diffMs = now - date;
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
+  // Send reply
+  window.sendReply = async function() {
+    if (!selectedSender) return
+    const input = document.getElementById('replyInput')
+    const text  = input.value.trim()
+    if (!text) return
 
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
-  
-  return date.toLocaleDateString();
-}
-
-function formatFullTime(timestamp) {
-  const date = new Date(timestamp);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-// Auth check
-const currentUser = window.dataManager.getCurrentUser();
-if (!currentUser || !currentUser.isAdmin) {
-  window.location.href = '../auth/admin-login.html';
-}
-
-// Auto-resize textarea
-document.getElementById('replyInput').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-});
-</script>
-
-<script>
-function toggleAdminMenu() {
-  const nav = document.querySelector('.admin-nav');
-  const toggle = document.querySelector('.admin-menu-toggle');
-  nav.classList.toggle('active');
-  
-  if (nav.classList.contains('active')) {
-    toggle.innerHTML = '✕ Close';
-  } else {
-    toggle.innerHTML = '☰ Menu';
-  }
-}
-
-document.querySelectorAll('.admin-nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      const nav = document.querySelector('.admin-nav');
-      const toggle = document.querySelector('.admin-menu-toggle');
-      nav.classList.remove('active');
-      toggle.innerHTML = '☰ Menu';
-    }
-  });
-});
-
-document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 768) {
-    const nav = document.querySelector('.admin-nav');
-    const toggle = document.querySelector('.admin-menu-toggle');
-    
-    if (nav.classList.contains('active') && 
-        !nav.contains(e.target) && 
-        !toggle.contains(e.target)) {
-      nav.classList.remove('active');
-      toggle.innerHTML = '☰ Menu';
+    try {
+      await apiReply({ replyTo: selectedSender, text })
+      input.value = ''
+      input.style.height = ''
+      await load()
+    } catch (err) {
+      alert('Failed to send reply: ' + err.message)
     }
   }
-});
 
-// Add back button functionality
-function goBackToConversations() {
-  if (window.innerWidth <= 768) {
-    document.querySelector('.conversations-panel').classList.remove('mobile-hidden');
-    document.getElementById('chatPanel').classList.remove('mobile-active');
+  window.autoResize = function(el) {
+    el.style.height = ''
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px'
   }
-}
 
+  window.handleKey = function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      window.sendReply()
+    }
+  }
+
+  // Helpers
+  function formatTime(ts) {
+    const d   = new Date(ts)
+    const now = new Date()
+    if (d.toDateString() === now.toDateString()) {
+      return d.toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' })
+    }
+    return d.toLocaleDateString('en-NG', { day: 'numeric', month: 'short' })
+  }
+
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/\n/g, '<br>')
+  }
+
+  window.handleLogout = function() { apiLogout() }
+
+  // Init
+  load()
+
+  // Poll every 10 seconds
+  pollTimer = setInterval(load, 10000)
 </script>
 
 </body>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Order a Cake</title>
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+</head>
+
+<body>
+
+
+
+  <!-- Header -->
+
+  <header class="header">
+
+    <div class="logo">Sweet Delights</div>
+
+<nav class="nav">
+
+  <a href="index.html">Home</a>
+
+  <a href="gallery.html">Gallery</a>
+
+  <a href="order.html">Order</a>
+
+  <a href="my-orders.html">My Orders</a>
+
+  <a href="chat.html">Chat</a>
+
+  <span id="authNav">
+
+    <a href="auth/login.html">Login</a>
+
+  </span>
+
+</nav>
+
+  </header>
+
+
+
+  <!-- Order Form -->
+
+  <section class="featured">
+
+    <h2>Book Your Cake</h2>
+
+
+
+    <form id="orderForm" class="order-form">
+
+      
+
+      <label>
+
+        Cake Type
+
+        <select name="cake" required>
+
+          <option value="">Select a cake</option>
+
+          <option value="Chocolate Delight">Chocolate Delight</option>
+
+          <option value="Vanilla Dream">Vanilla Dream</option>
+
+          <option value="Red Velvet">Red Velvet</option>
+
+        </select>
+
+      </label>
+
+
+
+      <label>
+
+        Size
+
+        <select name="size" required>
+
+          <option value="">Select size</option>
+
+          <option value="6 inch">6 inch</option>
+
+          <option value="8 inch">8 inch</option>
+
+          <option value="10 inch">10 inch</option>
+
+        </select>
+
+      </label>
+
+
+
+      <label>
+
+        Layers
+
+        <select name="layers" required>
+
+          <option value="">Select layers</option>
+
+          <option value="2">2 layers</option>
+
+          <option value="3">3 layers</option>
+
+          <option value="4">4 layers</option>
+
+        </select>
+
+      </label>
+
+
+
+      <label>
+
+        Quantity
+
+        <input type="number" name="quantity" min="1" value="1" required />
+
+      </label>
+
+
+
+      <label>
+
+        Delivery Option
+
+        <select name="deliveryOption" required>
+
+          <option value="pickup">Pickup</option>
+
+          <option value="delivery">Delivery</option>
+
+        </select>
+
+      </label>
+
+
+
+      <label>
+
+        Customer Name
+
+        <input type="text" name="customerName" placeholder="Your full name" required />
+
+      </label>
+
+
+
+      <label>
+
+        Phone Number
+
+        <input type="tel" name="phone" placeholder="e.g. 08012345678" required />
+
+      </label>
+
+
+
+      <label>
+
+        Email Address
+
+        <input type="email" name="email" placeholder="your@email.com" />
+
+      </label>
+
+
+
+      <label>
+
+        Delivery / Pickup Date
+
+        <input type="date" name="deliveryDate" required />
+
+      </label>
+
+
+
+      <label id="deliveryAddressLabel" style="display: none;">
+
+        Delivery Address
+
+        <textarea name="deliveryAddress" placeholder="Enter your delivery address"></textarea>
+
+      </label>
+
+
+
+      <label>
+
+        Additional Notes
+
+        <textarea name="notes" placeholder="Any special instructions?"></textarea>
+
+      </label>
+
+
+
+      <button type="submit" class="btn primary">Submit Order</button>
+
+    </form>
+
+
+
+    <!-- Confirmation -->
+
+    <div id="orderConfirmation" class="order-confirmation">
+
+      <h3>Order Submitted 🎉</h3>
+
+      <p>Your Order ID is:</p>
+
+      <strong id="orderId"></strong>
+
+      <p>Please keep this ID to track or cancel your order.</p>
+
+    </div>
+
+
+
+  </section>
+
+
+
+  <!-- Footer -->
+
+<footer class="footer">
+
+  <p>© 2026 Sweet Delights Bakery</p>
+
+  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+
+    <a href="../auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
+
+  </p>
+
+</footer>
+
+
+
+  <script src="../js/main.js"></script>
+
+<script src="../js/simple-data-manager.js"></script>
+
+
+
+  <script>
+
+// Update navigation based on auth state
+
+window.onAuthStateChanged = (user, isAdmin) => {
+
+  const authNav = document.getElementById('authNav');
+
+  if (!authNav) return;
+
+
+
+  if (user) {
+
+    const displayName = user.displayName || user.email.split('@')[0];
+
+    authNav.innerHTML = `
+
+      <span style="color: var(--primary-color); font-weight: 600;">
+
+        👤 ${displayName}
+
+      </span>
+
+      <a href="#" onclick="event.preventDefault(); window.authManager.logout().then(() => location.reload());">
+
+        Logout
+
+      </a>
+
+    `;
+
+  } else {
+
+    authNav.innerHTML = `
+
+      <a href="auth/login.html">Login</a>
+
+      <a href="auth/register.html">Sign Up</a>
+
+    `;
+
+  }
+
+};
+
+</script>
+
+
+
+
+
+<!-- <script>
+
+// Require authentication before showing order form
+
+(async () => {
+
+  const isAuthenticated = await window.authManager.requireAuth('../auth/login.html');
+
+  if (!isAuthenticated) return;
+
+  
+
+  // Show the order form
+
+  document.getElementById('orderForm').style.display = 'flex';
+
+})();
+
+</script> -->
+
+
+
+
+
+</body>
+
+</html>
+

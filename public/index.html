@@ -1,180 +1,906 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sweet Delights Bakery - Handcrafted Cakes</title>
-  <link rel="stylesheet" href="CSS/styles.css" />
-</head>
-<body>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-  <!-- Header -->
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --brown: #5C3317;
+    --brown-mid: #7A4728;
+    --gold: #C4924A;
+    --gold-light: #E8C078;
+    --cream: #FAF6F0;
+    --cream-dark: #F2E8D9;
+    --ink: #1C1410;
+    --ink-mid: #4A3728;
+    --stone: #9E8A78;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 4%;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(92,51,23,0.12);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-wrap {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .logo-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--brown);
+    letter-spacing: 0.02em;
+  }
+
+  .logo-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  .nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav a:hover { color: var(--brown); }
+
+  .nav-cta {
+    background: var(--brown);
+    color: #fff !important;
+    padding: 0.55rem 1.25rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em !important;
+  }
+
+  .nav-cta:hover { background: var(--brown-mid) !important; color: #fff !important; }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 86vh;
+  }
+
+  .hero-left {
+    background: var(--brown);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 5% 5rem 6%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(196,146,74,0.12);
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.12;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.72);
+    max-width: 380px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+
+  .hero-right {
+    background: var(--cream-dark);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    position: relative;
+  }
+
+  .hero-img {
+    background: var(--brown-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-img-main {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    background: linear-gradient(160deg, #7A4728 0%, #5C3317 100%);
+    min-height: 300px;
+  }
+
+  .hero-img-a { background: linear-gradient(135deg, #6B3A1F 0%, #8B5030 100%); }
+  .hero-img-b { background: linear-gradient(135deg, #8B5030 0%, #A0622A 100%); }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--cream);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brown);
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .cake-icon {
+    font-size: 1.4rem;
+    margin-bottom: 3px;
+  }
+
+  /* ── MARQUEE / TRUST BAR ── */
+  .trust-bar {
+    background: var(--brown);
+    padding: 0.9rem 4%;
+    display: flex;
+    gap: 4rem;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .trust-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── FEATURED CAKES ── */
+  .section {
+    padding: 5rem 6%;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(92,51,23,0.1);
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 400;
+    color: var(--brown);
+    line-height: 1.1;
+  }
+
+  .section-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+    padding-bottom: 0.5rem;
+  }
+
+  .section-link:hover { color: var(--brown); }
+
+  .cake-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(92,51,23,0.08);
+    border: 1px solid rgba(92,51,23,0.08);
+  }
+
+  .cake-card {
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .cake-thumb {
+    height: 280px;
+    background: linear-gradient(160deg, #9B6040 0%, #6B3A1F 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.8rem;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cake-card:first-child .cake-thumb { height: 380px; }
+  .cake-thumb-b { background: linear-gradient(160deg, #7A4F38 0%, #4A2810 100%); }
+  .cake-thumb-c { background: linear-gradient(160deg, #8B5530 0%, #5C2E10 100%); }
+
+  .cake-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(28,20,16,0.9) 0%, transparent 100%);
+    padding: 2rem 1.5rem 1.5rem;
+    transform: translateY(0);
+  }
+
+  .cake-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 0.25rem;
+  }
+
+  .cake-desc {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+  }
+
+  .cake-info {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(92,51,23,0.08);
+  }
+
+  .cake-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--brown);
+    font-weight: 600;
+  }
+
+  .cake-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+
+  /* ── WHY US ── */
+  .why-section {
+    background: var(--cream-dark);
+    padding: 5rem 6%;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 3rem;
+  }
+
+  .why-card {
+    background: var(--cream);
+    padding: 2.5rem 2rem;
+    border: 1px solid rgba(92,51,23,0.06);
+  }
+
+  .why-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  .why-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--brown);
+    margin-bottom: 0.6rem;
+  }
+
+  .why-desc {
+    font-size: 0.82rem;
+    color: var(--stone);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials {
+    padding: 5rem 6%;
+    background: var(--cream);
+  }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .testi-card {
+    background: var(--cream-dark);
+    padding: 2rem;
+    border: 1px solid rgba(92,51,23,0.08);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .testi-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+  }
+
+  .testi-text {
+    font-size: 0.88rem;
+    color: var(--ink-mid);
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+  }
+
+  .testi-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .testi-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--gold-light);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .testi-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--brown);
+    letter-spacing: 0.05em;
+  }
+
+  .testi-role {
+    font-size: 0.72rem;
+    color: var(--stone);
+    font-weight: 300;
+  }
+
+  .stars {
+    color: var(--gold);
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 2px;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--brown);
+    padding: 5rem 6%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-title em { font-style: italic; color: var(--gold-light); }
+
+  .cta-desc {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    padding: 3.5rem 6% 2rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--gold-light);
+    font-weight: 300;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 280px;
+  }
+
+  .footer-col-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .footer-links a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: rgba(255,255,255,0.85); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-demo {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    background: rgba(196,146,74,0.1);
+    border: 1px solid rgba(196,146,74,0.25);
+    padding: 0.3rem 0.75rem;
+    border-radius: 2px;
+  }
+</style>
+
+<!-- HEADER -->
 <header class="header">
-  <div class="logo">Sweet Delights</div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <nav class="nav">
-  <a href="index.html">Home</a>
-  <a href="gallery.html">Gallery</a>
-  <a href="order.html">Order</a>
-  <a href="my-orders.html">My Orders</a>
-  <a href="chat.html">Chat</a>
-  <span id="authNav">
-    <a href="auth/login.html">Login</a>
-  </span>
-</nav>
-
-  </header>
-
-  
-<div class="menu-overlay" onclick="toggleMenu()"></div>
-
-  <!-- Demo Notice -->
-  <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-bottom: 3px solid #F59E0B; padding: 1.25rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <p style="margin: 0; font-weight: bold; color: #78350F; font-size: 1.1rem;">
-      📌 Portfolio Demo Project
-    </p>
-    <p style="margin: 0.5rem 0 0 0; color: #92400E; font-size: 0.95rem;">
-      This is a demonstration website. All data is stored locally in your browser. No real orders or payments are processed.
-    </p>
+  <div class="logo-wrap">
+    <span class="logo-main">Sweet Delights</span>
+    <span class="logo-sub">Artisan Bakery</span>
   </div>
+  <nav class="nav">
+    <a href="#">Home</a>
+    <a href="#">Gallery</a>
+    <a href="#">Order</a>
+    <a href="#">My Orders</a>
+    <a href="#">Chat</a>
+    <a href="#" class="nav-cta">Order Now</a>
+  </nav>
+</header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Freshly Baked Cakes for Every Occasion</h1>
-    <p>Delicious, custom-made cakes baked with love and the finest ingredients</p>
-    <div class="hero-buttons">
-      <a href="order.html" class="btn primary">Order a Cake</a>
-      <a href="gallery.html" class="btn secondary">View Gallery</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Handcrafted with love</p>
+    <h1 class="hero-title">
+      Cakes baked for<br>
+      <em>every celebration</em>
+    </h1>
+    <p class="hero-desc">Custom cakes made to order using the finest ingredients. From intimate birthdays to grand weddings — each creation is uniquely yours.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Order a Cake</a>
+      <a href="#" class="btn-ghost">View Gallery</a>
     </div>
-  </section>
-
-  <!-- Featured Cakes -->
-  <section class="featured">
-    <h2>Featured Cakes</h2>
-    <div class="cake-grid">
-      <div class="cake-card">
-        <img src="images/chocolate cake.jpg" alt="Chocolate Cake">
-        <h3>Chocolate Delight</h3>
-        <p>Rich chocolate sponge with creamy frosting</p>
-      </div>
-      <div class="cake-card">
-        <img src="images/vanilla-cake.jpg" alt="Vanilla Cake">
-        <h3>Vanilla Dream</h3>
-        <p>Classic vanilla cake with buttercream</p>
-      </div>
-      <div class="cake-card">
-        <img src="images/red velvet cake.jpg" alt="Red Velvet Cake">
-        <h3>Red Velvet</h3>
-        <p>Soft red velvet with cream cheese frosting</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why Choose Us -->
-  <section class="why-us">
-    <h2>Why Choose Us</h2>
-    <div class="reasons">
-      <div>🎂 Fresh Ingredients</div>
-      <div>⏰ On-Time Delivery</div>
-      <div>❤️ Made with Love</div>
-    </div>
-  </section>
-
-  <!-- Recently Delivered -->
-  <section class="recently-delievered">
-    <h2>These Cakes Just Went Out the Door</h2>
-    <div class="cake-grid">
-      <div class="cake-card">
-        <img src="images/bread cake.jpg" alt="Loaf Cake">
-        <h3>Loaf Delight</h3>
-        <p>Perfectly baked and freshly delivered</p>
-      </div>
-      <div class="cake-card">
-        <img src="images/vanilla-cake.jpg" alt="Vanilla Cake">
-        <h3>Vanilla Dream</h3>
-        <p>A customer favorite, just delivered</p>
-      </div>
-      <div class="cake-card">
-        <img src="images/strawberry cake.jpg" alt="Strawberry Cake">
-        <h3>Strawberry Passion</h3>
-        <p>Fresh strawberries and cream</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img hero-img-main">
+      <span>Signature Collection</span>
+      <div class="hero-badge">
+        <span class="cake-icon">🎂</span>
+        <span>Fresh<br>Daily</span>
       </div>
     </div>
-  </section>
+    <div class="hero-img hero-img-a">Chocolate Delight</div>
+    <div class="hero-img hero-img-b">Red Velvet</div>
+  </div>
+</section>
 
-  <!-- Call to Action -->
-  <section class="cta">
-    <h2>Ready to Order?</h2>
-    <p>Chat with us or place your order in minutes.</p>
-    <a href="chat.html" class="btn">Chat Now</a>
-  </section>
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="trust-dot"></span> Free local delivery on orders above ₦15,000</div>
+  <div class="trust-item"><span class="trust-dot"></span> Order 48 hours in advance</div>
+  <div class="trust-item"><span class="trust-dot"></span> 100% handcrafted ingredients</div>
+  <div class="trust-item"><span class="trust-dot"></span> Serving Lagos since 2019</div>
+  <div class="trust-item"><span class="trust-dot"></span> Customisation available</div>
+</div>
 
-  <!-- Footer -->
+<!-- FEATURED CAKES -->
+<section class="section">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Our Specialities</p>
+      <h2 class="section-title">Featured<br>Creations</h2>
+    </div>
+    <a href="#" class="section-link">View full gallery →</a>
+  </div>
+  <div class="cake-grid">
+    <div class="cake-card">
+      <div class="cake-thumb">
+        <div class="cake-overlay">
+          <div class="cake-name">Chocolate Delight</div>
+          <div class="cake-desc">Rich dark chocolate sponge with ganache</div>
+        </div>
+      </div>
+      <div class="cake-info">
+        <span class="cake-price">From ₦12,000</span>
+        <span class="cake-tag">Signature</span>
+      </div>
+    </div>
+    <div class="cake-card">
+      <div class="cake-thumb cake-thumb-b" style="height:280px">
+        <div class="cake-overlay">
+          <div class="cake-name">Vanilla Dream</div>
+          <div class="cake-desc">Classic buttercream finish</div>
+        </div>
+      </div>
+      <div class="cake-info">
+        <span class="cake-price">From ₦9,500</span>
+        <span class="cake-tag">Classic</span>
+      </div>
+    </div>
+    <div class="cake-card">
+      <div class="cake-thumb cake-thumb-c" style="height:280px">
+        <div class="cake-overlay">
+          <div class="cake-name">Red Velvet</div>
+          <div class="cake-desc">Cream cheese frosting</div>
+        </div>
+      </div>
+      <div class="cake-info">
+        <span class="cake-price">From ₦11,000</span>
+        <span class="cake-tag">Fan Favourite</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section">
+  <div>
+    <p class="section-label">Why Choose Us</p>
+    <h2 class="section-title">Quality you<br>can taste</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">✦</div>
+      <div class="why-title">Finest Ingredients</div>
+      <p class="why-desc">We source premium dairy, imported chocolate, and fresh fruits — no artificial flavours or shortcuts.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">◇</div>
+      <div class="why-title">Custom Designs</div>
+      <p class="why-desc">Every cake is tailored to your occasion, theme, and taste. Share your vision and we'll bring it to life.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">○</div>
+      <div class="why-title">Same-Day Pickup</div>
+      <p class="why-desc">Order by 9am and collect same day from our Lagos kitchen — or schedule a delivery window.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">□</div>
+      <div class="why-title">Order Tracking</div>
+      <p class="why-desc">Get real-time updates from the moment your order is placed until it arrives at your door.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <div>
+      <p class="section-label">What customers say</p>
+      <h2 class="section-title">Loved across<br>Lagos</h2>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">The Red Velvet for my daughter's birthday was absolutely perfect. Moist, beautifully decorated, and delivered on time.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AU</div>
+        <div>
+          <div class="testi-name">Amaka U.</div>
+          <div class="testi-role">Repeat customer · Lagos</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">Ordered the Chocolate Delight for our anniversary. Best cake I've had in Lagos — rich without being too heavy.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">TO</div>
+        <div>
+          <div class="testi-name">Tunde O.</div>
+          <div class="testi-role">First-time customer · Lekki</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">The custom corporate cake for our product launch was stunning. Got compliments from the entire team. Will order again.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">FK</div>
+        <div>
+          <div class="testi-name">Fatima K.</div>
+          <div class="testi-role">Corporate client · V.I.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div>
+    <h2 class="cta-title">Ready to <em>celebrate</em><br>something special?</h2>
+    <p class="cta-desc">Place your order at least 48 hours in advance. We'll handle the rest.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary" style="white-space:nowrap; font-size:0.78rem; letter-spacing:0.12em;">Order a Cake →</a>
+    <a href="#" style="font-size:0.72rem; color:rgba(255,255,255,0.4); text-decoration:none; letter-spacing:0.1em;">or chat with us first</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer class="footer">
-  <p>© 2026 Sweet Delights Bakery</p>
-  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
-    <a href="auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
-  </p>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Sweet Delights</div>
+      <p class="footer-desc">Handcrafted cakes baked fresh for every occasion. Proudly based in Lagos, Nigeria.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Order a Cake</a></li>
+        <li><a href="#">My Orders</a></li>
+        <li><a href="#">Chat with Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="#">hello@sweetdelights.ng</a></li>
+        <li><a href="#">08012345678</a></li>
+        <li><a href="#">Lagos, Nigeria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Sweet Delights Bakery. All rights reserved.</span>
+    <span class="footer-demo">Portfolio Demo</span>
+  </div>
 </footer>
-
-<script src="js/simple-data-manager.js"></script>
-<script src="js/main.js"></script>
-
-<script>
-// Hamburger Menu Toggle
-function toggleMenu() {
-  const nav = document.querySelector('.nav');
-  const overlay = document.querySelector('.menu-overlay');
-  const toggle = document.querySelector('.menu-toggle');
-  
-  nav.classList.toggle('active');
-  overlay.classList.toggle('active');
-  
-  if (nav.classList.contains('active')) {
-    toggle.textContent = '✕'; 
-    document.getElementsByTagName('header')[0].style.backgroundColor = 'var(--primary)';
-  } else {
-    toggle.textContent = '☰';
-    
-  }
-}
-
-document.querySelectorAll('.nav a').forEach(link => {
-  link.addEventListener('click', () => {
-    const nav = document.querySelector('.nav');
-    const overlay = document.querySelector('.menu-overlay');
-    const toggle = document.querySelector('.menu-toggle');
-    nav.classList.remove('active');
-    overlay.classList.remove('active');
-    toggle.textContent = '☰';
-  });
-});
-</script>
-
-  <script>
-// Update navigation based on auth state
-window.onAuthStateChanged = (user, isAdmin) => {
-  const authNav = document.getElementById('authNav');
-  if (!authNav) return;
-
-  if (user) {
-    const displayName = user.displayName || user.email.split('@')[0];
-    authNav.innerHTML = `
-      <span style="color: var(--primary-color); font-weight: 600;">
-        👤 ${displayName}
-      </span>
-      <a href="#" onclick="event.preventDefault(); window.authManager.logout().then(() => location.reload());">
-        Logout
-      </a>
-    `;
-  } else {
-    authNav.innerHTML = `
-      <a href="auth/login.html">Login</a>
-      <a href="auth/register.html">Sign Up</a>
-    `;
-  }
-};
-</script>
-
-</body>
-</html>

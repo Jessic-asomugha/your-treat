@@ -3,179 +3,824 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gallery - Sweet Delights Bakery</title>
-  <link rel="stylesheet" href="CSS/styles.css" />
+  <title>Gallery – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C3317;
+      --brown-mid:  #7A4728;
+      --gold:       #C4924A;
+      --gold-light: #E8C078;
+      --cream:      #FAF6F0;
+      --cream-dark: #F2E8D9;
+      --ink:        #1C1410;
+      --ink-mid:    #4A3728;
+      --stone:      #9E8A78;
+      --border:     rgba(92,51,23,0.12);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.02em;
+    }
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .nav { display: flex; gap: 2rem; align-items: center; }
+    .nav a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--brown); }
+    .nav-cta {
+      background: var(--brown) !important;
+      color: #fff !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+    }
+    .nav-cta:hover { background: var(--brown-mid) !important; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--brown);
+      padding: 3.5rem 5%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.1);
+    }
+    .page-hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .page-hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .page-hero-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      text-align: right;
+      max-width: 220px;
+      line-height: 1.7;
+      position: relative; z-index: 1;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 2rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover { border-color: var(--gold); color: var(--brown); }
+    .filter-tab.active {
+      background: var(--brown);
+      border-color: var(--brown);
+      color: #fff;
+    }
+
+    .filter-count {
+      font-size: 0.75rem;
+      color: var(--stone);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+    .filter-count span { color: var(--brown); font-weight: 500; }
+
+    /* ── GALLERY GRID ── */
+    .gallery-wrap {
+      padding: 2.5rem 5% 5rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .cake-card {
+      background: var(--cream);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .cake-card:hover .card-overlay { opacity: 1; }
+    .cake-card:hover .card-img { transform: scale(1.04); }
+
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 260px;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+      background: linear-gradient(135deg, #7A4728 0%, #5C3317 100%);
+    }
+
+    /* Fallback gradient when image missing */
+    .card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.35);
+      font-size: 0.9rem;
+      transition: transform 0.5s ease;
+    }
+
+    .grad-choc  { background: linear-gradient(155deg, #3D1F0A 0%, #7A4728 100%); }
+    .grad-van   { background: linear-gradient(155deg, #C4924A 0%, #E8C078 100%); }
+    .grad-red   { background: linear-gradient(155deg, #7A1F1F 0%, #B03030 100%); }
+    .grad-straw { background: linear-gradient(155deg, #B03060 0%, #E08080 100%); }
+    .grad-loaf  { background: linear-gradient(155deg, #8B7355 0%, #C4A882 100%); }
+    .grad-cara  { background: linear-gradient(155deg, #8B5E00 0%, #C4924A 100%); }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(28,20,16,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-overlay-btn {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.6);
+      padding: 0.6rem 1.4rem;
+      border-radius: 2px;
+    }
+
+    .card-body {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--brown);
+    }
+
+    .card-meta {
+      font-size: 0.7rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-top: 0.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      border: 1px solid rgba(196,146,74,0.35);
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 5rem 2rem;
+      background: var(--cream);
+    }
+    .empty-state p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,20,16,0.82);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .modal-backdrop.show { display: flex; }
+
+    .modal {
+      background: var(--cream);
+      border-radius: 2px;
+      max-width: 820px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      animation: slideUp 0.35s ease;
+      max-height: 90vh;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-img-wrap {
+      position: relative;
+      min-height: 400px;
+    }
+
+    .modal-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-img-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .modal-body {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      width: 32px; height: 32px;
+      background: rgba(28,20,16,0.5);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .modal-close:hover { background: rgba(28,20,16,0.8); }
+
+    .modal-eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--brown);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .modal-desc {
+      font-size: 0.88rem;
+      color: var(--stone);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-spec {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .spec-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+    }
+
+    .spec-value {
+      font-size: 0.85rem;
+      color: var(--ink-mid);
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .modal-actions { display: flex; gap: 0.75rem; }
+
+    .btn-order {
+      flex: 1;
+      padding: 0.85rem;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-order:hover { background: var(--brown-mid); }
+
+    .btn-close-modal {
+      padding: 0.85rem 1.25rem;
+      background: transparent;
+      color: var(--stone);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-close-modal:hover { border-color: var(--brown); color: var(--brown); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 300; }
+    .footer-admin { font-size: 0.7rem; color: rgba(255,255,255,0.2); text-decoration: none; }
+    .footer-admin:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .modal { grid-template-columns: 1fr; }
+      .modal-img-wrap { min-height: 240px; }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .nav a:not(.nav-cta):not(.active) { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Header -->
-<header class="header">
-  <div class="logo">Sweet Delights</div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <nav class="nav">
-  <a href="index.html">Home</a>
-  <a href="gallery.html">Gallery</a>
-  <a href="order.html">Order</a>
-  <a href="my-orders.html">My Orders</a>
-  <a href="chat.html">Chat</a>
-  <span id="authNav">
-    <a href="auth/login.html">Login</a>
-  </span>
-</nav>
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo-wrap">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html" class="active">Gallery</a>
+      <a href="order.html">Order</a>
+      <a href="my-orders.html">My Orders</a>
+      <a href="chat.html">Chat</a>
+      <span id="authNav"><a href="auth/login.html">Login</a></span>
+    </nav>
   </header>
 
-<div class="menu-overlay" onclick="toggleMenu()"></div>
-
-  <!-- Gallery Section -->
-  <section class="featured">
-    <h2>Our Cakes</h2>
-
-    <div class="cake-grid">
-      <div class="cake-card"
-           data-name="Chocolate Delight"
-           data-sizes="6, 8, 10 inches"
-           data-layers="3 layers"
-           data-description="Rich chocolate sponge with creamy chocolate frosting. A crowd favorite for chocolate lovers!"
-           data-image="images/chocolate cake.jpg">
-        <img src="images/chocolate cake.jpg" alt="Chocolate Cake">
-        <h3>Chocolate Delight</h3>
-        <p>Rich chocolate sponge with creamy frosting</p>
-      </div>
-
-      <div class="cake-card"
-           data-name="Vanilla Dream"
-           data-sizes="6, 8 inches"
-           data-layers="2 layers"
-           data-description="Classic vanilla cake with smooth buttercream frosting. Perfect for any celebration!"
-           data-image="images/vanilla cake.jpg">
-        <img src="images/vanilla cake.jpg" alt="Vanilla Cake">
-        <h3>Vanilla Dream</h3>
-        <p>Classic vanilla cake with buttercream</p>
-      </div>
-
-      <div class="cake-card"
-           data-name="Red Velvet Romance"
-           data-sizes="8, 10 inches"
-           data-layers="3 layers"
-           data-description="Soft red velvet cake with rich cream cheese frosting. An elegant choice for special occasions!"
-           data-image="images/red velvet cake.jpg">
-        <img src="images/red velvet cake.jpg" alt="Red Velvet Cake">
-        <h3>Red Velvet Romance</h3>
-        <p>Soft red velvet with cream cheese frosting</p>
-      </div>
-
-      <div class="cake-card"
-           data-name="Strawberry Passion"
-           data-sizes="6, 8, 10 inches"
-           data-layers="2-3 layers"
-           data-description="Fresh strawberries layered with light cream. A refreshing and fruity delight!"
-           data-image="images/strawberry cake.jpg">
-        <img src="images/strawberry cake.jpg" alt="Strawberry Cake">
-        <h3>Strawberry Passion</h3>
-        <p>Fresh strawberries with light cream</p>
-      </div>
-
-      <div class="cake-card"
-           data-name="Loaf Delight"
-           data-sizes="Standard loaf size"
-           data-layers="Single layer"
-           data-description="Perfectly baked loaf cake with a moist, tender crumb. Great for sharing!"
-           data-image="images/bread cake.jpg">
-        <img src="images/bread cake.jpg" alt="Loaf Cake">
-        <h3>Loaf Delight</h3>
-        <p>Perfect for sharing and gifting</p>
-      </div>
-
-      <div class="cake-card"
-           data-name="Caramel Heaven"
-           data-sizes="6, 8, 10 inches"
-           data-layers="3-4 layers"
-           data-description="Decadent caramel layers with smooth caramel drizzle. Pure indulgence!"
-           data-image="images/chocolate cake.jpg">
-        <img src="images/chocolate cake.jpg" alt="Caramel Cake">
-        <h3>Caramel Heaven</h3>
-        <p>Decadent caramel layers</p>
-      </div>
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <p class="page-hero-eyebrow">Our creations</p>
+      <h1>The <em>gallery</em></h1>
     </div>
-  </section>
+    <p class="page-hero-note">Every cake is handcrafted to order. Click any creation to see full details.</p>
+  </div>
 
-  <!-- Modal -->
-  <div class="modal" id="cakeModal">
-    <div class="modal-content">
-      <button class="close">&times;</button>
-      <img id="modalImage" alt="">
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
-      <p><strong>Available Sizes:</strong> <span id="modalSizes"></span></p>
-      <p><strong>Layers:</strong> <span id="modalLayers"></span></p>
-      <a href="order.html" class="btn primary" style="margin-top: 1.5rem;">Order This Cake</a>
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="Classic">Classic</button>
+      <button class="filter-tab" data-filter="Premium">Premium</button>
+      <button class="filter-tab" data-filter="Seasonal">Seasonal</button>
+    </div>
+    <p class="filter-count">Showing <span id="countDisplay">6</span> cakes</p>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery-wrap">
+    <div class="gallery-grid" id="galleryGrid">
+
+      <div class="cake-card" data-category="Premium"
+           data-name="Chocolate Delight"
+           data-tag="Signature"
+           data-sizes="6, 8, 10 inches"
+           data-layers="2–4 layers"
+           data-price="From ₦12,000"
+           data-desc="Rich dark chocolate sponge layered with velvety ganache and finished with a smooth chocolate cream frosting. A perennial crowd-pleaser for chocolate lovers of all ages."
+           data-grad="grad-choc"
+           data-img="images/chocolate cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/chocolate cake.jpg" alt="Chocolate Delight"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-choc" style="display:none;">Chocolate Delight</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Chocolate Delight</div>
+            <div class="card-meta">From ₦12,000 · 6–10 inch</div>
+          </div>
+          <span class="card-tag">Signature</span>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="Classic"
+           data-name="Vanilla Dream"
+           data-tag="Classic"
+           data-sizes="6, 8 inches"
+           data-layers="2–3 layers"
+           data-price="From ₦9,500"
+           data-desc="Classic vanilla sponge with smooth Madagascar vanilla buttercream. Light, elegant, and versatile — perfect for birthdays, anniversaries, or any occasion that calls for understated perfection."
+           data-grad="grad-van"
+           data-img="images/vanilla cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/vanilla cake.jpg" alt="Vanilla Dream"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-van" style="display:none;">Vanilla Dream</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Vanilla Dream</div>
+            <div class="card-meta">From ₦9,500 · 6–8 inch</div>
+          </div>
+          <span class="card-tag">Classic</span>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="Premium"
+           data-name="Red Velvet Romance"
+           data-tag="Fan Favourite"
+           data-sizes="8, 10 inches"
+           data-layers="3–4 layers"
+           data-price="From ₦11,000"
+           data-desc="Soft, velvety red sponge paired with a tangy, rich cream cheese frosting. An elegant and dramatic choice that's as beautiful to look at as it is to eat — ideal for weddings and special celebrations."
+           data-grad="grad-red"
+           data-img="images/red velvet cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/red velvet cake.jpg" alt="Red Velvet Romance"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-red" style="display:none;">Red Velvet Romance</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Red Velvet Romance</div>
+            <div class="card-meta">From ₦11,000 · 8–10 inch</div>
+          </div>
+          <span class="card-tag">Fan Favourite</span>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="Seasonal"
+           data-name="Strawberry Passion"
+           data-tag="Seasonal"
+           data-sizes="6, 8, 10 inches"
+           data-layers="2–3 layers"
+           data-price="From ₦10,500"
+           data-desc="Fresh strawberries folded into a light cream sponge and finished with a whipped cream frosting and whole strawberry garnish. A refreshing, fruity delight best enjoyed in season."
+           data-grad="grad-straw"
+           data-img="images/strawberry cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/strawberry cake.jpg" alt="Strawberry Passion"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-straw" style="display:none;">Strawberry Passion</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Strawberry Passion</div>
+            <div class="card-meta">From ₦10,500 · 6–10 inch</div>
+          </div>
+          <span class="card-tag">Seasonal</span>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="Classic"
+           data-name="Loaf Delight"
+           data-tag="Classic"
+           data-sizes="Standard loaf"
+           data-layers="Single"
+           data-price="From ₦6,000"
+           data-desc="A perfectly baked loaf cake with a moist, tender crumb and golden crust. Ideal for gifting, sharing at the office, or enjoying with a cup of tea. Simple, honest, and deeply satisfying."
+           data-grad="grad-loaf"
+           data-img="images/bread cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/bread cake.jpg" alt="Loaf Delight"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-loaf" style="display:none;">Loaf Delight</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Loaf Delight</div>
+            <div class="card-meta">From ₦6,000 · Standard loaf</div>
+          </div>
+          <span class="card-tag">Classic</span>
+        </div>
+      </div>
+
+      <div class="cake-card" data-category="Premium"
+           data-name="Caramel Heaven"
+           data-tag="Premium"
+           data-sizes="6, 8, 10 inches"
+           data-layers="3–4 layers"
+           data-price="From ₦13,500"
+           data-desc="Decadent layers of caramel sponge drizzled with a homemade salted caramel sauce and finished with a smooth caramel buttercream. Pure, unapologetic indulgence — for those who know what they want."
+           data-grad="grad-cara"
+           data-img="images/chocolate cake.jpg">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/chocolate cake.jpg" alt="Caramel Heaven"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="card-img-placeholder grad-cara" style="display:none;">Caramel Heaven</div>
+          <div class="card-overlay"><span class="card-overlay-btn">View Details</span></div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">Caramel Heaven</div>
+            <div class="card-meta">From ₦13,500 · 6–10 inch</div>
+          </div>
+          <span class="card-tag">Premium</span>
+        </div>
+      </div>
+
+    </div><!-- /gallery-grid -->
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-logo">Sweet Delights</span>
+    <span class="footer-copy">© 2025 Sweet Delights Bakery</span>
+    <a href="auth/admin-login.html" class="footer-admin">Admin</a>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modal">
+      <div class="modal-img-wrap" id="modalImgWrap">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img class="modal-img" id="modalImg" alt=""
+             onerror="this.style.display='none';document.getElementById('modalImgPlaceholder').style.display='flex';">
+        <div class="modal-img-placeholder" id="modalImgPlaceholder" style="display:none;"></div>
+      </div>
+      <div class="modal-body">
+        <div>
+          <p class="modal-eyebrow" id="modalTag"></p>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <p class="modal-desc" id="modalDesc"></p>
+          <div class="modal-specs">
+            <div class="modal-spec">
+              <span class="spec-label">Available sizes</span>
+              <span class="spec-value" id="modalSizes"></span>
+            </div>
+            <div class="modal-spec">
+              <span class="spec-label">Layers</span>
+              <span class="spec-value" id="modalLayers"></span>
+            </div>
+            <div class="modal-spec">
+              <span class="spec-label">Starting price</span>
+              <span class="spec-value" id="modalPrice"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <a href="order.html" class="btn-order">Order This Cake</a>
+          <button class="btn-close-modal" onclick="closeModal()">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Footer -->
-<footer class="footer">
-  <p> 2026 Sweet Delights Bakery</p>
-  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
-    <a href="auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
-  </p>
-</footer>
-
-<script src="js/main.js"></script>
-<script src="js/simple-data-manager.js"></script>
-
-<script>
-// Hamburger Menu Toggle
-function toggleMenu() {
-  const nav = document.querySelector('.nav');
-  const overlay = document.querySelector('.menu-overlay');
-  const toggle = document.querySelector('.menu-toggle');
-  
-  nav.classList.toggle('active');
-  overlay.classList.toggle('active');
-  
-  if (nav.classList.contains('active')) {
-    toggle.textContent = '✕';
-  } else {
-    toggle.textContent = '☰';
-  }
-}
-
-document.querySelectorAll('.nav a').forEach(link => {
-  link.addEventListener('click', () => {
-    const nav = document.querySelector('.nav');
-    const overlay = document.querySelector('.menu-overlay');
-    const toggle = document.querySelector('.menu-toggle');
-    nav.classList.remove('active');
-    overlay.classList.remove('active');
-    toggle.textContent = '☰';
-  });
-});
-</script>
-
   <script>
-// Update navigation based on auth state
-window.onAuthStateChanged = (user, isAdmin) => {
-  const authNav = document.getElementById('authNav');
-  if (!authNav) return;
+    // ── FILTER ──
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('.cake-card');
+    const countDisplay = document.getElementById('countDisplay');
 
-  if (user) {
-    const displayName = user.displayName || user.email.split('@')[0];
-    authNav.innerHTML = `
-      <span style="color: var(--primary-color); font-weight: 600;">
-        👤 ${displayName}
-      </span>
-      <a href="#" onclick="event.preventDefault(); window.authManager.logout().then(() => location.reload());">
-        Logout
-      </a>
-    `;
-  } else {
-    authNav.innerHTML = `
-      <a href="auth/login.html">Login</a>
-      <a href="auth/register.html">Sign Up</a>
-    `;
-  }
-};
-</script>
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        let visible = 0;
+        cards.forEach(card => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        countDisplay.textContent = visible;
+      });
+    });
+
+    // ── MODAL ──
+    function openModal(card) {
+      const grad = card.dataset.grad;
+      document.getElementById('modalTitle').textContent    = card.dataset.name;
+      document.getElementById('modalTag').textContent      = card.dataset.tag;
+      document.getElementById('modalDesc').textContent     = card.dataset.desc;
+      document.getElementById('modalSizes').textContent    = card.dataset.sizes;
+      document.getElementById('modalLayers').textContent   = card.dataset.layers;
+      document.getElementById('modalPrice').textContent    = card.dataset.price;
+
+      const img = document.getElementById('modalImg');
+      const placeholder = document.getElementById('modalImgPlaceholder');
+      img.src = card.dataset.img;
+      img.alt = card.dataset.name;
+      img.style.display = '';
+      placeholder.style.display = 'none';
+      placeholder.className = 'modal-img-placeholder ' + grad;
+      placeholder.textContent = card.dataset.name;
+
+      document.getElementById('modalBackdrop').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+    });
+
+    document.getElementById('modalBackdrop').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ── AUTH NAV ──
+    window.onAuthStateChanged = (user) => {
+      const authNav = document.getElementById('authNav');
+      if (!authNav) return;
+      if (user) {
+        const name = user.displayName || user.email.split('@')[0];
+        authNav.innerHTML = `<span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+          <a href="#" onclick="event.preventDefault();window.authManager&&window.authManager.logout().then(()=>location.reload());">Logout</a>`;
+      } else {
+        authNav.innerHTML = `<a href="auth/login.html">Login</a><a href="auth/register.html">Sign Up</a>`;
+      }
+    };
+  </script>
+
+  <script src="js/simple-data-manager.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>

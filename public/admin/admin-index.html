@@ -3,235 +3,256 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Sweet Delights Bakery</title>
+  <title>Dashboard – Sweet Delights Admin</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
-  <!-- Admin Header -->
+  <!-- HEADER -->
   <header class="admin-header">
-    <div class="admin-header-content">
-      <div class="admin-logo">
-        Sweet Delights
-        <span class="admin-badge">Admin Panel</span>
-      </div>
-      <button class="admin-menu-toggle" onclick="toggleAdminMenu()">☰ Menu</button>
+    <div class="admin-logo">
+      Sweet Delights
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-user">
+      <span class="admin-user-name" id="adminUserName">Admin</span>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
     </div>
   </header>
 
-  <!-- Admin Navigation -->
+  <!-- NAV -->
   <nav class="admin-nav">
-    <div class="admin-nav-content">
-      <a href="index.html" class="admin-nav-link active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"/>
-          <rect x="14" y="3" width="7" height="7"/>
-          <rect x="14" y="14" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        Dashboard
-      </a>
-      <a href="cake-orders.html" class="admin-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-        </svg>
-        Cake Orders
-      </a>
-      <a href="customer-messages.html" class="admin-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        Customer Messages
-      </a>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
+    <a href="admin-index.html" class="admin-nav-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Dashboard
+    </a>
+    <a href="cake-orders.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+      </svg>
+      Orders
+    </a>
+    <a href="customer-messages.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+      <span id="msgBadge" style="display:none; background:var(--gold); color:var(--ink); font-size:0.55rem; padding:0.15rem 0.45rem; border-radius:10px; margin-left:0.25rem; font-weight:600;"></span>
+    </a>
   </nav>
 
-  <!-- Main Container -->
+  <!-- CONTENT -->
   <div class="admin-container">
-    
-    <!-- Page Title -->
-    <div style="margin-bottom: 2rem;">
-      <h1>Dashboard Overview</h1>
-      <p style="color: var(--text-medium); font-size: 1.05rem;">Welcome back! Here's what's happening with your bakery today.</p>
+
+    <div class="page-title">
+      <h1>Dashboard</h1>
+      <p id="dashDate">Loading…</p>
     </div>
 
-    <!-- Statistics Cards -->
-    <div class="dashboard-grid">
-      
-      <!-- Total Orders -->
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-card-header">
-          <div>
-            <div class="stat-card-title">Total Orders</div>
-          </div>
-          <div class="stat-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B4513" stroke-width="2">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-            </svg>
-          </div>
-        </div>
-        <div class="stat-card-value" id="totalOrders">0</div>
-        <div class="stat-card-change positive">↑ 12% from last week</div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-note">All time</div>
+        <div class="stat-card-accent" style="background: var(--brown);"></div>
       </div>
-
-      <!-- Pending Orders -->
-      <div class="stat-card" style="border-left-color: #FFA726;">
-        <div class="stat-card-header">
-          <div>
-            <div class="stat-card-title">Pending Orders</div>
-          </div>
-          <div class="stat-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-          </div>
-        </div>
-        <div class="stat-card-value" id="pendingOrders" style="color: #FFA726;">0</div>
-        <div class="stat-card-change">Needs attention</div>
+      <div class="stat-card">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value" id="statPending" style="color: var(--s-pending);">—</div>
+        <div class="stat-note">Needs attention</div>
+        <div class="stat-card-accent" style="background: var(--s-pending);"></div>
       </div>
-
-      <!-- Completed Today -->
-      <div class="stat-card" style="border-left-color: #4CAF50;">
-        <div class="stat-card-header">
-          <div>
-            <div class="stat-card-title">Completed Today</div>
-          </div>
-          <div class="stat-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          </div>
-        </div>
-        <div class="stat-card-value" id="completedToday" style="color: #4CAF50;">0</div>
-        <div class="stat-card-change positive">Great job!</div>
+      <div class="stat-card">
+        <div class="stat-label">Delivered Today</div>
+        <div class="stat-value" id="statDelivered" style="color: var(--s-delivered);">—</div>
+        <div class="stat-note">Completed orders</div>
+        <div class="stat-card-accent" style="background: var(--s-delivered);"></div>
       </div>
-
-      <!-- Unread Messages -->
-      <div class="stat-card" style="border-left-color: #2196F3;">
-        <div class="stat-card-header">
-          <div>
-            <div class="stat-card-title">Unread Messages</div>
-          </div>
-          <div class="stat-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2196F3" stroke-width="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-          </div>
-        </div>
-        <div class="stat-card-value" id="unreadMessages" style="color: #2196F3;">0</div>
-        <div class="stat-card-change">Respond quickly</div>
-      </div>
-
-    </div>
-
-    <!-- Recent Orders -->
-    <div class="content-card">
-      <div class="content-card-header">
-        <h2 class="content-card-title">Recent Orders</h2>
-        <a href="cake-orders.html" class="btn btn-secondary btn-small">View All Orders</a>
-      </div>
-
-      <div id="recentOrdersContainer">
-        <div class="data-table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Cake</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="recentOrdersTable">
-              <!-- Orders will be loaded here -->
-            </tbody>
-          </table>
-        </div>
+      <div class="stat-card">
+        <div class="stat-label">Unread Messages</div>
+        <div class="stat-value" id="statMessages" style="color: var(--s-baking);">—</div>
+        <div class="stat-note">From customers</div>
+        <div class="stat-card-accent" style="background: var(--s-baking);"></div>
       </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- RECENT ORDERS -->
     <div class="content-card">
       <div class="content-card-header">
-        <h2 class="content-card-title">Quick Actions</h2>
+        <span class="content-card-title">Recent Orders</span>
+        <a href="cake-orders.html" class="btn btn-ghost btn-sm">View all →</a>
       </div>
+      <div class="content-card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Cake</th>
+              <th>Delivery Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="recentOrdersTable">
+            <tr><td colspan="6">
+              <div class="empty-state">
+                <div class="empty-icon">🎂</div>
+                <div class="empty-title">No orders yet</div>
+                <div class="empty-text">Orders from customers will appear here</div>
+              </div>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-        
-        <div style="background: var(--cream); padding: 2rem; border-radius: var(--radius-lg); text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
-          <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">New Order</h3>
-          <p style="color: var(--text-medium); margin-bottom: 1.5rem; font-size: 0.95rem;">Manually add a new cake order</p>
-          <button class="btn btn-primary" onclick="alert('This would open a new order form - Demo feature')">Create Order</button>
+    <!-- ORDER STATUS BREAKDOWN -->
+    <div class="content-card">
+      <div class="content-card-header">
+        <span class="content-card-title">Status Breakdown</span>
+      </div>
+      <div class="content-card-body" style="padding: 1.75rem;">
+        <div id="statusBreakdown" style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border);">
+          <!-- Populated by JS -->
         </div>
-
-        <div style="background: var(--cream); padding: 2rem; border-radius: var(--radius-lg); text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
-          <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">Messages</h3>
-          <p style="color: var(--text-medium); margin-bottom: 1.5rem; font-size: 0.95rem;">Respond to customer inquiries</p>
-          <a href="customer-messages.html" class="btn btn-primary">View Messages</a>
-        </div>
-
       </div>
     </div>
 
   </div>
 
-<script src="../js/simple-data-manager.js"></script>
-<script src="../js/admin.js"></script>
+<script type="module">
+  import {
+    apiGetAllOrders, apiGetUnreadCount,
+    getUser, isLoggedIn, isAdmin, apiLogout
+  } from '../js/api.js'
 
-  <!-- Add auth check at the very end -->
- <script>
-  const currentUser = window.dataManager.getCurrentUser();
-  if (!currentUser || !currentUser.isAdmin) {
-    window.location.href = '../admin-login.html';
+  // Auth check — admin only
+  if (!isLoggedIn() || !isAdmin()) {
+    window.location.href = '../auth/admin-login.html'
   }
-</script>
 
-<!-- hamburger menu-->
-<script>
-function toggleAdminMenu() {
-  const nav = document.querySelector('.admin-nav');
-  const toggle = document.querySelector('.admin-menu-toggle');
-  nav.classList.toggle('active');
-  
-  if (nav.classList.contains('active')) {
-    toggle.innerHTML = '✕ Close';
-  } else {
-    toggle.innerHTML = '☰ Menu';
-  }
-}
+  const user = getUser()
+  document.getElementById('adminUserName').textContent = user?.fullName || user?.email || 'Admin'
 
-document.querySelectorAll('.admin-nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      const nav = document.querySelector('.admin-nav');
-      const toggle = document.querySelector('.admin-menu-toggle');
-      nav.classList.remove('active');
-      toggle.innerHTML = '☰ Menu';
+  // Date
+  document.getElementById('dashDate').textContent =
+    new Date().toLocaleDateString('en-NG', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    })
+
+  // Load stats
+  async function loadStats() {
+    try {
+      const orders = await apiGetAllOrders()
+      const { count } = await apiGetUnreadCount()
+
+      const stats = {
+        total:     orders.length,
+        pending:   orders.filter(o => o.status === 'PENDING').length,
+        confirmed: orders.filter(o => o.status === 'CONFIRMED').length,
+        baking:    orders.filter(o => o.status === 'BAKING').length,
+        delivered: orders.filter(o => o.status === 'DELIVERED').length,
+        cancelled: orders.filter(o => o.status === 'CANCELLED').length,
+      }
+
+      const today = new Date().toDateString()
+      stats.todayDelivered = orders.filter(o =>
+        o.status === 'DELIVERED' &&
+        new Date(o.updatedAt).toDateString() === today
+      ).length
+
+      document.getElementById('statTotal').textContent     = stats.total
+      document.getElementById('statPending').textContent   = stats.pending
+      document.getElementById('statDelivered').textContent = stats.todayDelivered
+      document.getElementById('statMessages').textContent  = count
+
+      // Message badge on nav
+      if (count > 0) {
+        const badge = document.getElementById('msgBadge')
+        if (badge) { badge.textContent = count; badge.style.display = 'inline' }
+      }
+
+      // Status breakdown
+      const items = [
+        { label: 'Pending',   val: stats.pending,   cls: 'sp-pending' },
+        { label: 'Confirmed', val: stats.confirmed,  cls: 'sp-confirmed' },
+        { label: 'Baking',    val: stats.baking,     cls: 'sp-baking' },
+        { label: 'Delivered', val: stats.delivered,  cls: 'sp-delivered' },
+        { label: 'Cancelled', val: stats.cancelled,  cls: 'sp-cancelled' },
+      ]
+
+      document.getElementById('statusBreakdown').innerHTML = items.map(i => `
+        <div style="background:var(--cream);padding:1.25rem 1.5rem;text-align:center;">
+          <div style="font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--stone);font-weight:500;margin-bottom:0.5rem;">${i.label}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;line-height:1;">${i.val}</div>
+          <span class="status-pill ${i.cls}" style="margin-top:0.5rem;display:inline-block;">${i.label}</span>
+        </div>`).join('')
+
+      // Recent orders table
+      loadRecentOrders(orders.slice(0, 8))
+
+    } catch (err) {
+      console.error('Load stats error:', err)
     }
-  });
-});
-
-document.addEventListener('click', (e) => {
-  if (window.innerWidth <= 768) {
-    const nav = document.querySelector('.admin-nav');
-    const toggle = document.querySelector('.admin-menu-toggle');
-    
-    if (nav.classList.contains('active') && 
-        !nav.contains(e.target) && 
-        !toggle.contains(e.target)) {
-      nav.classList.remove('active');
-      toggle.innerHTML = '☰ Menu';
-    }
   }
-});
+
+  function loadRecentOrders(orders) {
+    const tbody = document.getElementById('recentOrdersTable')
+    if (!tbody) return
+
+    if (orders.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6">
+        <div class="empty-state">
+          <div class="empty-icon">🎂</div>
+          <div class="empty-title">No orders yet</div>
+          <div class="empty-text">Orders from customers will appear here</div>
+        </div>
+      </td></tr>`
+      return
+    }
+
+    tbody.innerHTML = orders.map(o => {
+      const date = o.deliveryDate
+        ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', {
+            day: 'numeric', month: 'short'
+          })
+        : '—'
+      const sc = 'sp-' + (o.status || '').toLowerCase()
+      return `
+        <tr>
+          <td style="font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:600;color:var(--brown);">${o.id}</td>
+          <td>
+            <div style="font-weight:500;font-size:0.85rem;">${o.customerName || '—'}</div>
+            <div style="font-size:0.72rem;color:var(--stone);">${o.customerPhone || ''}</div>
+          </td>
+          <td style="font-size:0.85rem;">${o.cakeName || '—'}</td>
+          <td style="font-size:0.85rem;">${date}</td>
+          <td><span class="status-pill ${sc}">${o.status}</span></td>
+          <td>
+            <button class="btn btn-ghost btn-sm"
+              onclick="window.location.href='cake-orders.html?id=${o.id}'">
+              View
+            </button>
+          </td>
+        </tr>`
+    }).join('')
+  }
+
+  window.handleLogout = function() {
+    apiLogout()
+  }
+
+  // Init
+  loadStats()
+
+  // Refresh every 30s
+  setInterval(loadStats, 30000)
 </script>
 
 

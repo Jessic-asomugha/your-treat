@@ -3,664 +3,866 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Orders - Sweet Delights Bakery</title>
-  <link rel="stylesheet" href="CSS/styles.css" />
+  <title>My Orders – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    .tabs {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      border-bottom: 2px solid var(--cream);
-      overflow-x: auto;
-      padding-bottom: 1rem;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C3317;
+      --brown-mid:  #7A4728;
+      --gold:       #C4924A;
+      --gold-light: #E8C078;
+      --cream:      #FAF6F0;
+      --cream-dark: #F2E8D9;
+      --ink:        #1C1410;
+      --ink-mid:    #4A3728;
+      --stone:      #9E8A78;
+      --border:     rgba(92,51,23,0.12);
+
+      --status-pending:   #B45309;
+      --status-confirmed: #1D6F42;
+      --status-baking:    #1E40AF;
+      --status-delivered: #276749;
+      --status-cancelled: #9B2C2C;
     }
-    .tab {
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px 10px 0 0;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
       font-weight: 600;
-      color: var(--text-medium);
-      transition: all 0.3s ease;
+      color: var(--brown);
+      letter-spacing: 0.02em;
+    }
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .nav { display: flex; gap: 2rem; align-items: center; }
+    .nav a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--brown); }
+    .nav-cta {
+      background: var(--brown) !important;
+      color: #fff !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--brown);
+      padding: 3.5rem 5%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.1);
+    }
+    .page-hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .page-hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .page-hero-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      text-align: right;
+      max-width: 220px;
+      line-height: 1.7;
+      position: relative; z-index: 1;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 5% 5rem;
+    }
+
+    /* ── LOOKUP (guest) ── */
+    .lookup-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .lookup-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 0.4rem;
+    }
+
+    .lookup-sub {
+      font-size: 0.82rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .lookup-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .lookup-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: border-color 0.2s;
+    }
+    .lookup-input:focus { outline: none; border-color: var(--gold); background: #fff; }
+    .lookup-input::placeholder { text-transform: none; letter-spacing: normal; color: rgba(158,138,120,0.5); }
+
+    .lookup-btn {
+      padding: 0.8rem 1.75rem;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
       white-space: nowrap;
     }
-    .tab:hover {
-      background: var(--cream);
-      color: var(--primary-color);
+    .lookup-btn:hover { background: var(--brown-mid); }
+
+    /* ── TABS ── */
+    .tabs-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      overflow-x: auto;
     }
-    .tab.active {
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-      color: white;
+
+    .tab-btn {
+      padding: 0.75rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
     }
+    .tab-btn:hover { color: var(--brown); }
+    .tab-btn.active {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+    }
+
+    /* ── ORDER CARDS ── */
+    .orders-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
     .order-card {
-      background: white;
-      border-radius: 20px;
+      background: #fff;
+      padding: 1.75rem 2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .order-card:hover { background: var(--cream); }
+
+    .order-status-bar {
+      width: 3px;
+      height: 100%;
+      min-height: 60px;
+      border-radius: 2px;
+      align-self: stretch;
+    }
+
+    .order-main { }
+
+    .order-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.05em;
+    }
+
+    .status-pill {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+    }
+
+    .order-details {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .order-detail-item { }
+
+    .detail-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .detail-value {
+      font-size: 0.85rem;
+      color: var(--ink-mid);
+      font-weight: 400;
+    }
+
+    .order-arrow {
+      font-size: 1rem;
+      color: var(--stone);
+      transition: transform 0.2s, color 0.2s;
+    }
+    .order-card:hover .order-arrow { transform: translateX(4px); color: var(--brown); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .empty-icon {
+      width: 56px; height: 56px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.3rem;
+    }
+
+    .empty-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--brown);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-sub {
+      font-size: 0.83rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .btn-place {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: var(--brown);
+      color: #fff;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-place:hover { background: var(--brown-mid); }
+
+    /* ── ORDER DETAIL PANEL ── */
+    .detail-panel-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,20,16,0.6);
+      z-index: 200;
+      justify-content: flex-end;
+    }
+    .detail-panel-backdrop.show { display: flex; }
+
+    .detail-panel {
+      background: var(--cream);
+      width: min(520px, 100%);
+      height: 100%;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(0); }
+    }
+
+    .panel-header {
+      background: var(--brown);
       padding: 2rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      transition: all 0.3s ease;
-      animation: slideUp 0.4s ease;
+      position: relative;
     }
-    .order-card:hover {
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      transform: translateY(-3px);
+
+    .panel-close {
+      position: absolute;
+      top: 1.25rem; right: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .panel-close:hover { background: rgba(255,255,255,0.2); }
+
+    .panel-order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-status {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    .panel-date {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+
+    .panel-body { padding: 2rem; }
+
+    .panel-section { margin-bottom: 2rem; }
+
+    .panel-section-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-row-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+    }
+
+    .panel-row-value {
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      text-align: right;
+      max-width: 60%;
+    }
+
+    /* Status colours */
+    .s-pending   { color: var(--status-pending); background: rgba(180,83,9,0.08);   border-color: rgba(180,83,9,0.2); }
+    .s-confirmed { color: var(--status-confirmed); background: rgba(29,111,66,0.08); border-color: rgba(29,111,66,0.2); }
+    .s-baking    { color: var(--status-baking); background: rgba(30,64,175,0.08);   border-color: rgba(30,64,175,0.2); }
+    .s-delivered { color: var(--status-delivered); background: rgba(39,103,73,0.08); border-color: rgba(39,103,73,0.2); }
+    .s-cancelled { color: var(--status-cancelled); background: rgba(155,44,44,0.08); border-color: rgba(155,44,44,0.2); }
+
+    .bar-pending   { background: var(--status-pending); }
+    .bar-confirmed { background: var(--status-confirmed); }
+    .bar-baking    { background: var(--status-baking); }
+    .bar-delivered { background: var(--status-delivered); }
+    .bar-cancelled { background: var(--status-cancelled); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: rgba(255,255,255,0.35); }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 300; }
+    .footer-admin { font-size: 0.7rem; color: rgba(255,255,255,0.2); text-decoration: none; }
+    .footer-admin:hover { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .order-card { grid-template-columns: auto 1fr; }
+      .order-arrow { display: none; }
+      .nav a:not(.nav-cta):not(.active) { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-<header class="header">
-  <div class="logo">Sweet Delights</div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <nav class="nav">
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo-wrap">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
+    </a>
+    <nav class="nav">
       <a href="index.html">Home</a>
       <a href="gallery.html">Gallery</a>
       <a href="order.html">Order</a>
       <a href="my-orders.html" class="active">My Orders</a>
       <a href="chat.html">Chat</a>
+      <span id="authNav"><a href="auth/login.html">Login</a></span>
     </nav>
   </header>
 
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <p class="page-hero-eyebrow">Order history</p>
+      <h1>Your <em>orders</em></h1>
+    </div>
+    <p class="page-hero-note">Track status, view details, and manage all your cake orders in one place.</p>
+  </div>
 
-<div class="menu-overlay" onclick="toggleMenu()"></div>
+  <!-- MAIN -->
+  <div class="main-wrap">
 
-  <!-- My Orders Section -->
-  <section class="featured">
-    <h2>My Orders</h2>
-    <p style="max-width: 600px; margin: 0 auto 2rem; color: var(--text-medium);">
-      View and manage all your cake orders
-    </p>
-
-    <div style="max-width: 1200px; margin: 0 auto;">
-      
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" onclick="filterOrders('all')">All Orders</button>
-        <button class="tab" onclick="filterOrders('Pending')">Pending</button>
-        <button class="tab" onclick="filterOrders('Confirmed')">Confirmed</button>
-        <button class="tab" onclick="filterOrders('Baking')">Baking</button>
-        <button class="tab" onclick="filterOrders('Delivered')">Delivered</button>
-        <button class="tab" onclick="filterOrders('Cancelled')">Cancelled</button>
+    <!-- ORDER ID LOOKUP (shown to guests / as fallback) -->
+    <div class="lookup-card" id="lookupCard">
+      <div class="lookup-title">Track an order</div>
+      <p class="lookup-sub">Enter your order ID to check status and details.</p>
+      <div class="lookup-row">
+        <input class="lookup-input" id="lookupInput" placeholder="e.g. ORD1A2B3C4D5" maxlength="20" />
+        <button class="lookup-btn" onclick="lookupOrder()">Track</button>
       </div>
+      <p id="lookupError" style="font-size:0.78rem;color:#9B2C2C;margin-top:0.75rem;display:none;"></p>
+    </div>
 
-      <!-- Orders Container -->
-      <div id="ordersContainer">
-        <div style="text-align: center; padding: 3rem; color: var(--text-medium);">
-          <div style="width: 60px; height: 60px; border: 4px solid var(--cream); border-top-color: var(--primary-color); border-radius: 50%; margin: 0 auto 1.5rem; animation: spin 1s linear infinite;"></div>
-          <p style="font-size: 1.1rem;">Loading your orders...</p>
+    <!-- TABS -->
+    <div class="tabs-bar" id="tabsBar">
+      <button class="tab-btn active" data-filter="all">All</button>
+      <button class="tab-btn" data-filter="Pending">Pending</button>
+      <button class="tab-btn" data-filter="Confirmed">Confirmed</button>
+      <button class="tab-btn" data-filter="Baking">Baking</button>
+      <button class="tab-btn" data-filter="Delivered">Delivered</button>
+      <button class="tab-btn" data-filter="Cancelled">Cancelled</button>
+    </div>
+
+    <!-- ORDERS LIST -->
+    <div id="ordersContainer">
+      <!-- Populated by JS -->
+    </div>
+
+  </div><!-- /main-wrap -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-logo">Sweet Delights</span>
+    <span class="footer-copy">© 2025 Sweet Delights Bakery</span>
+    <a href="auth/admin-login.html" class="footer-admin">Admin</a>
+  </footer>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel-backdrop" id="detailBackdrop">
+    <div class="detail-panel">
+      <div class="panel-header">
+        <button class="panel-close" onclick="closePanel()">✕</button>
+        <div class="panel-order-id" id="panelOrderId"></div>
+        <div class="panel-status" id="panelStatus"></div>
+        <div class="panel-date" id="panelDate"></div>
+      </div>
+      <div class="panel-body">
+        <div class="panel-section">
+          <div class="panel-section-title">Cake details</div>
+          <div id="panelCakeDetails"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-section-title">Delivery</div>
+          <div id="panelDeliveryDetails"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-section-title">Customer</div>
+          <div id="panelCustomerDetails"></div>
         </div>
       </div>
-
     </div>
-  </section>
+  </div>
 
-  <!-- Footer -->
-<footer class="footer">
-  <p> 2026 Sweet Delights Bakery</p>
-  <p style="margin-top: 0.5rem; font-size: 0.875rem;">
-    <a href="auth/admin-login.html" style="color: var(--text-medium);">Admin Login</a>
-  </p>
-</footer>
+<script type="module">
+  import {
+    apiGetMyOrders, apiGetOrderById, apiCancelOrder,
+    getUser, isLoggedIn, apiLogout
+  } from './js/api.js'
 
-  <script src="js/main.js"></script>
-<script src="js/simple-data-manager.js"></script>
-
-<script>
-// Hamburger Menu Toggle
-function toggleMenu() {
-  const nav = document.querySelector('.nav');
-  const overlay = document.querySelector('.menu-overlay');
-  const toggle = document.querySelector('.menu-toggle');
-  
-  nav.classList.toggle('active');
-  overlay.classList.toggle('active');
-  
-  if (nav.classList.contains('active')) {
-    toggle.textContent = '✕';
+  // Auth nav
+  const authNav = document.getElementById('authNav')
+  if (isLoggedIn()) {
+    const user = getUser()
+    const name = user?.fullName || user?.email?.split('@')[0]
+    authNav.innerHTML = `
+      <span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+      <a href="#" id="logoutBtn">Logout</a>`
+    document.getElementById('logoutBtn').onclick = (e) => {
+      e.preventDefault()
+      apiLogout()
+    }
   } else {
-    toggle.textContent = '☰';
+    authNav.innerHTML = `
+      <a href="auth/login.html">Login</a>
+      <a href="auth/register.html">Sign Up</a>`
   }
-}
 
-document.querySelectorAll('.nav a').forEach(link => {
-  link.addEventListener('click', () => {
-    const nav = document.querySelector('.nav');
-    const overlay = document.querySelector('.menu-overlay');
-    const toggle = document.querySelector('.menu-toggle');
-    nav.classList.remove('active');
-    overlay.classList.remove('active');
-    toggle.textContent = '☰';
-  });
-});
+  const STATUS_CLASS = {
+    PENDING:   's-pending',
+    CONFIRMED: 's-confirmed',
+    BAKING:    's-baking',
+    DELIVERED: 's-delivered',
+    CANCELLED: 's-cancelled'
+  }
+
+  const BAR_CLASS = {
+    PENDING:   'bar-pending',
+    CONFIRMED: 'bar-confirmed',
+    BAKING:    'bar-baking',
+    DELIVERED: 'bar-delivered',
+    CANCELLED: 'bar-cancelled'
+  }
+
+  let allOrders = []
+  let currentFilter = 'all'
+
+  // Load orders
+  async function loadOrders() {
+    try {
+      if (isLoggedIn()) {
+        allOrders = await apiGetMyOrders()
+      } else {
+        allOrders = []
+      }
+      renderOrders()
+    } catch (err) {
+      console.error('Load orders error:', err)
+      showError()
+    }
+  }
+
+  function renderOrders() {
+    const container = document.getElementById('ordersContainer')
+    const filtered  = currentFilter === 'all'
+      ? allOrders
+      : allOrders.filter(o => o.status === currentFilter.toUpperCase())
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🎂</div>
+          <div class="empty-title">No orders here</div>
+          <p class="empty-sub">${currentFilter === 'all'
+            ? "You haven't placed any orders yet."
+            : 'No ' + currentFilter.toLowerCase() + ' orders.'}</p>
+          <a href="order.html" class="btn-place">Place an Order</a>
+        </div>`
+      return
+    }
+
+    container.innerHTML = `<div class="orders-list">${filtered.map(o => orderCardHTML(o)).join('')}</div>`
+  }
+
+  function orderCardHTML(o) {
+    const date = o.deliveryDate
+      ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        })
+      : '—'
+    const placed = o.createdAt
+      ? new Date(o.createdAt).toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        })
+      : '—'
+    const status = o.status || 'PENDING'
+    const sc = STATUS_CLASS[status] || ''
+    const bc = BAR_CLASS[status] || ''
+
+    return `
+      <div class="order-card" onclick="openPanel('${o.id}')">
+        <div class="order-status-bar ${bc}"></div>
+        <div class="order-main">
+          <div class="order-top">
+            <span class="order-id">${o.id}</span>
+            <span class="status-pill ${sc}">${status}</span>
+          </div>
+          <div class="order-details">
+            <div class="order-detail-item">
+              <div class="detail-label">Cake</div>
+              <div class="detail-value">${o.cakeName || '—'}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">Size</div>
+              <div class="detail-value">${o.size || '—'}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">${o.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup'} date</div>
+              <div class="detail-value">${date}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">Placed</div>
+              <div class="detail-value">${placed}</div>
+            </div>
+          </div>
+        </div>
+        <div class="order-arrow">→</div>
+      </div>`
+  }
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      currentFilter = btn.dataset.filter
+      renderOrders()
+    })
+  })
+
+  // Order lookup (guest)
+  window.lookupOrder = async function() {
+    const val    = document.getElementById('lookupInput').value.trim().toUpperCase()
+    const errEl  = document.getElementById('lookupError')
+    if (!val) {
+      errEl.textContent = 'Please enter an order ID.'
+      errEl.style.display = 'block'
+      return
+    }
+    errEl.style.display = 'none'
+
+    try {
+      const order = await apiGetOrderById(val)
+      if (!allOrders.find(o => o.id === order.id)) allOrders.unshift(order)
+      renderOrders()
+      openPanel(order.id)
+    } catch {
+      errEl.textContent = 'Order not found. Please check the ID and try again.'
+      errEl.style.display = 'block'
+    }
+  }
+
+  document.getElementById('lookupInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.lookupOrder()
+  })
+
+  // Detail panel
+  window.openPanel = function(orderId) {
+    const o = allOrders.find(x => x.id === orderId)
+    if (!o) return
+
+    const status = o.status || 'PENDING'
+    document.getElementById('panelOrderId').textContent = 'Order ' + o.id
+    document.getElementById('panelStatus').textContent  = status
+    document.getElementById('panelDate').textContent    = o.createdAt
+      ? 'Placed ' + new Date(o.createdAt).toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        })
+      : ''
+
+    const row = (label, value) => value ? `
+      <div class="panel-row">
+        <span class="panel-row-label">${label}</span>
+        <span class="panel-row-value">${value}</span>
+      </div>` : ''
+
+    document.getElementById('panelCakeDetails').innerHTML =
+      row('Cake type',  o.cakeName) +
+      row('Size',       o.size) +
+      row('Layers',     o.layers ? o.layers + ' layers' : null) +
+      row('Quantity',   o.quantity ? o.quantity + ' cake(s)' : '1 cake') +
+      (o.specialRequests ? row('Special requests', o.specialRequests) : '')
+
+    const delivDate = o.deliveryDate
+      ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        })
+      : null
+
+    document.getElementById('panelDeliveryDetails').innerHTML =
+      row('Method',  o.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup') +
+      row('Date',    delivDate) +
+      (o.deliveryAddress ? row('Address', o.deliveryAddress) : '')
+
+    document.getElementById('panelCustomerDetails').innerHTML =
+      row('Name',  o.customerName) +
+      row('Phone', o.customerPhone) +
+      (o.customerEmail ? row('Email', o.customerEmail) : '')
+
+    // Show cancel button only if cancellable
+    const cancelBtn = document.getElementById('panelCancelBtn')
+    if (cancelBtn) {
+      if (!['DELIVERED', 'CANCELLED'].includes(status)) {
+        cancelBtn.style.display = 'inline-flex'
+        cancelBtn.onclick = () => cancelOrder(o.id)
+      } else {
+        cancelBtn.style.display = 'none'
+      }
+    }
+
+    document.getElementById('detailBackdrop').classList.add('show')
+    document.body.style.overflow = 'hidden'
+  }
+
+  window.closePanel = function() {
+    document.getElementById('detailBackdrop').classList.remove('show')
+    document.body.style.overflow = ''
+  }
+
+  document.getElementById('detailBackdrop').addEventListener('click', e => {
+    if (e.target === e.currentTarget) window.closePanel()
+  })
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') window.closePanel()
+  })
+
+  async function cancelOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order? This cannot be undone.')) return
+    try {
+      await apiCancelOrder(orderId)
+      await loadOrders()
+      window.closePanel()
+      alert('Order cancelled successfully.')
+    } catch (err) {
+      alert(err.message || 'Failed to cancel order.')
+    }
+  }
+
+  function showError() {
+    document.getElementById('ordersContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Something went wrong</div>
+        <p class="empty-sub">Could not load your orders. Please refresh the page.</p>
+      </div>`
+  }
+
+  // Add cancel button to panel actions if not already there
+  const panelActions = document.querySelector('.panel-actions')
+  if (panelActions && !document.getElementById('panelCancelBtn')) {
+    const cancelBtn = document.createElement('button')
+    cancelBtn.id        = 'panelCancelBtn'
+    cancelBtn.className = 'btn btn-ghost'
+    cancelBtn.style.color       = 'var(--s-cancelled)'
+    cancelBtn.style.borderColor = 'var(--s-cancelled)'
+    cancelBtn.style.display     = 'none'
+    cancelBtn.textContent       = 'Cancel Order'
+    panelActions.prepend(cancelBtn)
+  }
+
+  loadOrders()
 </script>
 
-  <script>
-    let allOrders = [];
-    let currentFilter = 'all';
 
-    // Load orders on page load
-    document.addEventListener('DOMContentLoaded', async function() {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      loadOrders();
-      
-      // Set up real-time listener
-      window.dataManager.onOrdersChange((orders) => {
-        allOrders = orders;
-        displayOrders(currentFilter);
-      });
-    });
-
-    async function loadOrders() {
-      try {
-        allOrders = await window.dataManager.getOrders();
-        displayOrders('all');
-      } catch (error) {
-        console.error('Error loading orders:', error);
-        showError();
-      }
-    }
-
-    function displayOrders(filter) {
-      currentFilter = filter;
-      const container = document.getElementById('ordersContainer');
-
-      // Update active tab
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      event?.target?.classList.add('active');
-
-      // Filter orders
-      let filteredOrders = allOrders;
-      if (filter !== 'all') {
-        filteredOrders = allOrders.filter(order => order.status === filter);
-      }
-
-      // Check if empty
-      if (filteredOrders.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-medium)" stroke-width="1.5" style="margin: 0 auto 1.5rem; opacity: 0.3;">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-            </svg>
-            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">No ${filter === 'all' ? '' : filter} Orders</h3>
-            <p style="color: var(--text-medium); margin-bottom: 2rem;">
-              ${filter === 'all' ? "You haven't placed any orders yet." : `No ${filter.toLowerCase()} orders found.`}
-            </p>
-            ${filter === 'all' ? '<a href="order.html" class="btn primary">Place Your First Order</a>' : ''}
-          </div>
-        `;
-        return;
-      }
-
-      // Display orders
-      container.innerHTML = filteredOrders.map(order => createOrderCard(order)).join('');
-    }
-
-    function createOrderCard(order) {
-      const statusColors = {
-        'Pending': { bg: '#FFF3CD', color: '#856404', border: '#FFA500' },
-        'Confirmed': { bg: '#D1ECF1', color: '#0C5460', border: '#17A2B8' },
-        'Baking': { bg: '#F8D7DA', color: '#721C24', border: '#DC3545' },
-        'Delivered': { bg: '#D4EDDA', color: '#155724', border: '#28A745' },
-        'Cancelled': { bg: '#F5C6CB', color: '#721C24', border: '#DC3545' }
-      };
-
-      const statusColor = statusColors[order.status] || statusColors.Pending;
-
-      return `
-        <div class="order-card">
-          <!-- Header -->
-          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--cream);">
-            <div>
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">
-                Order #${order.id}
-              </h3>
-              <p style="color: var(--text-medium); font-size: 0.95rem;">
-                Placed on ${new Date(order.createdAt).toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </p>
-            </div>
-            <div style="background: ${statusColor.bg}; color: ${statusColor.color}; padding: 0.75rem 1.5rem; border-radius: 25px; border: 2px solid ${statusColor.border}; font-weight: 700; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
-              <span style="width: 10px; height: 10px; background: ${statusColor.border}; border-radius: 50%;"></span>
-              ${order.status}
-            </div>
-          </div>
-
-          <!-- Order Details Grid -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div style="background: var(--cream); padding: 1.25rem; border-radius: 12px;">
-              <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Cake</p>
-              <p style="font-size: 1.1rem; font-weight: 600; color: var(--primary-color);">${order.cakeName || 'N/A'}</p>
-              <p style="font-size: 0.9rem; color: var(--text-dark); margin-top: 0.25rem;">${order.size || 'N/A'} • ${order.layers || 'N/A'} layers</p>
-            </div>
-
-            <div style="background: var(--cream); padding: 1.25rem; border-radius: 12px;">
-              <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Delivery</p>
-              <p style="font-size: 1.1rem; font-weight: 600; color: var(--primary-color);">${order.deliveryOption === 'pickup' ? 'Pickup' : 'Delivery'}</p>
-              <p style="font-size: 0.9rem; color: var(--text-dark); margin-top: 0.25rem;">
-                ${order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('en-US', { 
-                  month: 'short', 
-                  day: 'numeric', 
-                  year: 'numeric' 
-                }) : 'N/A'}
-              </p>
-            </div>
-
-            <div style="background: var(--cream); padding: 1.25rem; border-radius: 12px;">
-              <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Quantity</p>
-              <p style="font-size: 1.1rem; font-weight: 600; color: var(--primary-color);">${order.quantity || 1} cake(s)</p>
-              <p style="font-size: 0.9rem; color: var(--text-dark); margin-top: 0.25rem;">Flavor: ${order.flavor || 'Standard'}</p>
-            </div>
-          </div>
-
-          <!-- Payment Details -->
-          ${order.status !== 'Cancelled' && order.status !== 'Delivered' ? `
-            <div style="background: linear-gradient(135deg, #FFF9E6 0%, #FFE8A3 100%); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; border: 2px solid var(--accent-gold);">
-              <h4 style="color: var(--primary-color); margin-bottom: 1rem; font-weight: 700; font-size: 1.1rem;">💳 Payment Information</h4>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-                <div>
-                  <p style="font-size: 0.75rem; color: var(--text-medium); margin-bottom: 0.25rem; font-weight: 600;">Bank Name</p>
-                  <p style="font-weight: 600; color: var(--text-dark);">First Bank</p>
-                </div>
-                <div>
-                  <p style="font-size: 0.75rem; color: var(--text-medium); margin-bottom: 0.25rem; font-weight: 600;">Account Name</p>
-                  <p style="font-weight: 600; color: var(--text-dark);">Sweet Creations Ltd</p>
-                </div>
-                <div>
-                  <p style="font-size: 0.75rem; color: var(--text-medium); margin-bottom: 0.25rem; font-weight: 600;">Account Number</p>
-                  <p style="font-weight: 700; color: var(--text-dark); font-family: monospace;">1234567890</p>
-                </div>
-                <div>
-                  <p style="font-size: 0.75rem; color: var(--text-medium); margin-bottom: 0.25rem; font-weight: 600;">Reference</p>
-                  <p style="font-weight: 700; color: var(--primary-color); font-family: monospace;">${order.id}</p>
-                </div>
-              </div>
-              <p style="font-size: 0.85rem; color: #856404; background: #FFF3CD; padding: 0.75rem; border-radius: 8px;">
-                <strong>⚠️ Important:</strong> Use Order ID <strong>${order.id}</strong> as payment reference. WhatsApp proof to <strong>+234 800 123 4567</strong>
-              </p>
-            </div>
-          ` : ''}
-
-          <!-- Special Requests -->
-          ${order.specialRequests ? `
-            <div style="background: var(--cream); padding: 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; border-left: 4px solid var(--accent-gold);">
-              <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase;">Special Requests</p>
-              <p style="color: var(--text-dark); line-height: 1.6;">${order.specialRequests}</p>
-            </div>
-          ` : ''}
-
-          <!-- Actions -->
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: flex-end;">
-            ${order.status !== 'Cancelled' && order.status !== 'Delivered' ? `
-              <button onclick="cancelOrder('${order.id}')" class="btn" style="background: transparent; color: var(--error); border: 2px solid var(--error); padding: 0.75rem 1.5rem;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="15" y1="9" x2="9" y2="15"/>
-                  <line x1="9" y1="9" x2="15" y2="15"/>
-                </svg>
-                Cancel Order
-              </button>
-            ` : ''}
-            <a href="chat.html" class="btn" style="background: var(--cream); color: var(--primary-color); border: 2px solid var(--accent-gold); padding: 0.75rem 1.5rem; text-decoration: none;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              Contact Us
-            </a>
-          </div>
-        </div>
-      `;
-    }
-
-    function filterOrders(status) {
-      // Update active tab
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      event.target.classList.add('active');
-      
-      displayOrders(status);
-    }
-
-    async function cancelOrder(orderId) {
-      if (!confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
-        return;
-      }
-
-      try {
-        await window.dataManager.cancelOrder(orderId);
-        alert('Order cancelled successfully');
-        loadOrders();
-      } catch (error) {
-        console.error('Error cancelling order:', error);
-        alert('Error cancelling order. Please contact us for assistance.');
-      }
-    }
-
-    function showError() {
-      const container = document.getElementById('ordersContainer');
-      container.innerHTML = `
-        <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-          <p style="color: var(--error); font-size: 1.1rem;">Error loading orders. Please refresh the page.</p>
-          <button onclick="location.reload()" class="btn primary" style="margin-top: 1.5rem;">Refresh Page</button>
-        </div>
-      `;
-    }
-  </script>
-
-  <style>
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
-
-</body>
-</html>
-
-  <script>
-    // My Orders page specific code
-    document.addEventListener('DOMContentLoaded', async function() {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const orderLookupForm = document.getElementById('orderLookupForm');
-      const orderIdInput = document.getElementById('orderIdInput');
-      const ordersContainer = document.getElementById('ordersContainer');
-
-      // Check if user is authenticated and load their orders
-      window.onAuthStateChanged = async (user) => {
-        if (user) {
-          // User is logged in - show their orders
-          await loadUserOrders(user);
-        } else {
-          // User not logged in - show order ID lookup
-          showOrderLookup();
-        }
-      };
-
-      // Load all orders for logged-in user
-      async function loadUserOrders(user) {
-        try {
-          const orders = await window.authManager.getUserOrders();
-          
-          if (orders.length === 0) {
-            ordersContainer.innerHTML = `
-              <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--text-medium)" stroke-width="1.5" style="margin: 0 auto 1.5rem; opacity: 0.3;">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                  <line x1="3" y1="6" x2="21" y2="6"/>
-                </svg>
-                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">No Orders Yet</h3>
-                <p style="color: var(--text-medium); margin-bottom: 2rem;">You haven't placed any orders yet.</p>
-                <a href="order.html" class="btn primary">Place Your First Order</a>
-              </div>
-            `;
-            return;
-          }
-
-          // Display all user's orders
-          ordersContainer.innerHTML = `
-            <div style="margin-bottom: 2rem;">
-              <h3 style="color: var(--primary-color); font-size: 1.5rem;">Your Orders (${orders.length})</h3>
-            </div>
-            <div style="display: grid; gap: 2rem;">
-              ${orders.map(order => createOrderCard(order)).join('')}
-            </div>
-          `;
-
-          // Set up real-time listeners for each order
-          orders.forEach(order => {
-            window.dataManager.db.ref('orders/' + order.id).on('value', (snapshot) => {
-              const updatedOrder = snapshot.val();
-              if (updatedOrder) {
-                // Refresh the specific order card
-                loadUserOrders(user);
-              }
-            });
-          });
-
-        } catch (error) {
-          console.error('Error loading orders:', error);
-          ordersContainer.innerHTML = `
-            <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px;">
-              <p style="color: var(--error);">Error loading orders. Please refresh the page.</p>
-            </div>
-          `;
-        }
-      }
-
-      function createOrderCard(order) {
-        const statusColors = {
-          'Pending': '#FFA500',
-          'Confirmed': '#4CAF50',
-          'Baking': '#FF6B6B',
-          'Delivered': '#4CAF50',
-          'Cancelled': '#FF4444'
-        };
-
-        return `
-          <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s ease;" onclick="viewFullOrder('${order.id}')">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-              <div>
-                <h4 style="font-size: 1.3rem; color: var(--primary-color); margin-bottom: 0.5rem;">Order #${order.id}</h4>
-                <p style="color: var(--text-medium); font-size: 0.9rem;">${new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-              </div>
-              <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.5rem; background: ${statusColors[order.status]}15; border: 2px solid ${statusColors[order.status]}; border-radius: 20px;">
-                <span style="width: 8px; height: 8px; background: ${statusColors[order.status]}; border-radius: 50%;"></span>
-                <span style="font-weight: 600; color: ${statusColors[order.status]};">${order.status}</span>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding: 1.5rem; background: var(--cream); border-radius: 12px;">
-              <div>
-                <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.25rem;">Cake</p>
-                <p style="font-weight: 600; color: var(--text-dark);">${order.cakeName || 'N/A'}</p>
-              </div>
-              <div>
-                <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.25rem;">Size</p>
-                <p style="font-weight: 600; color: var(--text-dark);">${order.size || 'N/A'}</p>
-              </div>
-              <div>
-                <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.25rem;">Delivery</p>
-                <p style="font-weight: 600; color: var(--text-dark);">${new Date(order.deliveryDate).toLocaleDateString()}</p>
-              </div>
-            </div>
-
-            <div style="margin-top: 1rem; text-align: right;">
-              <span style="color: var(--primary-color); font-weight: 500; font-size: 0.9rem;">Click to view details →</span>
-            </div>
-          </div>
-        `;
-      }
-
-      function showOrderLookup() {
-        // Show the order lookup form (default state)
-      }
-
-      window.viewFullOrder = async (orderId) => {
-        const order = await window.dataManager.getOrderById(orderId);
-        if (order) {
-          displayOrder(order);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      };
-
-      orderLookupForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const orderId = orderIdInput.value.trim().toUpperCase();
-        if (!orderId) return;
-
-        try {
-          const order = await window.dataManager.getOrderById(orderId);
-          
-          if (order) {
-            displayOrder(order);
-            
-            // Set up real-time listener
-            window.dataManager.db.ref('orders/' + orderId).on('value', (snapshot) => {
-              const updatedOrder = snapshot.val();
-              if (updatedOrder) displayOrder(updatedOrder);
-            });
-          } else {
-            showNotFound();
-          }
-        } catch (error) {
-          console.error('Error finding order:', error);
-          alert('Error finding order. Please try again.');
-        }
-      });
-
-      function displayOrder(order) {
-        const statusColors = {
-          'Pending': '#FFA500',
-          'Confirmed': '#4CAF50',
-          'Baking': '#FF6B6B',
-          'Delivered': '#4CAF50',
-          'Cancelled': '#FF4444'
-        };
-
-        const statusIcons = {
-          'Pending': '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
-          'Confirmed': '<polyline points="20 6 9 17 4 12"/>',
-          'Baking': '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
-          'Delivered': '<path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
-          'Cancelled': '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'
-        };
-
-        ordersContainer.innerHTML = `
-          <div style="background: white; border-radius: 30px; padding: 3rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1); animation: slideUp 0.4s ease;">
-            
-            <div style="border-bottom: 2px solid var(--cream); padding-bottom: 2rem; margin-bottom: 2rem;">
-              <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                  <h3 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">
-                    Order #${order.id}
-                  </h3>
-                  <p style="color: var(--text-medium); font-size: 1rem;">
-                    Placed on ${new Date(order.createdAt).toLocaleString()}
-                  </p>
-                </div>
-                <div style="display: inline-flex; align-items: center; gap: 0.75rem; padding: 1rem 2rem; background: ${statusColors[order.status]}15; border: 2px solid ${statusColors[order.status]}; border-radius: 25px;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${statusColors[order.status]}" stroke-width="2">
-                    ${statusIcons[order.status]}
-                  </svg>
-                  <span style="font-weight: 700; color: ${statusColors[order.status]}; font-size: 1.1rem;">
-                    ${order.status}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-              
-              <div style="background: var(--cream); padding: 1.5rem; border-radius: 15px;">
-                <h4 style="font-size: 0.85rem; color: var(--text-medium); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; font-weight: 600;">Cake Details</h4>
-                <p style="font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">${order.cakeName || 'N/A'}</p>
-                <p style="color: var(--text-dark); font-size: 0.95rem;">${order.size || 'N/A'} • ${order.layers || 'N/A'} layers</p>
-                <p style="color: var(--text-medium); font-size: 0.9rem; margin-top: 0.5rem;">Flavor: ${order.flavor || 'N/A'}</p>
-              </div>
-
-              <div style="background: var(--cream); padding: 1.5rem; border-radius: 15px;">
-                <h4 style="font-size: 0.85rem; color: var(--text-medium); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; font-weight: 600;">Delivery Info</h4>
-                <p style="font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">${order.deliveryOption === 'pickup' ? 'Pickup' : 'Delivery'}</p>
-                <p style="color: var(--text-dark); font-size: 0.95rem;">${new Date(order.deliveryDate).toLocaleDateString()}</p>
-              </div>
-
-              <div style="background: var(--cream); padding: 1.5rem; border-radius: 15px;">
-                <h4 style="font-size: 0.85rem; color: var(--text-medium); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; font-weight: 600;">Contact Info</h4>
-                <p style="font-size: 1.2rem; color: var(--primary-color); font-weight: 600; margin-bottom: 0.5rem;">${order.customerName}</p>
-                <p style="color: var(--text-dark); font-size: 0.95rem;">${order.customerPhone}</p>
-              </div>
-
-            </div>
-
-            ${order.specialRequests ? `
-              <div style="background: var(--cream); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem; border-left: 4px solid var(--accent-gold);">
-                <h4 style="font-size: 0.85rem; color: var(--text-medium); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; font-weight: 600;">Special Requests</h4>
-                <p style="color: var(--text-dark); font-size: 0.95rem; line-height: 1.6;">${order.specialRequests}</p>
-              </div>
-            ` : ''}
-
-            <div style="background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%); padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 2px solid var(--accent-gold);">
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">Payment Information</h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                <div style="background: white; padding: 1rem; border-radius: 10px;">
-                  <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600;">Bank Name</p>
-                  <p style="color: var(--text-dark); font-weight: 500;">First Bank of Nigeria</p>
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 10px;">
-                  <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600;">Account Name</p>
-                  <p style="color: var(--text-dark); font-weight: 500;">Sweet Creations Bakery Ltd</p>
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 10px;">
-                  <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600;">Account Number</p>
-                  <p style="color: var(--text-dark); font-weight: 600; font-family: monospace; font-size: 1.1rem;">1234567890</p>
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 10px;">
-                  <p style="font-size: 0.8rem; color: var(--text-medium); margin-bottom: 0.5rem; font-weight: 600;">Payment Reference</p>
-                  <p style="color: var(--primary-color); font-weight: 700; font-family: monospace;">${order.id}</p>
-                </div>
-              </div>
-              <div style="background: #fff3cd; padding: 1rem; border-radius: 10px; border-left: 4px solid var(--warning-orange);">
-                <p style="color: #856404; font-size: 0.9rem; margin: 0;"><strong>Important:</strong> Use Order ID <strong>${order.id}</strong> as payment reference. Send proof to WhatsApp: <strong>+234 800 123 4567</strong></p>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-              ${order.status !== 'Cancelled' && order.status !== 'Delivered' ? `
-                <button onclick="cancelOrder('${order.id}')" class="btn" style="background: transparent; color: var(--error-red); border: 2px solid var(--error-red);">Cancel Order</button>
-              ` : ''}
-              <a href="chat.html" class="btn primary">Contact Us</a>
-            </div>
-
-          </div>
-        `;
-      }
-
-      function showNotFound() {
-        ordersContainer.innerHTML = `
-          <div style="text-align: center; padding: 3rem; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Order Not Found</h3>
-            <p style="color: var(--text-medium); margin-bottom: 2rem;">We couldn't find an order with that ID. Please check and try again.</p>
-            <button onclick="document.getElementById('orderIdInput').value = ''; document.getElementById('orderIdInput').focus();" class="btn primary">Try Again</button>
-          </div>
-        `;
-      }
-
-      window.cancelOrder = async function(orderId) {
-        if (!confirm('Are you sure you want to cancel this order?')) return;
-        try {
-          await window.dataManager.cancelOrder(orderId);
-          alert('Order cancelled successfully');
-          const order = await window.dataManager.getOrderById(orderId);
-          if (order) displayOrder(order);
-        } catch (error) {
-          console.error('Error cancelling order:', error);
-          alert('Error cancelling order. Please try again.');
-        }
-      };
-    });
-  </script>
-
-  <style>
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  <script src="js/main.js"></script>
 
 </body>
 </html>

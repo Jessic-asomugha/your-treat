@@ -3,114 +3,493 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - Sweet Delights Bakery</title>
-  <link rel="stylesheet" href="auth.css" />
+  <title>Create Account – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C3317;
+      --brown-mid:  #7A4728;
+      --gold:       #C4924A;
+      --gold-light: #E8C078;
+      --cream:      #FAF6F0;
+      --cream-dark: #F2E8D9;
+      --ink:        #1C1410;
+      --ink-mid:    #4A3728;
+      --stone:      #9E8A78;
+      --border:     rgba(92,51,23,0.14);
+      --error:      #9B2C2C;
+      --success:    #276749;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── LEFT PANEL ── */
+    .panel-left {
+      background: var(--brown);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-left::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.08);
+    }
+
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 250px; height: 250px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .panel-logo { position: relative; z-index: 1; }
+
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.02em;
+      display: block;
+    }
+
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .panel-benefits {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .benefit-icon {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(196,146,74,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .benefit-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 0.2rem;
+    }
+
+    .benefit-desc {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .panel-bottom {
+      position: relative;
+      z-index: 1;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.2);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── RIGHT PANEL ── */
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2.5rem 4rem;
+      background: var(--cream);
+      overflow-y: auto;
+    }
+
+    .form-header { margin-bottom: 2rem; }
+
+    .form-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .form-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+    }
+
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: var(--brown);
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-subtitle {
+      font-size: 0.83rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    /* Alert */
+    .alert {
+      display: none;
+      padding: 0.85rem 1rem;
+      border-radius: 2px;
+      font-size: 0.82rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .alert.show { display: block; }
+
+    .alert-error {
+      background: rgba(155,44,44,0.08);
+      color: var(--error);
+      border: 1px solid rgba(155,44,44,0.2);
+    }
+
+    .alert-success {
+      background: rgba(39,103,73,0.08);
+      color: var(--success);
+      border: 1px solid rgba(39,103,73,0.2);
+    }
+
+    /* Fields */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+    }
+
+    .field input {
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .field input::placeholder { color: rgba(158,138,120,0.5); }
+
+    .field input.error { border-color: var(--error); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Password strength */
+    .strength-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 0.4rem;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .strength-hint {
+      font-size: 0.7rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+
+    /* Checkbox */
+    .checkbox-field {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .checkbox-field input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--brown);
+      margin-top: 2px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-field label {
+      font-size: 0.78rem;
+      color: var(--stone);
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    .checkbox-field a {
+      color: var(--brown);
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .checkbox-field a:hover { color: var(--gold); }
+
+    /* Buttons */
+    .btn-primary {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary:hover { background: var(--brown-mid); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 0.25rem 0 1rem;
+      color: var(--stone);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 0.85rem;
+      background: #fff;
+      color: var(--ink-mid);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-google:hover { border-color: var(--gold); background: var(--cream); }
+
+    .form-footer {
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-footer p {
+      font-size: 0.8rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
+    .form-footer a {
+      font-size: 0.8rem;
+      color: var(--brown);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .form-footer a:hover { color: var(--gold); }
+
+    .back-link {
+      font-size: 0.72rem;
+      color: var(--stone);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--brown); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { grid-template-columns: 1fr; }
+      .panel-left { display: none; }
+      .panel-right { padding: 2rem 1.5rem; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="auth-container">
-    <!-- Header -->
-    <div class="auth-header">
-      <div class="auth-logo">Sweet Delights</div>
-      <h1 class="auth-title">Create Account</h1>
-      <p class="auth-subtitle">Join us to order delicious cakes</p>
+  <!-- LEFT PANEL -->
+  <div class="panel-left">
+    <div class="panel-logo">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
     </div>
 
-    <!-- Alert Messages -->
+    <div class="panel-benefits">
+      <div class="benefit-item">
+        <div class="benefit-icon">✦</div>
+        <div>
+          <div class="benefit-title">Track every order</div>
+          <div class="benefit-desc">Get real-time updates from the moment you order to delivery at your door.</div>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">◇</div>
+        <div>
+          <div class="benefit-title">Save your preferences</div>
+          <div class="benefit-desc">Your favourite cake sizes, flavours, and delivery address saved for next time.</div>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">○</div>
+        <div>
+          <div class="benefit-title">Reorder in one tap</div>
+          <div class="benefit-desc">Found a cake you loved? Reorder it instantly from your order history.</div>
+        </div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon">□</div>
+        <div>
+          <div class="benefit-title">Exclusive offers</div>
+          <div class="benefit-desc">Account holders get early access to seasonal flavours and member discounts.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-bottom">© 2025 Sweet Delights Bakery · Lagos, Nigeria</div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right">
+
+    <div class="form-header">
+      <p class="form-eyebrow">Get started</p>
+      <h1 class="form-title">Create your account</h1>
+      <p class="form-subtitle">Join hundreds of happy customers across Lagos.</p>
+    </div>
+
     <div id="alertMessage" class="alert"></div>
 
-    <!-- Registration Form -->
-    <form id="registerForm" class="auth-form">
-      
-      <div class="form-group">
-        <label class="form-label" for="fullName">Full Name</label>
-        <input 
-          type="text" 
-          id="fullName" 
-          class="form-input" 
-          placeholder="John Doe" 
-          required 
-          autocomplete="name"
-        />
+    <div class="field-row">
+      <div class="field">
+        <label for="fullName">Full name</label>
+        <input type="text" id="fullName" placeholder="Amaka Obi" required autocomplete="name" />
       </div>
-
-      <div class="form-group">
-        <label class="form-label" for="email">Email Address</label>
-        <input 
-          type="email" 
-          id="email" 
-          class="form-input" 
-          placeholder="your@email.com" 
-          required 
-          autocomplete="email"
-        />
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" placeholder="08012345678" required autocomplete="tel" />
       </div>
+    </div>
 
-      <div class="form-group">
-        <label class="form-label" for="phone">Phone Number</label>
-        <input 
-          type="tel" 
-          id="phone" 
-          class="form-input" 
-          placeholder="08012345678" 
-          required 
-          autocomplete="tel"
-        />
-      </div>
+    <div class="field">
+      <label for="email">Email address</label>
+      <input type="email" id="email" placeholder="your@email.com" required autocomplete="email" />
+    </div>
 
-      <div class="form-group">
-        <label class="form-label" for="password">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          class="form-input" 
-          placeholder="At least 6 characters" 
-          required 
-          autocomplete="new-password"
-        />
-        <div class="password-strength">
-          <div id="passwordStrengthBar" class="password-strength-bar"></div>
-        </div>
-        <p class="password-hint" id="passwordHint">Use at least 6 characters</p>
-      </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="At least 6 characters" required autocomplete="new-password" oninput="checkStrength(this.value)" />
+      <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+      <p class="strength-hint" id="strengthHint">Use at least 6 characters</p>
+    </div>
 
-      <div class="form-group">
-        <label class="form-label" for="confirmPassword">Confirm Password</label>
-        <input 
-          type="password" 
-          id="confirmPassword" 
-          class="form-input" 
-          placeholder="Re-enter password" 
-          required 
-          autocomplete="new-password"
-        />
-      </div>
+    <div class="field">
+      <label for="confirmPassword">Confirm password</label>
+      <input type="password" id="confirmPassword" placeholder="Re-enter password" required autocomplete="new-password" />
+    </div>
 
-      <div class="form-checkbox">
-        <input type="checkbox" id="terms" required />
-        <label for="terms">
-          I agree to the <a href="../index.html#terms" class="auth-link">Terms & Conditions</a>
-        </label>
-      </div>
+    <div class="checkbox-field">
+      <input type="checkbox" id="terms" required />
+      <label for="terms">I agree to the <a href="../index.html#terms">Terms & Conditions</a> and <a href="../index.html#privacy">Privacy Policy</a></label>
+    </div>
 
-      <button type="submit" id="registerBtn" class="btn btn-primary">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="8.5" cy="7" r="4"/>
-          <line x1="20" y1="8" x2="20" y2="14"/>
-          <line x1="23" y1="11" x2="17" y2="11"/>
-        </svg>
-        Create Account
-      </button>
+    <button class="btn-primary" id="registerBtn" onclick="handleRegister()">Create Account</button>
 
-    </form>
+    <div class="divider">or</div>
 
-    <!-- Divider -->
-    <div class="auth-divider">Or continue with</div>
-
-    <!-- Google Sign-in -->
-    <button id="googleSignInBtn" class="btn btn-google">
-      <svg width="18" height="18" viewBox="0 0 24 24">
+    <button class="btn-google" onclick="handleGoogle()">
+      <svg width="16" height="16" viewBox="0 0 24 24">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -119,156 +498,106 @@
       Sign up with Google
     </button>
 
-    <!-- Links -->
-    <div class="auth-links">
-      <p class="auth-text">
-        Already have an account? 
-        <a href="login.html" class="auth-link">Login</a>
-      </p>
+    <div class="form-footer">
+      <p>Already have an account? <a href="login.html">Sign in</a></p>
+      <a href="../index.html" class="back-link">← Back to site</a>
     </div>
 
-    <!-- Back to Site -->
-    <div class="back-to-site">
-      <a href="../index.html">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="19" y1="12" x2="5" y2="12"/>
-          <polyline points="12 19 5 12 12 5"/>
-        </svg>
-        Back to website
-      </a>
-    </div>
   </div>
 
-<script src="../js/simple-data-manager.js"></script>
+<script type="module">
+  import { apiRegister, isLoggedIn } from '../js/api.js'
 
-  <script>
-    const registerForm = document.getElementById('registerForm');
-    const registerBtn = document.getElementById('registerBtn');
-    const googleSignInBtn = document.getElementById('googleSignInBtn');
-    const alertMessage = document.getElementById('alertMessage');
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirmPassword');
-    const passwordStrengthBar = document.getElementById('passwordStrengthBar');
-    const passwordHint = document.getElementById('passwordHint');
+  // If already logged in redirect away
+  if (isLoggedIn()) window.location.href = '../index.html'
 
-    // Password strength checker
-    password.addEventListener('input', () => {
-      const value = password.value;
-      let strength = 0;
-      let hint = '';
+  function showAlert(msg, type) {
+    const el = document.getElementById('alertMessage')
+    el.textContent = msg
+    el.className = 'alert alert-' + type + ' show'
+  }
 
-      if (value.length >= 6) strength++;
-      if (value.length >= 8) strength++;
-      if (/[A-Z]/.test(value)) strength++;
-      if (/[0-9]/.test(value)) strength++;
-      if (/[^A-Za-z0-9]/.test(value)) strength++;
+  // Password strength meter
+  window.checkStrength = function(val) {
+    const fill = document.getElementById('strengthFill')
+    const hint = document.getElementById('strengthHint')
+    let strength = 0
+    if (val.length >= 6)          strength++
+    if (val.length >= 10)         strength++
+    if (/[A-Z]/.test(val))        strength++
+    if (/[0-9]/.test(val))        strength++
+    if (/[^A-Za-z0-9]/.test(val)) strength++
 
-      // Update UI
-      if (value.length === 0) {
-        passwordStrengthBar.className = 'password-strength-bar';
-        passwordHint.textContent = 'Use at least 6 characters';
-      } else if (strength <= 2) {
-        passwordStrengthBar.className = 'password-strength-bar weak';
-        passwordHint.textContent = 'Weak password - add more characters';
-      } else if (strength <= 3) {
-        passwordStrengthBar.className = 'password-strength-bar medium';
-        passwordHint.textContent = 'Medium strength - add numbers or symbols';
-      } else {
-        passwordStrengthBar.className = 'password-strength-bar strong';
-        passwordHint.textContent = 'Strong password ✓';
-      }
-    });
+    const levels = [
+      { w: '0%',   bg: 'transparent', label: 'Use at least 6 characters' },
+      { w: '25%',  bg: '#9B2C2C',     label: 'Weak' },
+      { w: '50%',  bg: '#C4924A',     label: 'Fair' },
+      { w: '75%',  bg: '#8B9B2C',     label: 'Good' },
+      { w: '100%', bg: '#276749',     label: 'Strong' },
+    ]
+    const level = levels[Math.min(strength, 4)]
+    fill.style.width      = level.w
+    fill.style.background = level.bg
+    hint.textContent      = level.label
+  }
 
-    // Handle registration
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  // Wire up register button
+  document.getElementById('registerBtn').onclick = async () => {
+    const fullName = document.getElementById('fullName').value.trim()
+    const phone    = document.getElementById('phone').value.trim()
+    const email    = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value
+    const confirm  = document.getElementById('confirmPassword').value
+    const terms    = document.getElementById('terms').checked
+    const btn      = document.getElementById('registerBtn')
 
-      const fullName = document.getElementById('fullName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const pass = password.value;
-      const confirmPass = confirmPassword.value;
-
-      // Validate passwords match
-      if (pass !== confirmPass) {
-        showAlert('Passwords do not match', 'error');
-        return;
-      }
-
-      // Validate password length
-      if (pass.length < 6) {
-        showAlert('Password must be at least 6 characters', 'error');
-        return;
-      }
-
-      // Show loading state
-      registerBtn.classList.add('btn-loading');
-      registerBtn.disabled = true;
-      hideAlert();
-
-      try {
-        await window.authManager.registerCustomer({
-          email,
-          password: pass,
-          fullName,
-          phone
-        });
-
-        // Success - show message and redirect
-        showAlert('Account created successfully! Redirecting...', 'success');
-        setTimeout(() => {
-          window.location.href = '../index.html';
-        }, 1500);
-
-      } catch (error) {
-        console.error('Registration error:', error);
-        showAlert(error.message, 'error');
-        registerBtn.classList.remove('btn-loading');
-        registerBtn.disabled = false;
-      }
-    });
-
-    // Handle Google sign-up
-    googleSignInBtn.addEventListener('click', async () => {
-      googleSignInBtn.classList.add('btn-loading');
-      googleSignInBtn.disabled = true;
-      hideAlert();
-
-      try {
-        await window.authManager.loginWithGoogle();
-
-        // Success - redirect
-        showAlert('Account created successfully! Redirecting...', 'success');
-        setTimeout(() => {
-          window.location.href = '../index.html';
-        }, 1500);
-
-      } catch (error) {
-        console.error('Google sign-up error:', error);
-        showAlert(error.message, 'error');
-        googleSignInBtn.classList.remove('btn-loading');
-        googleSignInBtn.disabled = false;
-      }
-    });
-
-    // Alert helper functions
-    function showAlert(message, type) {
-      alertMessage.textContent = message;
-      alertMessage.className = `alert alert-${type} show`;
+    if (!fullName || !phone || !email || !password) {
+      showAlert('Please fill in all required fields.', 'error')
+      return
     }
 
-    function hideAlert() {
-      alertMessage.className = 'alert';
+    if (password.length < 6) {
+      showAlert('Password must be at least 6 characters.', 'error')
+      return
     }
 
-    // Check if user is already logged in
-    window.onAuthStateChanged = (user) => {
-      if (user) {
-        // User is already logged in, redirect to home
-        window.location.href = '../public/index.html';
-      }
-    };
-  </script>
+    if (password !== confirm) {
+      showAlert('Passwords do not match.', 'error')
+      document.getElementById('confirmPassword').classList.add('error')
+      return
+    }
+
+    if (!terms) {
+      showAlert('Please accept the Terms & Conditions to continue.', 'error')
+      return
+    }
+
+    btn.disabled = true
+    btn.textContent = 'Creating account…'
+
+    try {
+      await apiRegister({ fullName, phone, email, password })
+      showAlert('Account created! Redirecting…', 'success')
+      setTimeout(() => { window.location.href = '../index.html' }, 1200)
+    } catch (err) {
+      showAlert(err.message, 'error')
+      btn.disabled = false
+      btn.textContent = 'Create Account'
+    }
+  }
+
+  // Clear error highlight on retype
+  document.getElementById('confirmPassword').addEventListener('input', function() {
+    this.classList.remove('error')
+  })
+
+  // Google placeholder
+  document.querySelector('button[onclick="handleGoogle()"]') &&
+    (document.querySelector('button[onclick="handleGoogle()"]').onclick = () => {
+      alert('Google sign-up will be available once OAuth is configured.')
+    })
+</script>
+
 
 </body>
 </html>
