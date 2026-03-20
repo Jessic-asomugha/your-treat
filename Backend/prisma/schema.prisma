@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Get a free hosted Postgres database in seconds: `npx create-db`
-ggenerator client {
+generator client {
   provider = "prisma-client-js"
 }
 
@@ -10,6 +10,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -19,31 +20,28 @@ model User {
   role      Role     @default(CUSTOMER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   orders    Order[]
 }
 
 model Order {
-  id              String        @id @default(cuid())
+  id              String      @id @default(cuid())
   userId          String?
-  user            User?         @relation(fields: [userId], references: [id])
-
+  user            User?       @relation(fields: [userId], references: [id])
   cakeName        String
   size            String
   layers          String
-  quantity        Int           @default(1)
+  quantity        Int         @default(1)
   flavor          String?
-  deliveryOption  String        @default("pickup")
+  deliveryOption  String      @default("pickup")
   deliveryDate    String
   deliveryAddress String?
   customerName    String
   customerPhone   String
   customerEmail   String?
   specialRequests String?
-
-  status          OrderStatus   @default(PENDING)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  status          OrderStatus @default(PENDING)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }
 
 model Message {
