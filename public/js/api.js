@@ -1,6 +1,6 @@
 // ── CONFIG ──
 // Change this to your Vercel backend URL after deployment
-const API_BASE = 'https://your-treat-Backend.vercel.app/api'
+const API_BASE = 'https://your-treat-f0orvahr4-techmanias-projects.vercel.app/api'
 
 // ── TOKEN HELPERS ──
 export function getToken() {
