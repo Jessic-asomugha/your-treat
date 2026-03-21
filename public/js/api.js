@@ -1,6 +1,6 @@
 // ── CONFIG ──
 // Change this to your Vercel backend URL after deployment
-const API_BASE = 'http://localhost:3000/api'
+const API_BASE = 'https://your-treat.vercel.app/api'
 
 // ── TOKEN HELPERS ──
 export function getToken() {
