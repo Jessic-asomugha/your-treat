@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders – Sweet Delights Bakery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C3317;
+      --brown-mid:  #7A4728;
+      --gold:       #C4924A;
+      --gold-light: #E8C078;
+      --cream:      #FAF6F0;
+      --cream-dark: #F2E8D9;
+      --ink:        #1C1410;
+      --ink-mid:    #4A3728;
+      --stone:      #9E8A78;
+      --border:     rgba(92,51,23,0.12);
+
+      --status-pending:   #B45309;
+      --status-confirmed: #1D6F42;
+      --status-baking:    #1E40AF;
+      --status-delivered: #276749;
+      --status-cancelled: #9B2C2C;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-wrap { display: flex; flex-direction: column; line-height: 1; text-decoration: none; }
+    .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.02em;
+    }
+    .logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .nav { display: flex; gap: 2rem; align-items: center; }
+    .nav a {
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav a:hover, .nav a.active { color: var(--brown); }
+    .nav-cta {
+      background: var(--brown) !important;
+      color: #fff !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: var(--brown);
+      padding: 3.5rem 5%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(196,146,74,0.1);
+    }
+    .page-hero-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .page-hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+    .page-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .page-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .page-hero-note {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      text-align: right;
+      max-width: 220px;
+      line-height: 1.7;
+      position: relative; z-index: 1;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 5% 5rem;
+    }
+
+    /* ── LOOKUP (guest) ── */
+    .lookup-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .lookup-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 0.4rem;
+    }
+
+    .lookup-sub {
+      font-size: 0.82rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .lookup-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .lookup-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: border-color 0.2s;
+    }
+    .lookup-input:focus { outline: none; border-color: var(--gold); background: #fff; }
+    .lookup-input::placeholder { text-transform: none; letter-spacing: normal; color: rgba(158,138,120,0.5); }
+
+    .lookup-btn {
+      padding: 0.8rem 1.75rem;
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .lookup-btn:hover { background: var(--brown-mid); }
+
+    /* ── TABS ── */
+    .tabs-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.25rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--stone);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--brown); }
+    .tab-btn.active {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+    }
+
+    /* ── ORDER CARDS ── */
+    .orders-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+    .order-card {
+      background: #fff;
+      padding: 1.75rem 2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .order-card:hover { background: var(--cream); }
+
+    .order-status-bar {
+      width: 3px;
+      height: 100%;
+      min-height: 60px;
+      border-radius: 2px;
+      align-self: stretch;
+    }
+
+    .order-main { }
+
+    .order-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      letter-spacing: 0.05em;
+    }
+
+    .status-pill {
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+    }
+
+    .order-details {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .order-detail-item { }
+
+    .detail-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .detail-value {
+      font-size: 0.85rem;
+      color: var(--ink-mid);
+      font-weight: 400;
+    }
+
+    .order-arrow {
+      font-size: 1rem;
+      color: var(--stone);
+      transition: transform 0.2s, color 0.2s;
+    }
+    .order-card:hover .order-arrow { transform: translateX(4px); color: var(--brown); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    .empty-icon {
+      width: 56px; height: 56px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.3rem;
+    }
+
+    .empty-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--brown);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-sub {
+      font-size: 0.83rem;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .btn-place {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      background: var(--brown);
+      color: #fff;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-place:hover { background: var(--brown-mid); }
+
+    /* ── ORDER DETAIL PANEL ── */
+    .detail-panel-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28,20,16,0.6);
+      z-index: 200;
+      justify-content: flex-end;
+    }
+    .detail-panel-backdrop.show { display: flex; }
+
+    .detail-panel {
+      background: var(--cream);
+      width: min(520px, 100%);
+      height: 100%;
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(0); }
+    }
+
+    .panel-header {
+      background: var(--brown);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 1.25rem; right: 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .panel-close:hover { background: rgba(255,255,255,0.2); }
+
+    .panel-order-id {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-status {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    .panel-date {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      margin-top: 0.3rem;
+    }
+
+    .panel-body { padding: 2rem; }
+
+    .panel-section { margin-bottom: 2rem; }
+
+    .panel-section-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-row-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+    }
+
+    .panel-row-value {
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      text-align: right;
+      max-width: 60%;
+    }
+
+    /* Status colours */
+    .s-pending   { color: var(--status-pending); background: rgba(180,83,9,0.08);   border-color: rgba(180,83,9,0.2); }
+    .s-confirmed { color: var(--status-confirmed); background: rgba(29,111,66,0.08); border-color: rgba(29,111,66,0.2); }
+    .s-baking    { color: var(--status-baking); background: rgba(30,64,175,0.08);   border-color: rgba(30,64,175,0.2); }
+    .s-delivered { color: var(--status-delivered); background: rgba(39,103,73,0.08); border-color: rgba(39,103,73,0.2); }
+    .s-cancelled { color: var(--status-cancelled); background: rgba(155,44,44,0.08); border-color: rgba(155,44,44,0.2); }
+
+    .bar-pending   { background: var(--status-pending); }
+    .bar-confirmed { background: var(--status-confirmed); }
+    .bar-baking    { background: var(--status-baking); }
+    .bar-delivered { background: var(--status-delivered); }
+    .bar-cancelled { background: var(--status-cancelled); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--ink);
+      padding: 2rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: rgba(255,255,255,0.35); }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.25); font-weight: 300; }
+    .footer-admin { font-size: 0.7rem; color: rgba(255,255,255,0.2); text-decoration: none; }
+    .footer-admin:hover { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .order-card { grid-template-columns: auto 1fr; }
+      .order-arrow { display: none; }
+      .nav a:not(.nav-cta):not(.active) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo-wrap">
+      <span class="logo-main">Sweet Delights</span>
+      <span class="logo-sub">Artisan Bakery</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="order.html">Order</a>
+      <a href="my-orders.html" class="active">My Orders</a>
+      <a href="chat.html">Chat</a>
+      <span id="authNav"><a href="auth/login.html">Login</a></span>
+    </nav>
+  </header>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div>
+      <p class="page-hero-eyebrow">Order history</p>
+      <h1>Your <em>orders</em></h1>
+    </div>
+    <p class="page-hero-note">Track status, view details, and manage all your cake orders in one place.</p>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <!-- ORDER ID LOOKUP (shown to guests / as fallback) -->
+    <div class="lookup-card" id="lookupCard">
+      <div class="lookup-title">Track an order</div>
+      <p class="lookup-sub">Enter your order ID to check status and details.</p>
+      <div class="lookup-row">
+        <input class="lookup-input" id="lookupInput" placeholder="e.g. ORD1A2B3C4D5" maxlength="20" />
+        <button class="lookup-btn" onclick="lookupOrder()">Track</button>
+      </div>
+      <p id="lookupError" style="font-size:0.78rem;color:#9B2C2C;margin-top:0.75rem;display:none;"></p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-bar" id="tabsBar">
+      <button class="tab-btn active" data-filter="all">All</button>
+      <button class="tab-btn" data-filter="Pending">Pending</button>
+      <button class="tab-btn" data-filter="Confirmed">Confirmed</button>
+      <button class="tab-btn" data-filter="Baking">Baking</button>
+      <button class="tab-btn" data-filter="Delivered">Delivered</button>
+      <button class="tab-btn" data-filter="Cancelled">Cancelled</button>
+    </div>
+
+    <!-- ORDERS LIST -->
+    <div id="ordersContainer">
+      <!-- Populated by JS -->
+    </div>
+
+  </div><!-- /main-wrap -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-logo">Sweet Delights</span>
+    <span class="footer-copy">© 2025 Sweet Delights Bakery</span>
+    <a href="auth/admin-login.html" class="footer-admin">Admin</a>
+  </footer>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel-backdrop" id="detailBackdrop">
+    <div class="detail-panel">
+      <div class="panel-header">
+        <button class="panel-close" onclick="closePanel()">✕</button>
+        <div class="panel-order-id" id="panelOrderId"></div>
+        <div class="panel-status" id="panelStatus"></div>
+        <div class="panel-date" id="panelDate"></div>
+      </div>
+      <div class="panel-body">
+        <div class="panel-section">
+          <div class="panel-section-title">Cake details</div>
+          <div id="panelCakeDetails"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-section-title">Delivery</div>
+          <div id="panelDeliveryDetails"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-section-title">Customer</div>
+          <div id="panelCustomerDetails"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="module">
+  import {
+    apiGetMyOrders, apiGetOrderById, apiCancelOrder,
+    getUser, isLoggedIn, apiLogout
+  } from './js/api.js'
+
+  // Auth nav
+  const authNav = document.getElementById('authNav')
+  if (isLoggedIn()) {
+    const user = getUser()
+    const name = user?.fullName || user?.email?.split('@')[0]
+    authNav.innerHTML = `
+      <span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+      <a href="#" id="logoutBtn">Logout</a>`
+    document.getElementById('logoutBtn').onclick = (e) => {
+      e.preventDefault()
+      apiLogout()
+    }
+  } else {
+    authNav.innerHTML = `
+      <a href="auth/login.html">Login</a>
+      <a href="auth/register.html">Sign Up</a>`
+  }
+
+  const STATUS_CLASS = {
+    PENDING:   's-pending',
+    CONFIRMED: 's-confirmed',
+    BAKING:    's-baking',
+    DELIVERED: 's-delivered',
+    CANCELLED: 's-cancelled'
+  }
+
+  const BAR_CLASS = {
+    PENDING:   'bar-pending',
+    CONFIRMED: 'bar-confirmed',
+    BAKING:    'bar-baking',
+    DELIVERED: 'bar-delivered',
+    CANCELLED: 'bar-cancelled'
+  }
+
+  let allOrders = []
+  let currentFilter = 'all'
+
+  // Load orders
+  async function loadOrders() {
+    try {
+      if (isLoggedIn()) {
+        allOrders = await apiGetMyOrders()
+      } else {
+        allOrders = []
+      }
+      renderOrders()
+    } catch (err) {
+      console.error('Load orders error:', err)
+      showError()
+    }
+  }
+
+  function renderOrders() {
+    const container = document.getElementById('ordersContainer')
+    const filtered  = currentFilter === 'all'
+      ? allOrders
+      : allOrders.filter(o => o.status === currentFilter.toUpperCase())
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🎂</div>
+          <div class="empty-title">No orders here</div>
+          <p class="empty-sub">${currentFilter === 'all'
+            ? "You haven't placed any orders yet."
+            : 'No ' + currentFilter.toLowerCase() + ' orders.'}</p>
+          <a href="order.html" class="btn-place">Place an Order</a>
+        </div>`
+      return
+    }
+
+    container.innerHTML = `<div class="orders-list">${filtered.map(o => orderCardHTML(o)).join('')}</div>`
+  }
+
+  function orderCardHTML(o) {
+    const date = o.deliveryDate
+      ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        })
+      : '—'
+    const placed = o.createdAt
+      ? new Date(o.createdAt).toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        })
+      : '—'
+    const status = o.status || 'PENDING'
+    const sc = STATUS_CLASS[status] || ''
+    const bc = BAR_CLASS[status] || ''
+
+    return `
+      <div class="order-card" onclick="openPanel('${o.id}')">
+        <div class="order-status-bar ${bc}"></div>
+        <div class="order-main">
+          <div class="order-top">
+            <span class="order-id">${o.id}</span>
+            <span class="status-pill ${sc}">${status}</span>
+          </div>
+          <div class="order-details">
+            <div class="order-detail-item">
+              <div class="detail-label">Cake</div>
+              <div class="detail-value">${o.cakeName || '—'}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">Size</div>
+              <div class="detail-value">${o.size || '—'}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">${o.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup'} date</div>
+              <div class="detail-value">${date}</div>
+            </div>
+            <div class="order-detail-item">
+              <div class="detail-label">Placed</div>
+              <div class="detail-value">${placed}</div>
+            </div>
+          </div>
+        </div>
+        <div class="order-arrow">→</div>
+      </div>`
+  }
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      currentFilter = btn.dataset.filter
+      renderOrders()
+    })
+  })
+
+  // Order lookup (guest)
+  window.lookupOrder = async function() {
+    const val    = document.getElementById('lookupInput').value.trim().toUpperCase()
+    const errEl  = document.getElementById('lookupError')
+    if (!val) {
+      errEl.textContent = 'Please enter an order ID.'
+      errEl.style.display = 'block'
+      return
+    }
+    errEl.style.display = 'none'
+
+    try {
+      const order = await apiGetOrderById(val)
+      if (!allOrders.find(o => o.id === order.id)) allOrders.unshift(order)
+      renderOrders()
+      openPanel(order.id)
+    } catch {
+      errEl.textContent = 'Order not found. Please check the ID and try again.'
+      errEl.style.display = 'block'
+    }
+  }
+
+  document.getElementById('lookupInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.lookupOrder()
+  })
+
+  // Detail panel
+  window.openPanel = function(orderId) {
+    const o = allOrders.find(x => x.id === orderId)
+    if (!o) return
+
+    const status = o.status || 'PENDING'
+    document.getElementById('panelOrderId').textContent = 'Order ' + o.id
+    document.getElementById('panelStatus').textContent  = status
+    document.getElementById('panelDate').textContent    = o.createdAt
+      ? 'Placed ' + new Date(o.createdAt).toLocaleDateString('en-NG', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        })
+      : ''
+
+    const row = (label, value) => value ? `
+      <div class="panel-row">
+        <span class="panel-row-label">${label}</span>
+        <span class="panel-row-value">${value}</span>
+      </div>` : ''
+
+    document.getElementById('panelCakeDetails').innerHTML =
+      row('Cake type',  o.cakeName) +
+      row('Size',       o.size) +
+      row('Layers',     o.layers ? o.layers + ' layers' : null) +
+      row('Quantity',   o.quantity ? o.quantity + ' cake(s)' : '1 cake') +
+      (o.specialRequests ? row('Special requests', o.specialRequests) : '')
+
+    const delivDate = o.deliveryDate
+      ? new Date(o.deliveryDate + 'T00:00:00').toLocaleDateString('en-NG', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        })
+      : null
+
+    document.getElementById('panelDeliveryDetails').innerHTML =
+      row('Method',  o.deliveryOption === 'delivery' ? 'Delivery' : 'Pickup') +
+      row('Date',    delivDate) +
+      (o.deliveryAddress ? row('Address', o.deliveryAddress) : '')
+
+    document.getElementById('panelCustomerDetails').innerHTML =
+      row('Name',  o.customerName) +
+      row('Phone', o.customerPhone) +
+      (o.customerEmail ? row('Email', o.customerEmail) : '')
+
+    // Show cancel button only if cancellable
+    const cancelBtn = document.getElementById('panelCancelBtn')
+    if (cancelBtn) {
+      if (!['DELIVERED', 'CANCELLED'].includes(status)) {
+        cancelBtn.style.display = 'inline-flex'
+        cancelBtn.onclick = () => cancelOrder(o.id)
+      } else {
+        cancelBtn.style.display = 'none'
+      }
+    }
+
+    document.getElementById('detailBackdrop').classList.add('show')
+    document.body.style.overflow = 'hidden'
+  }
+
+  window.closePanel = function() {
+    document.getElementById('detailBackdrop').classList.remove('show')
+    document.body.style.overflow = ''
+  }
+
+  document.getElementById('detailBackdrop').addEventListener('click', e => {
+    if (e.target === e.currentTarget) window.closePanel()
+  })
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') window.closePanel()
+  })
+
+  async function cancelOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order? This cannot be undone.')) return
+    try {
+      await apiCancelOrder(orderId)
+      await loadOrders()
+      window.closePanel()
+      alert('Order cancelled successfully.')
+    } catch (err) {
+      alert(err.message || 'Failed to cancel order.')
+    }
+  }
+
+  function showError() {
+    document.getElementById('ordersContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Something went wrong</div>
+        <p class="empty-sub">Could not load your orders. Please refresh the page.</p>
+      </div>`
+  }
+
+  // Add cancel button to panel actions if not already there
+  const panelActions = document.querySelector('.panel-actions')
+  if (panelActions && !document.getElementById('panelCancelBtn')) {
+    const cancelBtn = document.createElement('button')
+    cancelBtn.id        = 'panelCancelBtn'
+    cancelBtn.className = 'btn btn-ghost'
+    cancelBtn.style.color       = 'var(--s-cancelled)'
+    cancelBtn.style.borderColor = 'var(--s-cancelled)'
+    cancelBtn.style.display     = 'none'
+    cancelBtn.textContent       = 'Cancel Order'
+    panelActions.prepend(cancelBtn)
+  }
+
+  loadOrders()
+</script>
+
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>
