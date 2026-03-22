@@ -1,6 +1,6 @@
 // ── CONFIG ──
 // Change this to your Vercel backend URL after deployment
-const API_BASE = 'https://your-treat-pw8pf0z6x-techmanias-projects.vercel.app/api'
+const API_BASE = 'https://your-treat-production.up.railway.app/api'
 // ── TOKEN HELPERS ──
 export function getToken() {
   return localStorage.getItem('sd_token')
