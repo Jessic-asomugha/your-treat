@@ -56,6 +56,50 @@ model Message {
   createdAt   DateTime @default(now())
 }
 
+model GalleryItem {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  tag         String?
+  sizes       String?
+  layers      String?
+  priceLabel  String?
+  summary     String?
+  description String
+  imageUrl    String?
+  featured    Boolean  @default(false)
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Promo {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  ctaLabel  String?
+  ctaUrl    String?
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SitePost {
+  id          String   @id @default(cuid())
+  title       String
+  tag         String?
+  excerpt     String
+  body        String?
+  imageUrl    String?
+  active      Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 enum Role {
   CUSTOMER
   ADMIN
