@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Content - Sweet Delights Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+  <style>
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .content-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    .section-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .editor-form {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .field label {
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 500;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      padding: 0.8rem 0.9rem;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      border-radius: 2px;
+    }
+
+    .field textarea {
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--ink-mid);
+    }
+
+    .checkbox input {
+      accent-color: var(--brown);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .item-card:last-child {
+      border-bottom: none;
+    }
+
+    .item-meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.7rem;
+    }
+
+    .item-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.22rem 0.55rem;
+      font-size: 0.64rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--stone);
+      background: #fff;
+    }
+
+    .item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      color: var(--brown);
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .item-text {
+      font-size: 0.83rem;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .item-sub {
+      margin-top: 0.6rem;
+      font-size: 0.74rem;
+      color: var(--stone);
+      line-height: 1.7;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .feedback {
+      display: none;
+      margin-bottom: 1rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      border-radius: 2px;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.success {
+      color: var(--s-confirmed);
+      background: rgba(29,111,66,0.08);
+      border-color: rgba(29,111,66,0.24);
+    }
+    .feedback.error {
+      color: var(--s-cancelled);
+      background: rgba(155,44,44,0.08);
+      border-color: rgba(155,44,44,0.24);
+    }
+
+    @media (max-width: 960px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .field-grid,
+      .item-card {
+        grid-template-columns: 1fr;
+      }
+
+      .item-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-logo">
+      Sweet Delights
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-user">
+      <span class="admin-user-name" id="adminUserName">Admin</span>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+  </header>
+
+  <nav class="admin-nav">
+    <a href="admin-index.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      Dashboard
+    </a>
+    <a href="cake-orders.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+      </svg>
+      Orders
+    </a>
+    <a href="customer-messages.html" class="admin-nav-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Messages
+    </a>
+    <a href="site-content.html" class="admin-nav-link active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      Site Content
+    </a>
+  </nav>
+
+  <div class="admin-container">
+    <div class="page-title">
+      <h1>Site Content</h1>
+      <p>Manage promos, gallery items, and business updates without changing code.</p>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <div class="content-grid">
+      <div class="section-stack">
+        <div class="content-card">
+          <div class="content-card-header">
+            <span class="content-card-title">Promo Banner</span>
+          </div>
+          <form class="editor-form" id="promoForm">
+            <div class="field">
+              <label for="promoTitle">Title</label>
+              <input id="promoTitle" name="title" required />
+            </div>
+            <div class="field">
+              <label for="promoMessage">Message</label>
+              <textarea id="promoMessage" name="message" required></textarea>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="promoCtaLabel">CTA label</label>
+                <input id="promoCtaLabel" name="ctaLabel" placeholder="Place an order" />
+              </div>
+              <div class="field">
+                <label for="promoCtaUrl">CTA URL</label>
+                <input id="promoCtaUrl" name="ctaUrl" placeholder="order.html" />
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="promoSortOrder">Sort order</label>
+                <input id="promoSortOrder" name="sortOrder" type="number" value="0" />
+              </div>
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox"><input type="checkbox" id="promoActive" name="active" checked /> Active</label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary btn-sm" type="submit" id="promoSubmitBtn">Save Promo</button>
+              <button class="btn btn-ghost btn-sm" type="button" onclick="resetPromoForm()">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="content-card">
+          <div class="content-card-header">
+            <span class="content-card-title">Promos</span>
+          </div>
+          <div class="item-list" id="promoList"></div>
+        </div>
+      </div>
+
+      <div class="section-stack">
+        <div class="content-card">
+          <div class="content-card-header">
+            <span class="content-card-title">Business Update</span>
+          </div>
+          <form class="editor-form" id="postForm">
+            <div class="field-grid">
+              <div class="field">
+                <label for="postTitle">Title</label>
+                <input id="postTitle" name="title" required />
+              </div>
+              <div class="field">
+                <label for="postTag">Tag</label>
+                <input id="postTag" name="tag" placeholder="Kitchen Update" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="postExcerpt">Excerpt</label>
+              <textarea id="postExcerpt" name="excerpt" required></textarea>
+            </div>
+            <div class="field">
+              <label for="postBody">Body</label>
+              <textarea id="postBody" name="body" placeholder="Optional longer write-up for future use"></textarea>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="postImageUrl">Image URL</label>
+                <input id="postImageUrl" name="imageUrl" placeholder="images/cake.jpg or https://..." />
+              </div>
+              <div class="field">
+                <label for="postPublishedAt">Publish date</label>
+                <input id="postPublishedAt" name="publishedAt" type="date" />
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="postSortOrder">Sort order</label>
+                <input id="postSortOrder" name="sortOrder" type="number" value="0" />
+              </div>
+            </div>
+            <div class="checkbox-row">
+              <label class="checkbox"><input type="checkbox" id="postActive" name="active" checked /> Active</label>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary btn-sm" type="submit" id="postSubmitBtn">Save Update</button>
+              <button class="btn btn-ghost btn-sm" type="button" onclick="resetPostForm()">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="content-card">
+          <div class="content-card-header">
+            <span class="content-card-title">Updates</span>
+          </div>
+          <div class="item-list" id="postList"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid full" style="margin-top:1.5rem;">
+      <div class="content-card">
+        <div class="content-card-header">
+          <span class="content-card-title">Gallery Item</span>
+        </div>
+        <form class="editor-form" id="galleryForm">
+          <div class="field-grid">
+            <div class="field">
+              <label for="galleryTitle">Title</label>
+              <input id="galleryTitle" name="title" required />
+            </div>
+            <div class="field">
+              <label for="galleryCategory">Category</label>
+              <select id="galleryCategory" name="category" required>
+                <option value="Classic">Classic</option>
+                <option value="Premium">Premium</option>
+                <option value="Seasonal">Seasonal</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Celebration">Celebration</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="galleryTag">Tag</label>
+              <input id="galleryTag" name="tag" placeholder="Signature" />
+            </div>
+            <div class="field">
+              <label for="galleryPriceLabel">Price label</label>
+              <input id="galleryPriceLabel" name="priceLabel" placeholder="From ₦12,000" />
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="gallerySizes">Sizes</label>
+              <input id="gallerySizes" name="sizes" placeholder="6, 8, 10 inches" />
+            </div>
+            <div class="field">
+              <label for="galleryLayers">Layers</label>
+              <input id="galleryLayers" name="layers" placeholder="2-4 layers" />
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="galleryImageUrl">Image URL</label>
+              <input id="galleryImageUrl" name="imageUrl" placeholder="images/chocolate cake.jpg or https://..." />
+            </div>
+            <div class="field">
+              <label for="gallerySortOrder">Sort order</label>
+              <input id="gallerySortOrder" name="sortOrder" type="number" value="0" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="gallerySummary">Summary</label>
+            <input id="gallerySummary" name="summary" placeholder="Rich dark chocolate sponge with ganache" />
+          </div>
+          <div class="field">
+            <label for="galleryDescription">Description</label>
+            <textarea id="galleryDescription" name="description" required></textarea>
+          </div>
+          <div class="checkbox-row">
+            <label class="checkbox"><input type="checkbox" id="galleryFeatured" name="featured" /> Show on homepage</label>
+            <label class="checkbox"><input type="checkbox" id="galleryActive" name="active" checked /> Active</label>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary btn-sm" type="submit" id="gallerySubmitBtn">Save Gallery Item</button>
+            <button class="btn btn-ghost btn-sm" type="button" onclick="resetGalleryForm()">Clear</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="content-card">
+        <div class="content-card-header">
+          <span class="content-card-title">Gallery Library</span>
+        </div>
+        <div class="item-list" id="galleryList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      apiGetAdminContent,
+      apiCreateGalleryItem,
+      apiUpdateGalleryItem,
+      apiDeleteGalleryItem,
+      apiCreatePromo,
+      apiUpdatePromo,
+      apiDeletePromo,
+      apiCreateSitePost,
+      apiUpdateSitePost,
+      apiDeleteSitePost,
+      getUser,
+      isLoggedIn,
+      isAdmin,
+      apiLogout
+    } from '../js/api.js'
+
+    if (!isLoggedIn() || !isAdmin()) {
+      window.location.href = '../auth/admin-login.html'
+    }
+
+    const user = getUser()
+    document.getElementById('adminUserName').textContent = user?.fullName || user?.email || 'Admin'
+
+    const state = {
+      galleryItems: [],
+      promos: [],
+      posts: [],
+      editingPromoId: null,
+      editingPostId: null,
+      editingGalleryId: null
+    }
+
+    function showFeedback(message, type = 'success') {
+      const el = document.getElementById('feedback')
+      el.textContent = message
+      el.className = `feedback ${type} show`
+      window.clearTimeout(window.feedbackTimer)
+      window.feedbackTimer = window.setTimeout(() => {
+        el.className = 'feedback'
+      }, 3200)
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+    }
+
+    function boolText(value) {
+      return value ? 'Active' : 'Hidden'
+    }
+
+    function toDateInput(value) {
+      if (!value) return ''
+      return new Date(value).toISOString().slice(0, 10)
+    }
+
+    function serializeForm(form) {
+      const data = Object.fromEntries(new FormData(form).entries())
+      form.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        data[input.name] = input.checked
+      })
+      return data
+    }
+
+    async function loadContent() {
+      try {
+        const data = await apiGetAdminContent()
+        state.galleryItems = data.galleryItems || []
+        state.promos = data.promos || []
+        state.posts = data.posts || []
+        renderAll()
+      } catch (error) {
+        console.error('Load content error:', error)
+        showFeedback(error.message || 'Failed to load site content.', 'error')
+      }
+    }
+
+    function renderPromos() {
+      const list = document.getElementById('promoList')
+      if (!state.promos.length) {
+        list.innerHTML = `<div class="item-card"><div class="item-text">No promos yet. Add one above and it will appear on the homepage.</div></div>`
+        return
+      }
+
+      list.innerHTML = state.promos.map(promo => `
+        <article class="item-card">
+          <div>
+            <div class="item-meta">
+              <span class="item-pill">${promo.sortOrder}</span>
+              <span class="item-pill">${boolText(promo.active)}</span>
+            </div>
+            <div class="item-title">${escapeHtml(promo.title)}</div>
+            <div class="item-text">${escapeHtml(promo.message)}</div>
+            <div class="item-sub">${promo.ctaLabel ? `CTA: ${escapeHtml(promo.ctaLabel)} → ${escapeHtml(promo.ctaUrl || '#')}` : 'No call to action'}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-sm" onclick="editPromo('${promo.id}')">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="deletePromoItem('${promo.id}')">Delete</button>
+          </div>
+        </article>
+      `).join('')
+    }
+
+    function renderPosts() {
+      const list = document.getElementById('postList')
+      if (!state.posts.length) {
+        list.innerHTML = `<div class="item-card"><div class="item-text">No business updates yet. Add one above and it will appear on the homepage.</div></div>`
+        return
+      }
+
+      list.innerHTML = state.posts.map(post => `
+        <article class="item-card">
+          <div>
+            <div class="item-meta">
+              <span class="item-pill">${escapeHtml(post.tag || 'Update')}</span>
+              <span class="item-pill">${boolText(post.active)}</span>
+              <span class="item-pill">${toDateInput(post.publishedAt)}</span>
+            </div>
+            <div class="item-title">${escapeHtml(post.title)}</div>
+            <div class="item-text">${escapeHtml(post.excerpt)}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-sm" onclick="editPost('${post.id}')">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="deletePostItem('${post.id}')">Delete</button>
+          </div>
+        </article>
+      `).join('')
+    }
+
+    function renderGallery() {
+      const list = document.getElementById('galleryList')
+      if (!state.galleryItems.length) {
+        list.innerHTML = `<div class="item-card"><div class="item-text">No gallery items yet. Add one above and it will appear in the gallery and homepage feature area.</div></div>`
+        return
+      }
+
+      list.innerHTML = state.galleryItems.map(item => `
+        <article class="item-card">
+          <div>
+            <div class="item-meta">
+              <span class="item-pill">${escapeHtml(item.category)}</span>
+              <span class="item-pill">${boolText(item.active)}</span>
+              ${item.featured ? '<span class="item-pill">Homepage</span>' : ''}
+              <span class="item-pill">Sort ${item.sortOrder}</span>
+            </div>
+            <div class="item-title">${escapeHtml(item.title)}</div>
+            <div class="item-text">${escapeHtml(item.summary || item.description)}</div>
+            <div class="item-sub">${escapeHtml(item.priceLabel || 'Custom pricing')} · ${escapeHtml(item.sizes || 'Custom sizes')}</div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-sm" onclick="editGalleryItem('${item.id}')">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteGalleryItemById('${item.id}')">Delete</button>
+          </div>
+        </article>
+      `).join('')
+    }
+
+    function renderAll() {
+      renderPromos()
+      renderPosts()
+      renderGallery()
+    }
+
+    function resetPromoFormState() {
+      state.editingPromoId = null
+      document.getElementById('promoForm').reset()
+      document.getElementById('promoActive').checked = true
+      document.getElementById('promoSortOrder').value = 0
+      document.getElementById('promoSubmitBtn').textContent = 'Save Promo'
+    }
+
+    function resetPostFormState() {
+      state.editingPostId = null
+      document.getElementById('postForm').reset()
+      document.getElementById('postActive').checked = true
+      document.getElementById('postSortOrder').value = 0
+      document.getElementById('postPublishedAt').value = ''
+      document.getElementById('postSubmitBtn').textContent = 'Save Update'
+    }
+
+    function resetGalleryFormState() {
+      state.editingGalleryId = null
+      document.getElementById('galleryForm').reset()
+      document.getElementById('galleryActive').checked = true
+      document.getElementById('galleryFeatured').checked = false
+      document.getElementById('gallerySortOrder').value = 0
+      document.getElementById('gallerySubmitBtn').textContent = 'Save Gallery Item'
+    }
+
+    window.resetPromoForm = resetPromoFormState
+    window.resetPostForm = resetPostFormState
+    window.resetGalleryForm = resetGalleryFormState
+
+    window.editPromo = function editPromo(id) {
+      const promo = state.promos.find(item => item.id === id)
+      if (!promo) return
+      state.editingPromoId = id
+      document.getElementById('promoTitle').value = promo.title || ''
+      document.getElementById('promoMessage').value = promo.message || ''
+      document.getElementById('promoCtaLabel').value = promo.ctaLabel || ''
+      document.getElementById('promoCtaUrl').value = promo.ctaUrl || ''
+      document.getElementById('promoSortOrder').value = promo.sortOrder ?? 0
+      document.getElementById('promoActive').checked = Boolean(promo.active)
+      document.getElementById('promoSubmitBtn').textContent = 'Update Promo'
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    window.editPost = function editPost(id) {
+      const post = state.posts.find(item => item.id === id)
+      if (!post) return
+      state.editingPostId = id
+      document.getElementById('postTitle').value = post.title || ''
+      document.getElementById('postTag').value = post.tag || ''
+      document.getElementById('postExcerpt').value = post.excerpt || ''
+      document.getElementById('postBody').value = post.body || ''
+      document.getElementById('postImageUrl').value = post.imageUrl || ''
+      document.getElementById('postSortOrder').value = post.sortOrder ?? 0
+      document.getElementById('postPublishedAt').value = toDateInput(post.publishedAt)
+      document.getElementById('postActive').checked = Boolean(post.active)
+      document.getElementById('postSubmitBtn').textContent = 'Update Update'
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    window.editGalleryItem = function editGalleryItem(id) {
+      const item = state.galleryItems.find(entry => entry.id === id)
+      if (!item) return
+      state.editingGalleryId = id
+      document.getElementById('galleryTitle').value = item.title || ''
+      document.getElementById('galleryCategory').value = item.category || 'Classic'
+      document.getElementById('galleryTag').value = item.tag || ''
+      document.getElementById('galleryPriceLabel').value = item.priceLabel || ''
+      document.getElementById('gallerySizes').value = item.sizes || ''
+      document.getElementById('galleryLayers').value = item.layers || ''
+      document.getElementById('galleryImageUrl').value = item.imageUrl || ''
+      document.getElementById('gallerySummary').value = item.summary || ''
+      document.getElementById('galleryDescription').value = item.description || ''
+      document.getElementById('gallerySortOrder').value = item.sortOrder ?? 0
+      document.getElementById('galleryFeatured').checked = Boolean(item.featured)
+      document.getElementById('galleryActive').checked = Boolean(item.active)
+      document.getElementById('gallerySubmitBtn').textContent = 'Update Gallery Item'
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    }
+
+    window.deletePromoItem = async function deletePromoItem(id) {
+      if (!confirm('Delete this promo?')) return
+      try {
+        await apiDeletePromo(id)
+        if (state.editingPromoId === id) resetPromoFormState()
+        showFeedback('Promo deleted.')
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to delete promo.', 'error')
+      }
+    }
+
+    window.deletePostItem = async function deletePostItem(id) {
+      if (!confirm('Delete this update?')) return
+      try {
+        await apiDeleteSitePost(id)
+        if (state.editingPostId === id) resetPostFormState()
+        showFeedback('Update deleted.')
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to delete update.', 'error')
+      }
+    }
+
+    window.deleteGalleryItemById = async function deleteGalleryItemById(id) {
+      if (!confirm('Delete this gallery item?')) return
+      try {
+        await apiDeleteGalleryItem(id)
+        if (state.editingGalleryId === id) resetGalleryFormState()
+        showFeedback('Gallery item deleted.')
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to delete gallery item.', 'error')
+      }
+    }
+
+    document.getElementById('promoForm').addEventListener('submit', async event => {
+      event.preventDefault()
+      const payload = serializeForm(event.currentTarget)
+      try {
+        if (state.editingPromoId) {
+          await apiUpdatePromo(state.editingPromoId, payload)
+          showFeedback('Promo updated.')
+        } else {
+          await apiCreatePromo(payload)
+          showFeedback('Promo created.')
+        }
+        resetPromoFormState()
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to save promo.', 'error')
+      }
+    })
+
+    document.getElementById('postForm').addEventListener('submit', async event => {
+      event.preventDefault()
+      const payload = serializeForm(event.currentTarget)
+      try {
+        if (state.editingPostId) {
+          await apiUpdateSitePost(state.editingPostId, payload)
+          showFeedback('Update saved.')
+        } else {
+          await apiCreateSitePost(payload)
+          showFeedback('Update created.')
+        }
+        resetPostFormState()
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to save update.', 'error')
+      }
+    })
+
+    document.getElementById('galleryForm').addEventListener('submit', async event => {
+      event.preventDefault()
+      const payload = serializeForm(event.currentTarget)
+      try {
+        if (state.editingGalleryId) {
+          await apiUpdateGalleryItem(state.editingGalleryId, payload)
+          showFeedback('Gallery item updated.')
+        } else {
+          await apiCreateGalleryItem(payload)
+          showFeedback('Gallery item created.')
+        }
+        resetGalleryFormState()
+        await loadContent()
+      } catch (error) {
+        showFeedback(error.message || 'Failed to save gallery item.', 'error')
+      }
+    })
+
+    window.handleLogout = function handleLogout() {
+      apiLogout()
+    }
+
+    resetPromoFormState()
+    resetPostFormState()
+    resetGalleryFormState()
+    loadContent()
+  </script>
+</body>
+</html>

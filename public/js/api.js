@@ -236,3 +236,74 @@ export async function apiReply({ replyTo, text }) {
 export async function apiGetUnreadCount() {
   return request('/messages/unread-count')
 }
+
+// ── SITE CONTENT ──
+export async function apiGetPublicContent() {
+  return request('/content/public', {
+    headers: { 'Content-Type': 'application/json' }
+  })
+}
+
+export async function apiGetAdminContent() {
+  return request('/content/admin')
+}
+
+export async function apiCreateGalleryItem(payload) {
+  return request('/content/gallery', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiUpdateGalleryItem(id, payload) {
+  return request(`/content/gallery/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiDeleteGalleryItem(id) {
+  return request(`/content/gallery/${id}`, {
+    method: 'DELETE'
+  })
+}
+
+export async function apiCreatePromo(payload) {
+  return request('/content/promos', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiUpdatePromo(id, payload) {
+  return request(`/content/promos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiDeletePromo(id) {
+  return request(`/content/promos/${id}`, {
+    method: 'DELETE'
+  })
+}
+
+export async function apiCreateSitePost(payload) {
+  return request('/content/posts', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiUpdateSitePost(id, payload) {
+  return request(`/content/posts/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload)
+  })
+}
+
+export async function apiDeleteSitePost(id) {
+  return request(`/content/posts/${id}`, {
+    method: 'DELETE'
+  })
+}

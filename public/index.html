@@ -376,6 +376,8 @@
   .cake-thumb {
     height: 280px;
     background: linear-gradient(160deg, #9B6040 0%, #6B3A1F 100%);
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -439,6 +441,66 @@
   }
 
   /* ── WHY US ── */
+  .promo-strip {
+    padding: 2rem 6%;
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    background: linear-gradient(180deg, rgba(196,146,74,0.07), transparent);
+  }
+
+  .promo-card {
+    background: #fff;
+    border: 1px solid rgba(92,51,23,0.12);
+    padding: 1.5rem;
+  }
+
+  .promo-card.primary {
+    background: var(--brown);
+    border-color: transparent;
+  }
+
+  .promo-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .promo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--brown);
+    margin-bottom: 0.6rem;
+  }
+
+  .promo-card.primary .promo-title { color: #fff; }
+
+  .promo-text {
+    font-size: 0.86rem;
+    color: var(--ink-mid);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .promo-card.primary .promo-text { color: rgba(255,255,255,0.76); }
+
+  .promo-link {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brown);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .promo-card.primary .promo-link { color: var(--gold-light); }
+
   .why-section {
     background: var(--cream-dark);
     padding: 5rem 6%;
@@ -486,6 +548,58 @@
   }
 
   /* ── TESTIMONIALS ── */
+  .updates-section {
+    display: none;
+    padding: 5rem 6%;
+    background: #fff;
+  }
+
+  .updates-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .update-card {
+    border: 1px solid rgba(92,51,23,0.12);
+    padding: 1.5rem;
+    background: var(--cream);
+  }
+
+  .update-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .update-tag,
+  .update-date {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+
+  .update-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem;
+    color: var(--brown);
+    line-height: 1.12;
+    margin-bottom: 0.7rem;
+    font-weight: 500;
+  }
+
+  .update-excerpt {
+    font-size: 0.84rem;
+    line-height: 1.8;
+    color: var(--ink-mid);
+    font-weight: 300;
+  }
+
   .testimonials {
     padding: 5rem 6%;
     background: var(--cream);
@@ -709,7 +823,9 @@
     }
 
     .cta-section,
-    .footer-top {
+    .footer-top,
+    .updates-grid,
+    .promo-strip {
       grid-template-columns: 1fr;
     }
   }
@@ -773,7 +889,9 @@
     .why-grid,
     .testi-grid,
     .cta-section,
-    .footer-top {
+    .footer-top,
+    .updates-grid,
+    .promo-strip {
       grid-template-columns: 1fr;
     }
 
@@ -785,6 +903,7 @@
 
     .section,
     .why-section,
+    .updates-section,
     .testimonials,
     .cta-section {
       padding-top: 3.5rem;
@@ -831,7 +950,9 @@
     <a href="order.html">Order</a>
     <a href="my-orders.html">My Orders</a>
     <a href="chat.html">Chat</a>
-    <a href="auth/login.html" class="nav-cta">Login</a>
+    <span id="authNav">
+      <a href="auth/login.html" class="nav-cta">Login</a>
+    </span>
   </nav>
 </header>
 
@@ -871,6 +992,8 @@
   <div class="trust-item"><span class="trust-dot"></span> Customisation available</div>
 </div>
 
+<section class="promo-strip" id="promoSection"></section>
+
 <!-- FEATURED CAKES -->
 <section class="section">
   <div class="section-header">
@@ -880,7 +1003,7 @@
     </div>
     <a href="gallery.html" class="section-link">View full gallery →</a>
   </div>
-  <div class="cake-grid">
+  <div class="cake-grid" id="featuredCakesGrid">
     <div class="cake-card">
       <div class="cake-thumb">
         <div class="cake-overlay">
@@ -948,6 +1071,16 @@
       <p class="why-desc">Get real-time updates from the moment your order is placed until it arrives at your door.</p>
     </div>
   </div>
+</section>
+
+<section class="updates-section" id="updatesSection">
+  <div class="section-header">
+    <div>
+      <p class="section-label">From the bakery</p>
+      <h2 class="section-title">Latest<br>Updates</h2>
+    </div>
+  </div>
+  <div class="updates-grid" id="updatesGrid"></div>
 </section>
 
 <!-- TESTIMONIALS -->
@@ -1041,3 +1174,6 @@
     <span class="footer-demo">Portfolio Demo</span>
   </div>
 </footer>
+
+<script type="module" src="js/content-ui.js"></script>
+<script type="module" src="js/site-shell.js"></script>

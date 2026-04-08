@@ -190,6 +190,16 @@
       border: 1px solid var(--border);
     }
 
+    .gallery-empty {
+      grid-column: 1 / -1;
+      background: #fff;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--stone);
+      font-weight: 300;
+    }
+
     .cake-card {
       background: var(--cream);
       cursor: pointer;
@@ -584,7 +594,7 @@
 
   <!-- FILTER BAR -->
   <div class="filter-bar">
-    <div class="filter-tabs">
+    <div class="filter-tabs" id="filterTabs">
       <button class="filter-tab active" data-filter="all">All</button>
       <button class="filter-tab" data-filter="Classic">Classic</button>
       <button class="filter-tab" data-filter="Premium">Premium</button>
@@ -790,64 +800,8 @@
 
   <script>
     // ── FILTER ──
-    const tabs = document.querySelectorAll('.filter-tab');
-    const cards = document.querySelectorAll('.cake-card');
-    const countDisplay = document.getElementById('countDisplay');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const filter = tab.dataset.filter;
-        let visible = 0;
-        cards.forEach(card => {
-          const show = filter === 'all' || card.dataset.category === filter;
-          card.style.display = show ? '' : 'none';
-          if (show) visible++;
-        });
-        countDisplay.textContent = visible;
-      });
-    });
 
     // ── MODAL ──
-    function openModal(card) {
-      const grad = card.dataset.grad;
-      document.getElementById('modalTitle').textContent    = card.dataset.name;
-      document.getElementById('modalTag').textContent      = card.dataset.tag;
-      document.getElementById('modalDesc').textContent     = card.dataset.desc;
-      document.getElementById('modalSizes').textContent    = card.dataset.sizes;
-      document.getElementById('modalLayers').textContent   = card.dataset.layers;
-      document.getElementById('modalPrice').textContent    = card.dataset.price;
-
-      const img = document.getElementById('modalImg');
-      const placeholder = document.getElementById('modalImgPlaceholder');
-      img.src = card.dataset.img;
-      img.alt = card.dataset.name;
-      img.style.display = '';
-      placeholder.style.display = 'none';
-      placeholder.className = 'modal-img-placeholder ' + grad;
-      placeholder.textContent = card.dataset.name;
-
-      document.getElementById('modalBackdrop').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      document.getElementById('modalBackdrop').classList.remove('show');
-      document.body.style.overflow = '';
-    }
-
-    cards.forEach(card => {
-      card.addEventListener('click', () => openModal(card));
-    });
-
-    document.getElementById('modalBackdrop').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeModal();
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
 
     // ── AUTH NAV ──
     window.onAuthStateChanged = (user) => {
@@ -863,7 +817,29 @@
     };
   </script>
 
-  <script src="js/simple-data-manager.js"></script>
+  <script type="module">
+    import { getUser, isLoggedIn, apiLogout } from './js/api.js'
+
+    const authNav = document.getElementById('authNav')
+    if (authNav) {
+      if (isLoggedIn()) {
+        const user = getUser()
+        const name = user?.fullName || user?.email?.split('@')[0] || 'Account'
+        authNav.innerHTML = `
+          <span style="color:var(--brown);font-weight:500;font-size:0.78rem;">👤 ${name}</span>
+          <a href="#" id="logoutBtn">Logout</a>
+        `
+        document.getElementById('logoutBtn')?.addEventListener('click', event => {
+          event.preventDefault()
+          apiLogout()
+        })
+      } else {
+        authNav.innerHTML = `<a href="auth/login.html">Login</a><a href="auth/register.html">Sign Up</a>`
+      }
+    }
+  </script>
+  <script type="module" src="js/content-ui.js"></script>
+  <script type="module" src="js/site-shell.js"></script>
   <script src="js/main.js"></script>
 
 </body>
