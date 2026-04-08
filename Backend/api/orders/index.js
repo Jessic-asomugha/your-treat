@@ -1,3 +1,4 @@
+import { sendOrderConfirmation, sendAdminOrderNotification, sendOrderStatusUpdate } from '../../lib/mailer.js'
 import express from 'express'
 import prisma from '../../lib/db.js'
 import { requireAuth, requireAdmin } from '../../lib/middleware.js'
@@ -18,13 +19,21 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' })
     }
 
-    // Attach to user account if token provided
     let userId = null
+    let resolvedCustomerEmail = customerEmail?.trim() || null
     const authHeader = req.headers.authorization
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const { verifyToken } = await import('../../lib/auth.js')
       const payload = verifyToken(authHeader.split(' ')[1])
       if (payload) userId = payload.userId
+    }
+
+    if (userId && !resolvedCustomerEmail) {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { email: true }
+      })
+      resolvedCustomerEmail = user?.email || null
     }
 
     const order = await prisma.order.create({
@@ -38,11 +47,15 @@ router.post('/', async (req, res) => {
         deliveryAddress: deliveryAddress || null,
         customerName,
         customerPhone,
-        customerEmail:   customerEmail || null,
+        customerEmail:   resolvedCustomerEmail,
         specialRequests: specialRequests || null,
         status:          'PENDING'
       }
     })
+
+    // Send emails — errors won't break order creation
+    sendOrderConfirmation(order).catch(err => console.error('Confirmation email error:', err))
+    sendAdminOrderNotification(order).catch(err => console.error('Admin notification error:', err))
 
     res.status(201).json({ success: true, order })
 
@@ -124,10 +137,22 @@ router.patch('/:id/status', requireAuth, requireAdmin, async (req, res) => {
       return res.status(400).json({ error: 'Invalid status value' })
     }
 
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: req.params.id }
+    })
+
+    if (!existingOrder) {
+      return res.status(404).json({ error: 'Order not found' })
+    }
+
     const order = await prisma.order.update({
       where: { id: req.params.id },
       data:  { status }
     })
+
+    if (existingOrder.status !== order.status) {
+      sendOrderStatusUpdate(order).catch(err => console.error('Status email error:', err))
+    }
 
     res.json({ success: true, order })
 
@@ -159,6 +184,8 @@ router.patch('/:id/cancel', requireAuth, async (req, res) => {
       where: { id: req.params.id },
       data:  { status: 'CANCELLED' }
     })
+
+    sendOrderStatusUpdate(updated).catch(err => console.error('Cancellation email error:', err))
 
     res.json({ success: true, order: updated })
 

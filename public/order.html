@@ -521,15 +521,60 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
+      .page-hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .page-hero-note {
+        max-width: none;
+        text-align: left;
+      }
       .order-layout { grid-template-columns: 1fr; }
       .summary-card { position: static; }
       .cake-options { grid-template-columns: repeat(3, 1fr); }
     }
+    @media (max-width: 720px) {
+      .header {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.9rem 1rem;
+      }
+      .nav {
+        width: 100%;
+        gap: 0.9rem;
+        overflow-x: auto;
+        padding-bottom: 0.15rem;
+      }
+      .nav a,
+      #authNav a {
+        white-space: nowrap;
+        display: inline-flex;
+      }
+      .form-section-header,
+      .form-section-body,
+      .summary-card,
+      .confirmation-card {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+      .cake-options,
+      .delivery-toggle {
+        grid-template-columns: 1fr;
+      }
+      .confirmation-card {
+        width: min(92vw, 420px);
+      }
+    }
     @media (max-width: 600px) {
       .form-row { grid-template-columns: 1fr; }
       .cake-options { grid-template-columns: 1fr; }
-      .nav { gap: 1rem; }
-      .nav a:not(.nav-cta):not(.active) { display: none; }
+      .page-hero,
+      .order-layout {
+        padding-left: 4%;
+        padding-right: 4%;
+      }
+      .nav { gap: 0.85rem; }
+      .nav a:not(.nav-cta):not(.active) { display: inline-flex; }
     }
   </style>
 </head>

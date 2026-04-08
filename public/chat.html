@@ -601,10 +601,41 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.9rem 1rem;
+      }
+      .nav {
+        width: 100%;
+        gap: 0.9rem;
+        overflow-x: auto;
+        padding-bottom: 0.15rem;
+      }
+      .nav a,
+      #authNav a {
+        white-space: nowrap;
+        display: inline-flex;
+      }
       .chat-page { grid-template-columns: 1fr; }
       .info-panel { display: none; }
       .chat-panel { height: calc(100vh - 65px); }
-      .nav a:not(.nav-cta):not(.active) { display: none; }
+      .nav a:not(.nav-cta):not(.active) { display: inline-flex; }
+    }
+    @media (max-width: 560px) {
+      .chat-panel {
+        height: auto;
+        min-height: calc(100vh - 120px);
+      }
+      .chat-topbar,
+      .chat-input-area,
+      .chat-messages {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .chat-input-row {
+        align-items: flex-end;
+      }
     }
   </style>
 </head>

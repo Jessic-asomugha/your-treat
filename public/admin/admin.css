@@ -522,8 +522,39 @@ body {
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .admin-header {
+    height: auto;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .admin-user {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .content-card-body {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 760px;
+  }
 }
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: 1fr; }
   .admin-container { padding: 1.5rem 4%; }
+  .page-title h1 {
+    font-size: 1.7rem;
+  }
+
+  .content-card-header,
+  .side-panel-header,
+  .side-panel-body,
+  .panel-actions {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

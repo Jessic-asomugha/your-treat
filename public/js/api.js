@@ -1,3 +1,4 @@
+
 // ── CONFIG ──
 // Change this to your Vercel backend URL after deployment
 const API_BASE = 'https://your-treat-production.up.railway.app/api'
@@ -49,6 +50,85 @@ async function request(path, options = {}) {
   return data
 }
 
+// ── LOADING STATE HELPERS ──
+export function showLoading(containerId, message = 'Loading…') {
+  const el = document.getElementById(containerId)
+  if (!el) return
+  el.innerHTML = `
+    <div style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      gap: 1rem;
+    ">
+      <div style="
+        width: 36px;
+        height: 36px;
+        border: 2px solid var(--cream-dark, #F2E8D9);
+        border-top-color: var(--brown, #5C3317);
+        border-radius: 50%;
+        animation: sd-spin 0.8s linear infinite;
+      "></div>
+      <p style="
+        font-size: 0.82rem;
+        color: var(--stone, #9E8A78);
+        font-weight: 300;
+        letter-spacing: 0.05em;
+      ">${message}</p>
+    </div>
+    <style>
+      @keyframes sd-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  `
+}
+
+export function showError(containerId, message = 'Something went wrong. Please refresh.', onRetry = null) {
+  const el = document.getElementById(containerId)
+  if (!el) return
+  el.innerHTML = `
+    <div style="
+      text-align: center;
+      padding: 4rem 2rem;
+    ">
+      <div style="
+        width: 48px;
+        height: 48px;
+        border: 1px solid rgba(155,44,44,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.2rem;
+      ">!</div>
+      <p style="
+        font-size: 0.88rem;
+        color: #9B2C2C;
+        margin-bottom: 1rem;
+      ">${message}</p>
+      ${onRetry ? `
+        <button onclick="${onRetry}()" style="
+          padding: 0.6rem 1.5rem;
+          background: var(--brown, #5C3317);
+          color: white;
+          border: none;
+          border-radius: 2px;
+          font-family: inherit;
+          font-size: 0.78rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          cursor: pointer;
+        ">Try Again</button>
+      ` : ''}
+    </div>
+  `
+}
+
+
 // ── AUTH ──
 export async function apiRegister({ email, password, fullName, phone }) {
   const data = await request('/auth/register', {
@@ -78,6 +158,20 @@ export function apiLogout() {
   removeToken()
   removeUser()
   window.location.href = '/index.html'
+}
+
+export async function apiForgotPassword(email) {
+  return request('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  })
+}
+
+export async function apiResetPassword({ token, password }) {
+  return request('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, password })
+  })
 }
 
 // ── ORDERS ──
